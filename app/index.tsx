@@ -1,49 +1,15 @@
-import {Image, Text, StyleSheet, View, Pressable} from "react-native";
-import {LinearGradient} from "expo-linear-gradient";
-import {useRouter} from "expo-router";
-import {colors} from "@/theme/colors";
-import {useEffect} from "react";
+import { Redirect } from 'expo-router';
+import { useAuth } from '@clerk/clerk-expo';
 
-const Splash = () => {
-    const router = useRouter();
+export default function RootIndex() {
+    const { isLoaded, isSignedIn } = useAuth();
 
-    useEffect(() => {
-        const timer = setTimeout(() => {
-            router.replace("/(public)/onboarding");
-        }, 2000);
+    if (!isLoaded) return null;
 
-        return () => clearTimeout(timer);
-    }, []);
-
-    return (
-        <View style={styles.container}>
-            <LinearGradient
-                colors={[colors.primary.blue[80], colors.primary.blue[100]]}
-                style={styles.gradient}
-                start={{x: 0, y: 0}}
-                end={{x: 1, y: 1}}
-            >
-                <View style={styles.centerContent}>
-                    <Image source={require('../assets/logo.png')}/>
-                    <Image style={{position: 'absolute'}} source={require('../assets/Circle BG.png')}/>
-                </View>
-            </LinearGradient>
-        </View>
-    );
-}
-
-const styles = StyleSheet.create({
-    container: {
-        flex: 1
-    },
-    gradient: {
-        flex: 1
-    },
-    centerContent: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center'
+    if (isSignedIn) {
+        //@ts-ignore
+        return <Redirect href="/(auth)" />;
     }
-});
 
-export default Splash;
+    return <Redirect href="/(public)" />;
+}
