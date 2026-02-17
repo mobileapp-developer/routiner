@@ -7,6 +7,8 @@ type AuthButtonProps = {
     icon?: React.ComponentProps<typeof Ionicons>['name'];
     text: string;
     onPress?: () => void;
+    loading?: boolean;
+    error?: string | null;
     backgroundColor: string;
     textColor?: string;
     iconColor?: string;
@@ -14,7 +16,8 @@ type AuthButtonProps = {
     height?: number;
     width?: number | `${number}%`;
     borderRadius?: number;
-    fontSize?: number; // Новий пропс
+    fontSize?: number;
+    fontWeight?: number;
     style?: ViewStyle;
     textStyle?: TextStyle;
 };
@@ -23,6 +26,7 @@ const AuthButton = ({
                         icon,
                         text,
                         onPress,
+                        loading,
                         backgroundColor,
                         textColor = '#fff',
                         iconColor = '#fff',
@@ -30,7 +34,8 @@ const AuthButton = ({
                         height,
                         width,
                         borderRadius,
-                        fontSize, // Деструктуризація
+                        fontSize,
+                        fontWeight,
                         style,
                         textStyle
                     }: AuthButtonProps) => {
@@ -54,7 +59,7 @@ const AuthButton = ({
     }, [scaleValue]);
 
     return (
-        <Animated.View style={[{ transform: [{ scale: scaleValue }], width: width }, style]}>
+        <Animated.View style={[{transform: [{scale: scaleValue}], width: width}, style]}>
             <Pressable
                 onPress={onPress}
                 onPressIn={onPressIn}
@@ -71,11 +76,11 @@ const AuthButton = ({
                     }
                 ]}
             >
-                {icon && <Ionicons name={icon} size={24} color={iconColor} />}
+                {icon && <Ionicons name={icon} size={24} color={iconColor}/>}
                 <Text
                     style={[
                         styles.buttonText,
-                        { color: textColor, fontSize: fontSize || 18 }, // Пріоритет переданому fontSize
+                        {color: textColor, fontSize: fontSize || 18},
                         textStyle
                     ]}
                 >

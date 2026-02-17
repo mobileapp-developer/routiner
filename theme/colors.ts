@@ -5,7 +5,10 @@ export const colors = {
         },
         black: {
             100: '#000000',
-            40: '#9B9BA1'
+            60: '#686873',
+            40: '#9B9BA1',
+            20: '#CDCDD0',
+            10: '#EAECF0',
         },
         blue: {
             100: '#3843FF',
@@ -15,7 +18,12 @@ export const colors = {
             20: '#D7D9FF',
             10: '#EBECFF'
         },
-        green: {},
+        blueInfo: {
+            10: '#DDF2FC',
+        },
+        green: {
+            100: '#4AC443',
+        },
         orange: {},
         red: {},
         white: '#FFFFFF'

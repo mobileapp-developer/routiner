@@ -106,7 +106,7 @@ const OnBoarding = () => {
                         backgroundColor={colors.primary.white}
                         textColor={colors.primary.black[100]}
                         iconColor={colors.primary.black[100]}
-                        onPress={() => router.push('/login')}
+                        onPress={() => router.push('/sign-in')}
                         height={60}
                         borderRadius={32}
 
@@ -172,7 +172,7 @@ const styles = StyleSheet.create({
     centerContent: {
         flex: 1,
         alignItems: 'center',
-        justifyContent: 'center', // Center the image better
+        justifyContent: 'center',
         top: 20
     },
     textContent: {
