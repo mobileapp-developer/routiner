@@ -11,5 +11,10 @@ export default function AuthLayout() {
         return <Redirect href="/(public)/sign-in" />;
     }
 
-    return <Stack screenOptions={{ headerShown: false }} />;
+    return (
+        <Stack>
+            <Stack.Screen name="(tabs)"/>
+            <Stack.Screen name="(register)"/>
+        </Stack>
+    );
 }
