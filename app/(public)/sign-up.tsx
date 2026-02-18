@@ -78,7 +78,7 @@ const SignUp = () => {
             if (result.status === 'complete') {
                 await setActive({session: result.createdSessionId});
                 //@ts-ignore
-                router.replace('/(auth)');
+                router.replace('/(auth)/(register)/gender');
             } else {
                 console.log('Verification status:', result.status);
             }
@@ -119,7 +119,7 @@ const SignUp = () => {
             <Animated.View style={styles.container}>
                 <Animated.View style={styles.header}>
                     <BackButton/>
-                    <Text style={styles.headerText}>Verify Email</Text>
+                    <Text style={[styles.headerText, {right: 110}]}>Verify Email</Text>
                 </Animated.View>
 
                 <View style={styles.inputs}>

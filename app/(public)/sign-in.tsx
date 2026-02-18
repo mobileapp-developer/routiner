@@ -31,7 +31,7 @@ const SignIn = () => {
             await setActive({session: result.createdSessionId});
 
             //@ts-ignore
-            router.replace('/sign-up');
+            router.replace('/(auth)/(tabs)/home');
         } catch (err: any) {
             setError(err.errors?.[0]?.message || 'Something went wrong');
         } finally {
