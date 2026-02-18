@@ -4,6 +4,7 @@ import {colors} from "@/theme/colors";
 import AuthButton from "@/components/AuthButton";
 import {useRef, useState} from "react";
 import {useRouter} from "expo-router";
+import {AppleSignInButton} from "@/components/AppleSignInButton";
 
 const ONBOARDING_SCREENS = [
     {
@@ -112,13 +113,10 @@ const OnBoarding = () => {
 
                     />
                     <View style={styles.otherButtons}>
-                        <AuthButton
-                            text='Apple'
-                            backgroundColor={colors.primary.white}
-                            textColor={colors.primary.black[100]}
-                            iconColor={colors.primary.black[100]}
-                            icon='logo-apple'
-                            onPress={() => router.dismiss()}
+                        <AppleSignInButton
+                            backgroundColor={colors.primary.black[100]}
+                            textColor={colors.primary.white}
+                            iconColor={colors.primary.white}
                             height={40}
                             width={120}
                             borderRadius={32}

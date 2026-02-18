@@ -1,18 +1,21 @@
 import React from 'react';
-import {StyleSheet} from 'react-native';
+import {View, Text, StyleSheet, Pressable} from 'react-native';
 import {useAuth} from "@clerk/clerk-expo";
 import {colors} from "@/theme/colors";
-import {Redirect} from "expo-router";
 
-const AuthIndex = () => {
-    const { isLoaded, isSignedIn } = useAuth();
+const Profile = () => {
+    const {signOut} = useAuth();
 
-    if (!isLoaded) return null;
-
-    if (isSignedIn) {
-        //@ts-ignore
-        return <Redirect href="/(auth)/(tabs)/home" />;
-    }
+    return (
+        <View style={styles.container}>
+            <Pressable
+                style={styles.signOutButton}
+                onPress={() => signOut()}
+            >
+                <Text style={styles.signOutText}>Sign Out</Text>
+            </Pressable>
+        </View>
+    );
 };
 
 const styles = StyleSheet.create({
@@ -35,4 +38,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default AuthIndex;
+export default Profile;

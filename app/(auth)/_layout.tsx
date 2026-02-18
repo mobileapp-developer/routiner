@@ -8,13 +8,17 @@ export default function AuthLayout() {
 
     if (!isSignedIn) {
         //@ts-ignore
-        return <Redirect href="/(public)/sign-in" />;
+        return <Redirect href="/(public)/onboarding" />;
     }
 
     return (
         <Stack>
-            <Stack.Screen name="(tabs)"/>
-            <Stack.Screen name="(register)"/>
+            <Stack.Screen name="(tabs)" options={{
+                headerShown: false,
+            }}/>
+            <Stack.Screen name="(register)" options={{
+                headerShown: false,
+            }}/>
         </Stack>
     );
 }

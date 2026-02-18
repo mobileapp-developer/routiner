@@ -4,7 +4,9 @@ export default function RegisterLayout() {
     return (
         <Stack screenOptions={{headerShown: false}}>
             <Stack.Screen name="index"/>
-            <Stack.Screen name="gender"/>
+            <Stack.Screen name="gender" options={{
+                headerShown: false,
+            }}/>
             <Stack.Screen name="habit"/>
         </Stack>
     );
