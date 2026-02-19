@@ -109,7 +109,7 @@ const styles = StyleSheet.create({
         gap: 24
     },
     selectedCard: {
-      borderColor: colors.primary.blue[100],
+        borderColor: colors.primary.blue[100],
     },
     emoji: {
         fontSize: 44,

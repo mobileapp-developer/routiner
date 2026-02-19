@@ -1,28 +1,29 @@
-import { useState, useCallback } from 'react'
+import {useState, useCallback} from 'react'
 import AuthButton from './AuthButton'
-import { useOAuth } from '@clerk/clerk-expo'
+import {useOAuth} from '@clerk/clerk-expo'
 import * as WebBrowser from 'expo-web-browser'
 import * as Linking from 'expo-linking'
 
 WebBrowser.maybeCompleteAuthSession()
 
-export const AppleSignInButton = () => {
+export const GoogleSignInButton = () => {
     const [loading, setLoading] = useState(false)
-    const { startOAuthFlow } = useOAuth({ strategy: 'oauth_apple' })
+    const {startOAuthFlow} = useOAuth({strategy: 'oauth_google'})
 
-    const handleAppleSignIn = useCallback(async () => {
+    const handleGoogleSignIn = useCallback(async () => {
         try {
             setLoading(true)
 
-            const { createdSessionId, setActive } = await startOAuthFlow({
+            const {createdSessionId, setActive} = await startOAuthFlow({
                 redirectUrl: Linking.createURL('/'),
             })
 
             if (createdSessionId && setActive) {
-                setActive({ session: createdSessionId })
+                setActive({session: createdSessionId})
             }
+
         } catch (err) {
-            console.error('Apple OAuth error:', err)
+            console.error('Google OAuth error:', err)
         } finally {
             setLoading(false)
         }
@@ -30,14 +31,14 @@ export const AppleSignInButton = () => {
 
     return (
         <AuthButton
-            icon="logo-apple"
-            text={'Apple'}
-            onPress={handleAppleSignIn}
+            icon="logo-google"
+            text={'Google'}
+            onPress={handleGoogleSignIn}
             loading={loading}
-            backgroundColor="#000"
-            textColor="#fff"
-            iconColor="#fff"
-            borderColor="#333"
+            backgroundColor="#FFF"
+            textColor="#000"
+            iconColor="#000"
+            borderColor="#E5E5E5"
             height={40}
             width={120}
             borderRadius={32}

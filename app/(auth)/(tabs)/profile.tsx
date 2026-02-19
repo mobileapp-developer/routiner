@@ -2,15 +2,26 @@ import React from 'react';
 import {View, Text, StyleSheet, Pressable} from 'react-native';
 import {useAuth} from "@clerk/clerk-expo";
 import {colors} from "@/theme/colors";
+import {useRouter} from "expo-router";
 
 const Profile = () => {
+    const router = useRouter();
     const {signOut} = useAuth();
+
+    const handleSignOut = async () => {
+        try {
+            await signOut();
+            router.replace('/(public)/onboarding');
+        } catch (error: any) {
+            console.log(error);
+        }
+    }
 
     return (
         <View style={styles.container}>
             <Pressable
                 style={styles.signOutButton}
-                onPress={() => signOut()}
+                onPress={handleSignOut}
             >
                 <Text style={styles.signOutText}>Sign Out</Text>
             </Pressable>
