@@ -5,7 +5,16 @@ import { colors } from "@/theme/colors";
 const Home = () => {
     return (
         <View style={styles.container}>
-            <Text style={styles.text}>Home Tab - Testing</Text>
+            <ScrollView contentContainerStyle={styles.content}>
+                <View style={styles.header}>
+                    <Text style={styles.greeting}>Good Morning!</Text>
+                    <Text style={styles.subtitle}>Here is your progress for today</Text>
+                </View>
+
+                <View style={styles.emptyState}>
+                    <Text style={styles.emptyStateText}>Your habits will appear here.</Text>
+                </View>
+            </ScrollView>
         </View>
     );
 };
@@ -13,13 +22,34 @@ const Home = () => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
         backgroundColor: colors.primary.white,
     },
-    text: {
-        fontSize: 18,
+    content: {
+        padding: 20,
+    },
+    header: {
+        marginBottom: 24,
+        marginTop: 20,
+    },
+    greeting: {
+        fontSize: 28,
+        fontWeight: '700',
         color: colors.primary.black[100],
+    },
+    subtitle: {
+        fontSize: 16,
+        color: colors.primary.black[60],
+        marginTop: 4,
+    },
+    emptyState: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginTop: 100,
+    },
+    emptyStateText: {
+        fontSize: 16,
+        color: colors.primary.black[40],
     },
 });
 
