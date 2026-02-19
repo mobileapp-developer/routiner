@@ -1,9 +1,11 @@
+import {useRef, useState} from "react";
 import {Image, StyleSheet, View, Text, FlatList, Dimensions} from "react-native";
 import {LinearGradient} from "expo-linear-gradient";
 import {colors} from "@/theme/colors";
-import AuthButton from "@/components/AuthButton";
-import {useRef, useState} from "react";
 import {useRouter} from "expo-router";
+import AuthButton from "@/components/AuthButton";
+import {AppleSignInButton} from "@/components/AppleSignInButton";
+import {GoogleSignInButton} from "@/components/GoogleSignInButton";
 
 const ONBOARDING_SCREENS = [
     {
@@ -26,8 +28,8 @@ const ONBOARDING_SCREENS = [
         id: 3,
         title1: 'State Together',
         title2: 'and Strong',
-        description1: 'sfddsf',
-        description2: 'fsd',
+        description1: 'Find friends to discuss common topics. Complete',
+        description2: 'challenges together.',
         image: require('../../assets/onboarding3.png'),
     }
 ]
@@ -112,37 +114,15 @@ const OnBoarding = () => {
 
                     />
                     <View style={styles.otherButtons}>
-                        <AuthButton
-                            text='Apple'
-                            backgroundColor={colors.primary.white}
-                            textColor={colors.primary.black[100]}
-                            iconColor={colors.primary.black[100]}
-                            icon='logo-apple'
-                            onPress={() => router.dismiss()}
-                            height={40}
-                            width={120}
-                            borderRadius={32}
-                            fontSize={14}
-                        />
-                        <AuthButton
-                            text='Google'
-                            backgroundColor={colors.primary.white}
-                            textColor={colors.primary.black[100]}
-                            iconColor={colors.primary.black[100]}
-                            icon='logo-google'
-                            onPress={() => router.dismiss()}
-                            height={40}
-                            width={120}
-                            borderRadius={32}
-                            fontSize={14}
-                        />
+                        <AppleSignInButton/>
+                        <GoogleSignInButton/>
                         <AuthButton
                             text='Facebook'
                             backgroundColor={colors.primary.white}
                             textColor={colors.primary.black[100]}
                             iconColor={colors.primary.blue[100]}
                             icon='logo-facebook'
-                            onPress={() => router.dismiss()}
+                            onPress={() => console.log('Facebook button pressed')}
                             height={40}
                             width={120}
                             borderRadius={32}
@@ -230,7 +210,7 @@ const styles = StyleSheet.create({
     privacyText: {
         fontSize: 13,
         fontWeight: '400',
-        color: colors.primary.black[40],
+        color: colors.primary.black[20],
         textAlign: 'center',
     },
 });

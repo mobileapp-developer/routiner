@@ -14,7 +14,7 @@ export default function AuthLayout() {
     return (
         <Stack>
             <Stack.Screen name="(tabs)"/>
-            <Stack.Screen name="(register)"/>
+            <Stack.Screen name="(register)" options={{headerShown: false}}/>
         </Stack>
     );
 }

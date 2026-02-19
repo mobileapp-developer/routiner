@@ -78,7 +78,7 @@ const SignUp = () => {
             if (result.status === 'complete') {
                 await setActive({session: result.createdSessionId});
                 //@ts-ignore
-                router.replace('/(auth)');
+                router.replace('/(auth)/(register)/gender');
             } else {
                 console.log('Verification status:', result.status);
             }
