@@ -1,51 +1,62 @@
-import React from 'react';
-import { Tabs } from 'expo-router';
-import { Ionicons } from '@expo/vector-icons';
-import { colors } from "@/theme/colors";
+import {Tabs} from 'expo-router';
+import MyTabBar from '../../../components/TabBar';
+import {Ionicons, MaterialIcons, FontAwesome5} from "@expo/vector-icons";
 
-export default function TabsLayout() {
+export default function TabLayout() {
     return (
-        <Tabs
-            screenOptions={{
-                headerShown: false,
-                tabBarActiveTintColor: colors.primary.black[100],
-                tabBarInactiveTintColor: colors.primary.black[40],
-                tabBarStyle: {
-                    backgroundColor: colors.primary.white,
-                    borderTopWidth: 1,
-                    borderTopColor: colors.primary.black[10],
-                    elevation: 0,
-                    shadowOpacity: 0,
-                },
-            }}
-        >
+        <Tabs tabBar={(props) => <MyTabBar {...props} />}>
             <Tabs.Screen
                 name="home"
                 options={{
-                    title: 'Home',
-                    tabBarIcon: ({ color, size }) => (
-                        <Ionicons name="home-outline" size={size} color={color} />
-                    ),
+                    title: 'Nome',
+                    headerShown: false,
+                    tabBarIcon: ({color}) => (
+                        <Ionicons name='home' size={30} color={color}/>
+                    )
                 }}
             />
             <Tabs.Screen
                 name="search"
                 options={{
                     title: 'Search',
-                    tabBarIcon: ({ color, size }) => (
-                        <Ionicons name="search-outline" size={size} color={color} />
-                    ),
+                    headerShown: false,
+                    tabBarIcon: ({color}) => (
+                        <Ionicons name='compass' size={32} color={color}/>
+                    )
                 }}
             />
+            <Tabs.Screen
+                name="new"
+                options={{
+                    title: 'New',
+                    headerShown: false,
+                    tabBarIcon: ({color}) => (
+                        <MaterialIcons name='add-circle' size={48} color={color}/>
+                    )
+                }}
+            />
+            <Tabs.Screen
+                name="challenges"
+                options={{
+                    title: 'Challenges',
+                    headerShown: false,
+                    tabBarIcon: ({color, size}) => (
+                        <FontAwesome5 name='medal' size={size} color={color}/>
+                    )
+                }}
+            />
+
             <Tabs.Screen
                 name="profile"
                 options={{
                     title: 'Profile',
-                    tabBarIcon: ({ color, size }) => (
-                        <Ionicons name="person-outline" size={size} color={color} />
-                    ),
+                    headerShown: false,
+                    tabBarIcon: ({color, size}) => (
+                        <Ionicons name='person' size={size} color={color}/>
+                    )
                 }}
             />
+
         </Tabs>
     );
 }
