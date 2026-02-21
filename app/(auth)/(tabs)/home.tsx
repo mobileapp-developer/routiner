@@ -1,20 +1,38 @@
 import React from 'react';
-import {View, Text, StyleSheet, ScrollView} from 'react-native';
-import { colors } from "@/theme/colors";
+import {useUser} from "@clerk/clerk-expo";
+import {View, Text, StyleSheet} from 'react-native';
+import {colors} from "@/theme/colors";
+import IconButton from "@/src/components/IconButton";
+import MoodIcon from "@/src/components/MoodIcon";
 
 const Home = () => {
+    const {user} = useUser();
+
     return (
         <View style={styles.container}>
-            <ScrollView contentContainerStyle={styles.content}>
-                <View style={styles.header}>
-                    <Text style={styles.greeting}>Good Morning!</Text>
-                    <Text style={styles.subtitle}>Here is your progress for today</Text>
+            {/* Header */}
+            <View style={styles.header}>
+                <View style={styles.iconButtonsContainer}>
+                    <IconButton icon={require('../../../assets/icons/calendar.png')}
+                                onPress={() => console.log('pressed')}
+                    />
+                    <IconButton icon={require('../../../assets/icons/notification.png')}
+                                onPress={() => console.log('pressed')}
+                    />
                 </View>
 
-                <View style={styles.emptyState}>
-                    <Text style={styles.emptyStateText}>Your habits will appear here.</Text>
+                {/* Text section */}
+                <View style={styles.greeting}>
+                    <View style={styles.content}>
+                        <Text style={styles.mainText}>Hi, {user?.firstName} 👋🏻</Text>
+                        <Text style={styles.subText}>Let's make habit together</Text>
+                    </View>
+
+                    <View style={styles.moodIcon}>
+                        <MoodIcon size={60} initialIndex={1}/>
+                    </View>
                 </View>
-            </ScrollView>
+            </View>
         </View>
     );
 };
@@ -22,34 +40,46 @@ const Home = () => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: colors.primary.white,
+        backgroundColor: colors.primary.blue[10],
     },
     content: {
-        padding: 20,
+        paddingVertical: 16,
+        flex: 2
     },
     header: {
-        marginBottom: 24,
-        marginTop: 20,
+        paddingBottom: 16,
+        backgroundColor: colors.primary.white,
+        paddingHorizontal: 20,
+        borderBottomWidth: 1.5,
+        borderBottomColor: colors.primary.black[10],
+    },
+    iconButtonsContainer: {
+        marginTop: 90,
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        gap: 8,
     },
     greeting: {
-        fontSize: 28,
-        fontWeight: '700',
-        color: colors.primary.black[100],
+        flexDirection: 'row',
     },
-    subtitle: {
+    mainText: {
+        fontSize: 26,
+        fontWeight: '500',
+        lineHeight: 24,
+        letterSpacing: 0,
+        paddingVertical: 10
+    },
+    subText: {
         fontSize: 16,
-        color: colors.primary.black[60],
-        marginTop: 4,
-    },
-    emptyState: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-        marginTop: 100,
-    },
-    emptyStateText: {
-        fontSize: 16,
+        fontWeight: '400',
+        lineHeight: 24,
+        letterSpacing: 0,
         color: colors.primary.black[40],
+    },
+    moodIcon: {
+        alignSelf: 'center',
+        justifyContent: 'center',
     },
 });
 
