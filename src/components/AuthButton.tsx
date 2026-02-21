@@ -26,7 +26,6 @@ const AuthButton = ({
                         icon,
                         text,
                         onPress,
-                        loading,
                         backgroundColor,
                         textColor = '#fff',
                         iconColor = '#fff',
@@ -35,7 +34,6 @@ const AuthButton = ({
                         width,
                         borderRadius,
                         fontSize,
-                        fontWeight,
                         style,
                         textStyle
                     }: AuthButtonProps) => {

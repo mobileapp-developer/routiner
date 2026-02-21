@@ -1,5 +1,5 @@
 import {Tabs} from 'expo-router';
-import MyTabBar from '../../../components/TabBar';
+import MyTabBar from '@/src/components/TabBar';
 import {Ionicons, MaterialIcons, FontAwesome5} from "@expo/vector-icons";
 
 export default function TabLayout() {

@@ -1,7 +1,7 @@
 import {View, Text, StyleSheet, Pressable, ScrollView} from "react-native";
-import BackButton from "@/components/BackButton";
+import BackButton from "@/src/components/BackButton";
 import {colors} from "@/theme/colors";
-import AuthButton from "@/components/AuthButton";
+import AuthButton from "@/src/components/AuthButton";
 import {useRouter} from "expo-router";
 import {useState} from "react";
 

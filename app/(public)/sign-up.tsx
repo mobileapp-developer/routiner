@@ -1,7 +1,7 @@
 import {Animated, Pressable, StyleSheet, Text, TextInput, View} from "react-native";
-import BackButton from "@/components/BackButton";
+import BackButton from "@/src/components/BackButton";
 import {useRouter} from "expo-router";
-import AuthButton from "@/components/AuthButton";
+import AuthButton from "@/src/components/AuthButton";
 import {colors} from "@/theme/colors";
 import {Ionicons} from "@expo/vector-icons";
 import {useSignUp} from "@clerk/clerk-expo";

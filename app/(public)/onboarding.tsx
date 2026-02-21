@@ -3,9 +3,9 @@ import {Image, StyleSheet, View, Text, FlatList, Dimensions} from "react-native"
 import {LinearGradient} from "expo-linear-gradient";
 import {colors} from "@/theme/colors";
 import {useRouter} from "expo-router";
-import AuthButton from "@/components/AuthButton";
-import {AppleSignInButton} from "@/components/AppleSignInButton";
-import {GoogleSignInButton} from "@/components/GoogleSignInButton";
+import AuthButton from "@/src/components/AuthButton";
+import {AppleSignInButton} from "@/src/components/AppleSignInButton";
+import {GoogleSignInButton} from "@/src/components/GoogleSignInButton";
 
 const ONBOARDING_SCREENS = [
     {

@@ -1,11 +1,11 @@
 import {StyleSheet, Text, Animated, View, TextInput, Pressable} from "react-native";
-import BackButton from "@/components/BackButton";
+import BackButton from "@/src/components/BackButton";
 import {colors} from "@/theme/colors";
 import {Link, useRouter} from "expo-router";
 import {useSignIn} from "@clerk/clerk-expo";
 import {useState} from "react";
 import {Ionicons} from '@expo/vector-icons';
-import AuthButton from "@/components/AuthButton";
+import AuthButton from "@/src/components/AuthButton";
 
 const SignIn = () => {
     const router = useRouter();
