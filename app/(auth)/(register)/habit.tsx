@@ -11,14 +11,14 @@ import {createHabit} from "@/src/db/habit";
 
 // Define a list of predefined habits
 const HABITS = [
-    {id: 'water', emoji: '💧', text: 'Drink water'},
-    {id: 'run', emoji: '🏃🏻‍♀️', text: 'Run'},
-    {id: 'read', emoji: '📖', text: 'Read books'},
+    {id: 'water',      emoji: '💧', text: 'Drink water'},
+    {id: 'run',        emoji: '🏃🏻‍♀️', text: 'Run'},
+    {id: 'read',       emoji: '📖', text: 'Read books'},
     {id: 'meditation', emoji: '🧘🏻‍♀️', text: 'Meditate'},
-    {id: 'study', emoji: '🧑🏻‍💻‍️', text: 'Study'},
-    {id: 'journal', emoji: '📕', text: 'Journal'},
-    {id: 'plant', emoji: '🌿‍', text: 'Grow plants'},
-    {id: 'sleep', emoji: '😴', text: 'Sleep'}
+    {id: 'study',      emoji: '🧑🏻‍💻‍️', text: 'Study'},
+    {id: 'journal',    emoji: '📕', text: 'Journal'},
+    {id: 'plant',      emoji: '🌿‍', text: 'Grow plants'},
+    {id: 'sleep',      emoji: '😴', text: 'Sleep'}
 ]
 
 const Page = () => {

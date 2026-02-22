@@ -21,13 +21,13 @@ export const habit = sqliteTable('habits', {
     icon:             text('icon'),
     color:            text('color'),
     type:             text('type', { enum: ['yesno', 'count', 'time'] }).notNull(),
-    goalValue:       real('goal_value'),
-    goalUnit:        text('goal_unit'),
+    goalValue:        real('goal_value'),
+    goalUnit:         text('goal_unit'),
     frequencyType:    text('frequency_type', { enum: ['daily', 'weekly_days', 'weekly_times'] }).notNull(),
-    frequencyDays:   text('frequency_days'),   // JSON string: '["mon","wed","fri"]'
-    frequencyTimes:  int('frequency_times'),
-    isActive:        int('is_active').default(1),
-    createdAt:       text('created_at').default(sql`(datetime('now'))`),
+    frequencyDays:    text('frequency_days'),
+    frequencyTimes:   int('frequency_times'),
+    isActive:         int('is_active').default(1),
+    createdAt:        text('created_at').default(sql`(datetime('now'))`),
 });
 
 export type THabit = typeof habit.$inferSelect
@@ -35,9 +35,9 @@ export type TInsertHabit = typeof habit.$inferInsert
 
 export const habit_logs = sqliteTable('habit_logs', {
     id:         int('id').primaryKey({ autoIncrement: true }),
-    habitId:   int('habit_id').notNull().references(() => habit.id),
+    habitId:    int('habit_id').notNull().references(() => habit.id),
     date:       text('date').notNull(),
     value:      real('value').default(1),
     note:       text('note'),
-    loggedAt:  text('logged_at').default(sql`(datetime('now'))`),
+    loggedAt:   text('logged_at').default(sql`(datetime('now'))`),
 });

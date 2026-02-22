@@ -5,6 +5,7 @@ import {colors} from "@/theme/colors";
 import IconButton from "@/src/components/IconButton";
 import MoodIcon from "@/src/components/MoodIcon";
 import HorizontalCalendar from "@/src/components/Calendar";
+import DailyGoalBanner from "@/src/components/DailyGoalBanner";
 
 const Home = () => {
     const {user} = useUser();
@@ -35,9 +36,16 @@ const Home = () => {
                 </View>
             </View>
 
-            <HorizontalCalendar
-                daysCount={90}
-            />
+            {/* Calendar */}
+            <View>
+                <HorizontalCalendar
+                    daysCount={10}
+                />
+            </View>
+
+            <View style={styles.dailyProgress}>
+                <DailyGoalBanner/>
+            </View>
         </View>
     );
 };
@@ -86,6 +94,10 @@ const styles = StyleSheet.create({
         alignSelf: 'center',
         justifyContent: 'center',
     },
+    dailyProgress: {
+        marginHorizontal: 24,
+        marginTop: 4,
+    }
 });
 
 export default Home;
