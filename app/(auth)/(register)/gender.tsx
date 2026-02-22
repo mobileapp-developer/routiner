@@ -1,16 +1,18 @@
-import {View, Text, StyleSheet, Pressable} from "react-native";
-import BackButton from "@/src/components/BackButton";
-import {colors} from "@/theme/colors";
-import AuthButton from "@/src/components/AuthButton";
-import {useRouter} from "expo-router";
 import {useState} from "react";
+import {useRouter} from "expo-router";
+import {View, Text, StyleSheet, Pressable} from "react-native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import {colors} from "@/theme/colors";
+import BackButton from "@/src/components/BackButton";
+import AuthButton from "@/src/components/AuthButton";
 
 const Page = () => {
     const router = useRouter();
     const [selectedGender, setSelectedGender] = useState<string | null>(null);
 
-    const handleNext = () => {
+    const handleNext = async () => {
         if (!selectedGender) return;
+        await AsyncStorage.setItem('gender', selectedGender);
         router.push('/(auth)/(register)/habit');
     }
 
