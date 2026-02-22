@@ -4,6 +4,7 @@ import {View, Text, StyleSheet} from 'react-native';
 import {colors} from "@/theme/colors";
 import IconButton from "@/src/components/IconButton";
 import MoodIcon from "@/src/components/MoodIcon";
+import HorizontalCalendar from "@/src/components/Calendar";
 
 const Home = () => {
     const {user} = useUser();
@@ -33,6 +34,10 @@ const Home = () => {
                     </View>
                 </View>
             </View>
+
+            <HorizontalCalendar
+                daysCount={90}
+            />
         </View>
     );
 };

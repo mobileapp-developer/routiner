@@ -1,6 +1,7 @@
 import {Tabs} from 'expo-router';
 import MyTabBar from '@/src/components/TabBar';
 import {Ionicons, MaterialIcons, FontAwesome5} from "@expo/vector-icons";
+import {colors} from "@/theme/colors";
 
 export default function TabLayout() {
     return (
@@ -30,8 +31,8 @@ export default function TabLayout() {
                 options={{
                     title: 'New',
                     headerShown: false,
-                    tabBarIcon: ({color}) => (
-                        <MaterialIcons name='add-circle' size={48} color={color}/>
+                    tabBarIcon: () => (
+                        <MaterialIcons name='add-circle' size={60} color={colors.primary.blue[100]}/>
                     )
                 }}
             />
