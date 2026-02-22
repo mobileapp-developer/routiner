@@ -1,9 +1,13 @@
-import {View, Text, StyleSheet, Pressable, ScrollView} from "react-native";
-import BackButton from "@/src/components/BackButton";
-import {colors} from "@/theme/colors";
-import AuthButton from "@/src/components/AuthButton";
-import {useRouter} from "expo-router";
 import {useState} from "react";
+import {useRouter} from "expo-router";
+import {useUser} from "@clerk/clerk-expo";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import {View, Text, StyleSheet, Pressable, ScrollView} from "react-native";
+import {colors} from "@/theme/colors";
+import BackButton from "@/src/components/BackButton";
+import AuthButton from "@/src/components/AuthButton";
+import {createUser} from "@/src/db/user";
+import {createHabit} from "@/src/db/habit";
 
 // Define a list of predefined habits
 const HABITS = [
@@ -18,11 +22,40 @@ const HABITS = [
 ]
 
 const Page = () => {
+    const {user} = useUser();
     const router = useRouter();
     const [selectedHabit, setSelectedHabit] = useState<string | null>(null);
 
-    const handleNext = () => {
+    const handleNext = async () => {
         if (!selectedHabit) return;
+
+        const gender = await AsyncStorage.getItem('gender');
+        const habit = HABITS.find(h => h.id === selectedHabit)
+
+        console.log('Saved data:', {
+            clerkId: user?.id,
+            name:    user?.firstName,
+            gander:  gender,
+            habit:   habit?.text,
+            emoji:   habit?.emoji,
+        });
+
+        const newUser = await createUser({
+            clerkId: user!.id,
+            name: user!.firstName ?? 'User',
+            gender: gender ?? 'other',
+        });
+
+        const newHabit = await createHabit({
+            userId: newUser.lastInsertRowId,
+            name: habit!.text,
+            icon: habit!.emoji,
+            type: 'yesno',
+            frequencyType: 'daily',
+        })
+
+        await AsyncStorage.removeItem('gender');
+
         router.replace('/(auth)/(tabs)/home');
     }
 
