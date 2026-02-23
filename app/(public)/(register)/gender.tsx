@@ -1,25 +1,29 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import {useRouter} from "expo-router";
+import {useLocalSearchParams, useRouter} from "expo-router";
 import {useState} from "react";
 import {Pressable, StyleSheet, Text, View} from "react-native";
-import AuthButton from "@/components/AuthButton";
-import BackButton from "@/components/BackButton";
+import AuthButton from "@/components/ui/AuthButton";
+import BackButton from "@/components/ui/BackButton";
 import {palette} from "@/constants/palette";
 
 const Page = () => {
 	const router = useRouter();
+	const {sessionId, clerkId, firstName} = useLocalSearchParams();
 	const [selectedGender, setSelectedGender] = useState<string | null>(null);
 
 	const handleNext = async () => {
 		if (!selectedGender) return;
 		await AsyncStorage.setItem("gender", selectedGender);
-		router.push("/(auth)/(register)/habit");
+		router.push({
+			pathname: "/(public)/(register)/habit",
+			params: {sessionId, clerkId, firstName}
+		});
 	};
 
 	return (
 		<View style={styles.container}>
 			<View style={styles.header}>
-				<BackButton />
+				<BackButton/>
 				<Text style={styles.headerText}>Create Account</Text>
 			</View>
 
@@ -48,7 +52,7 @@ const Page = () => {
 					text="Next"
 					backgroundColor={palette.primary.blue[100]}
 					textColor={palette.primary.white}
-					onPress={() => handleNext()}
+					onPress={handleNext}
 					height={52}
 					width={345}
 					borderRadius={40}
@@ -72,7 +76,7 @@ const styles = StyleSheet.create({
 		paddingTop: 40,
 		flexDirection: "row",
 		shadowColor: palette.primary.black[20],
-		shadowOffset: { width: 0, height: 1 },
+		shadowOffset: {width: 0, height: 1},
 		shadowOpacity: 0.25,
 		shadowRadius: 3.84,
 		elevation: 5

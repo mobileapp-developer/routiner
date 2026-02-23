@@ -1,61 +1,43 @@
 import {useState} from "react";
-import {useRouter} from "expo-router";
-import {useUser} from "@clerk/clerk-expo";
+import {useLocalSearchParams, useRouter} from "expo-router";
+import {useSignUp} from "@clerk/clerk-expo";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import {Pressable, ScrollView, StyleSheet, Text, View} from "react-native";
+import {HABITS} from "@/constants/habits";
 import {palette} from "@/constants/palette";
-import BackButton from "@/components/BackButton";
-import AuthButton from "@/components/AuthButton";
+import BackButton from "@/components/ui/BackButton";
+import AuthButton from "@/components/ui/AuthButton";
 import {createUser} from "@/db/user";
 import {createHabit} from "@/db/habit";
 
-// Define a list of predefined habits
-const HABITS = [
-    {id: 'water',      emoji: '💧', text: 'Drink water'},
-    {id: 'run',        emoji: '🏃🏻‍♀️', text: 'Run'},
-    {id: 'read',       emoji: '📖', text: 'Read books'},
-    {id: 'meditation', emoji: '🧘🏻‍♀️', text: 'Meditate'},
-    {id: 'study',      emoji: '🧑🏻‍💻‍️', text: 'Study'},
-    {id: 'journal',    emoji: '📕', text: 'Journal'},
-    {id: 'plant',      emoji: '🌿‍', text: 'Grow plants'},
-    {id: 'sleep',      emoji: '😴', text: 'Sleep'}
-]
-
 const Page = () => {
-    const {user} = useUser();
     const router = useRouter();
+    const {setActive} = useSignUp();
+    const {sessionId, clerkId, firstName} = useLocalSearchParams();
     const [selectedHabit, setSelectedHabit] = useState<string | null>(null);
 
     const handleNext = async () => {
         if (!selectedHabit) return;
 
         const gender = await AsyncStorage.getItem('gender');
-        const habit = HABITS.find(h => h.id === selectedHabit)
-
-        console.log('Saved data:', {
-            clerkId: user?.id,
-            name:    user?.firstName,
-            gander:  gender,
-            habit:   habit?.text,
-            emoji:   habit?.emoji,
-        });
+        const habit = HABITS.find(h => h.id === selectedHabit);
 
         const newUser = await createUser({
-            clerkId: user!.id,
-            name: user!.firstName ?? 'User',
+            clerkId: clerkId as string,
+            name: firstName as string ?? 'User',
             gender: gender ?? 'other',
         });
 
-        const newHabit = await createHabit({
+        await createHabit({
             userId: newUser.lastInsertRowId,
             name: habit!.text,
             icon: habit!.emoji,
             type: 'yesno',
             frequencyType: 'daily',
-        })
+        });
 
         await AsyncStorage.removeItem('gender');
-
+        await setActive!({session: sessionId as string});
         router.replace('/(auth)/(tabs)/home');
     }
 
@@ -142,8 +124,8 @@ const styles = StyleSheet.create({
         justifyContent: 'space-around',
         alignItems: 'center',
         paddingTop: 24,
-        flexWrap: 'wrap', // Allow cards to wrap to the next line
-        rowGap: 24, // Add space between rows of cards
+        flexWrap: 'wrap',
+        rowGap: 24,
     },
     card: {
         height: 140,

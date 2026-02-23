@@ -1,6 +1,6 @@
-import { useState, useCallback } from 'react'
-import AuthButton from './AuthButton'
-import { useOAuth } from '@clerk/clerk-expo'
+import {useCallback, useState} from 'react'
+import AuthButton from '../ui/AuthButton'
+import {useOAuth} from '@clerk/clerk-expo'
 import * as WebBrowser from 'expo-web-browser'
 import * as Linking from 'expo-linking'
 
