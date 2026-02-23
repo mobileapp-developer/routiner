@@ -1,5 +1,5 @@
 import {Tabs} from 'expo-router';
-import MyTabBar from '@/components/TabBar';
+import MyTabBar from '@/components/layout/TabBar';
 import {FontAwesome5, Ionicons, MaterialIcons} from "@expo/vector-icons";
 import {palette} from "@/constants/palette";
 

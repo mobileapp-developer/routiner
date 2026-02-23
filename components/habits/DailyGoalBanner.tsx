@@ -3,7 +3,7 @@ import {LinearGradient} from "expo-linear-gradient";
 import {useRouter} from "expo-router";
 import {useEffect, useState} from "react";
 import {Animated, Pressable, StyleSheet, Text, View} from "react-native";
-import CircularProgress from "@/components/CircularProgress";
+import CircularProgress from "@/components/ui/CircularProgress";
 import {getUser} from "@/db/user";
 import {useDailyGoals} from "@/hooks/useDailyGoal";
 import {usePressAnimation} from "@/hooks/usePressAnimation";

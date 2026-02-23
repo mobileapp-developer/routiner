@@ -1,11 +1,11 @@
 import {Animated, Pressable, StyleSheet, Text, TextInput, View} from "react-native";
-import BackButton from "@/components/BackButton";
+import BackButton from "@/components/ui/BackButton";
 import {palette} from "@/constants/palette";
 import {Link, useRouter} from "expo-router";
 import {useSignIn} from "@clerk/clerk-expo";
 import {useState} from "react";
 import {Ionicons} from '@expo/vector-icons';
-import AuthButton from "@/components/AuthButton";
+import AuthButton from "@/components/ui/AuthButton";
 
 const SignIn = () => {
     const router = useRouter();
@@ -30,7 +30,6 @@ const SignIn = () => {
 
             await setActive({session: result.createdSessionId});
 
-            //@ts-ignore
             router.replace('/(auth)/(tabs)/home');
         } catch (err: any) {
             setError(err.errors?.[0]?.message || 'Something went wrong');

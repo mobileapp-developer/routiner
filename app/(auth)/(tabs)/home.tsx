@@ -2,13 +2,13 @@ import React, {useEffect, useState} from 'react';
 import {useUser} from "@clerk/clerk-expo";
 import {FlatList, StyleSheet, Text, View} from 'react-native';
 import {palette} from "@/constants/palette";
-import IconButton from "@/components/IconButton";
-import MoodIcon from "@/components/MoodIcon";
-import HorizontalCalendar from "@/components/Calendar";
-import DailyGoalBanner from "@/components/DailyGoalBanner";
+import IconButton from "@/components/ui/IconButton";
+import MoodIcon from "@/components/habits/MoodIcon";
+import HorizontalCalendar from "@/components/shared/Calendar";
+import DailyGoalBanner from "@/components/habits/DailyGoalBanner";
 import {getUser} from "@/db/user";
 import {useHabits} from "@/hooks/useHabits";
-import HabitCard from "@/components/HabitCard";
+import HabitCard from "@/components/habits/HabitCard";
 import {Link} from "expo-router";
 
 const Home = () => {

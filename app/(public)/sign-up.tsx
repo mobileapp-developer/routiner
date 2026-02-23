@@ -1,7 +1,7 @@
 import {Animated, Pressable, StyleSheet, Text, TextInput, View} from "react-native";
-import BackButton from "@/components/BackButton";
+import BackButton from "@/components/ui/BackButton";
 import {useRouter} from "expo-router";
-import AuthButton from "@/components/AuthButton";
+import AuthButton from "@/components/ui/AuthButton";
 import {palette} from "@/constants/palette";
 import {Ionicons} from "@expo/vector-icons";
 import {useSignUp} from "@clerk/clerk-expo";
@@ -10,7 +10,7 @@ import {useCallback, useState} from "react";
 const SignUp = () => {
     const router = useRouter();
 
-    const {signUp, setActive, isLoaded} = useSignUp();
+    const {signUp, isLoaded} = useSignUp();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [code, setCode] = useState('');
@@ -71,14 +71,17 @@ const SignUp = () => {
         try {
             setLoading(true);
 
-            const result = await signUp.attemptEmailAddressVerification({
-                code,
-            });
+            const result = await signUp.attemptEmailAddressVerification({ code });
 
             if (result.status === 'complete') {
-                await setActive({session: result.createdSessionId});
-                //@ts-ignore
-                router.replace('/(auth)/(register)/gender');
+                router.replace({
+                    pathname: '/(public)/(register)/gender',
+                    params: {
+                        sessionId: result.createdSessionId,
+                        clerkId: result.createdUserId,
+                        firstName: name,
+                    }
+                });
             } else {
                 console.log('Verification status:', result.status);
             }
@@ -87,7 +90,7 @@ const SignUp = () => {
         } finally {
             setLoading(false);
         }
-    }, [isLoaded, loading, code, signUp, setActive, router]);
+    }, [isLoaded, loading, code, signUp, router, name]);
 
     const renderInput = (value: string, setValue: (text: string) => void, placeholder: string, isPassword?: boolean) => {
         return (
