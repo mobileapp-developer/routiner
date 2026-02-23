@@ -1,5 +1,5 @@
 import {StyleSheet, View} from "react-native";
-import {colors} from "@/theme/colors";
+import {palette} from "@/constants/palette";
 
 const Card = () => {
     return (
@@ -15,8 +15,8 @@ const styles = StyleSheet.create({
         width: 165,
         borderWidth: 1.5,
         borderRadius: 16,
-        borderColor: colors.primary.black[20],
-        backgroundColor: colors.primary.white,
+        borderColor: palette.primary.black[20],
+        backgroundColor: palette.primary.white,
         padding: 12,
         gap: 24
     }

@@ -1,7 +1,7 @@
 import React from 'react';
-import {View, Text, StyleSheet, Pressable} from 'react-native';
+import {Pressable, StyleSheet, Text, View} from 'react-native';
 import {useAuth} from "@clerk/clerk-expo";
-import {colors} from "@/theme/colors";
+import {palette} from "@/constants/palette";
 import {useRouter} from "expo-router";
 
 const Profile = () => {
@@ -32,11 +32,11 @@ const Profile = () => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: colors.primary.white,
+        backgroundColor: palette.primary.white,
     },
     signOutButton: {
         height: 52,
-        backgroundColor: colors.primary.black[20],
+        backgroundColor: palette.primary.black[20],
         borderRadius: 40,
         justifyContent: 'center',
         alignItems: 'center',
@@ -45,7 +45,7 @@ const styles = StyleSheet.create({
     signOutText: {
         fontSize: 14,
         fontWeight: '600',
-        color: colors.primary.black[100],
+        color: palette.primary.black[100],
     },
 });
 

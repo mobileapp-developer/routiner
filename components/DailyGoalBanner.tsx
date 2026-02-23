@@ -3,11 +3,11 @@ import {LinearGradient} from "expo-linear-gradient";
 import {useRouter} from "expo-router";
 import {useEffect, useState} from "react";
 import {Animated, Pressable, StyleSheet, Text, View} from "react-native";
+import CircularProgress from "@/components/CircularProgress";
+import {getUser} from "@/db/user";
 import {useDailyGoals} from "@/hooks/useDailyGoal";
 import {usePressAnimation} from "@/hooks/usePressAnimation";
-import CircularProgress from "@/src/components/CircularProgress";
-import {getUser} from "@/src/db/user";
-import {colors} from "@/theme/colors";
+import {palette} from "@/constants/palette";
 
 const DailyGoalBanner = () => {
     const router = useRouter();
@@ -28,26 +28,20 @@ const DailyGoalBanner = () => {
 
     return (
         <Animated.View style={{transform: [{scale: scaleValue}]}}>
-            <Pressable
-                onPress={() => router.push("/(auth)/(tabs)/home")}
-                onPressIn={onPressIn}
-                onPressOut={onPressOut}
-            >
+            <Pressable onPress={() => router.push("/(auth)/(tabs)/home")} onPressIn={onPressIn} onPressOut={onPressOut}>
                 <LinearGradient
                     colors={["#000DFF", "#6B73FF"]}
                     style={styles.container}
                     start={{x: 0.5, y: 0.2}}
-                    end={{x: 0, y: 0.5}}
-                >
+                    end={{x: 0, y: 0.5}}>
+
                     {/* Content */}
                     <View style={styles.content}>
                         <View style={styles.progressBarContainer}>
                             <CircularProgress percentage={percentage}/>
                         </View>
                         <View>
-                            <Text style={styles.dailyButtonTitle}>
-                                Your daily goals almost done! 🔥
-                            </Text>
+                            <Text style={styles.dailyButtonTitle}>Your daily goals almost done! 🔥</Text>
                             <Text style={styles.dailyButtonText}>
                                 {completed} of {total} completed
                             </Text>
@@ -64,30 +58,30 @@ const styles = StyleSheet.create({
         height: 82,
         borderRadius: 24,
         justifyContent: "center",
-        alignItems: "center",
+        alignItems: "center"
     },
     content: {
         flexDirection: "row",
         justifyContent: "space-evenly",
-        alignItems: "center",
+        alignItems: "center"
     },
     progressBarContainer: {
-        right: 16,
+        right: 16
     },
     dailyButtonTitle: {
         fontSize: 16,
         fontWeight: "500",
         lineHeight: 24,
         letterSpacing: 0,
-        color: colors.primary.white,
+        color: palette.primary.white
     },
     dailyButtonText: {
         fontSize: 14,
         fontWeight: "400",
         lineHeight: 24,
         letterSpacing: 0,
-        color: colors.primary.blue[40],
-    },
+        color: palette.primary.blue[40]
+    }
 });
 
 export default DailyGoalBanner;
