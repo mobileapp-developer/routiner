@@ -2,8 +2,8 @@ import {Stack} from 'expo-router';
 import {ClerkProvider} from "@clerk/clerk-expo";
 import {StatusBar} from "expo-status-bar";
 import {tokenCache} from "@clerk/clerk-expo/token-cache";
-import {useDatabaseMigrations} from "@/src/db/migrations";
-import {View, Text, ActivityIndicator, StyleSheet} from "react-native";
+import {useDatabaseMigrations} from "@/db/migrations";
+import {ActivityIndicator, StyleSheet, Text, View} from "react-native";
 
 export default function RootLayout() {
     const {success, error} = useDatabaseMigrations();

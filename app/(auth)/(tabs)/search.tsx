@@ -1,26 +1,26 @@
-import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
-import { colors } from "@/theme/colors";
+import React from "react";
+import {StyleSheet, Text, View} from "react-native";
+import {palette} from "@/constants/palette";
 
 const Search = () => {
-    return (
-        <View style={styles.container}>
-            <Text style={styles.text}>Search Tab - Testing</Text>
-        </View>
-    );
+	return (
+		<View style={styles.container}>
+			<Text style={styles.text}>Search Tab - Testing</Text>
+		</View>
+	);
 };
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor: colors.primary.white,
-    },
-    text: {
-        fontSize: 18,
-        color: colors.primary.black[100],
-    },
+	container: {
+		flex: 1,
+		justifyContent: "center",
+		alignItems: "center",
+		backgroundColor: palette.primary.white
+	},
+	text: {
+		fontSize: 18,
+		color: palette.primary.black[100]
+	}
 });
 
 export default Search;

@@ -1,6 +1,6 @@
 import React, {useEffect, useRef, useState} from 'react';
 import {FlatList, Pressable, StyleSheet, Text} from 'react-native';
-import {colors} from "@/theme/colors";
+import {palette} from "@/constants/palette";
 
 const DAY_NAMES = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
 const ITEM_WIDTH = 48;
@@ -87,7 +87,7 @@ const styles = StyleSheet.create({
         paddingVertical: 10,
         borderRadius: 14,
         borderWidth: 2,
-        backgroundColor: colors.primary.white,
+        backgroundColor: palette.primary.white,
         borderColor: 'transparent',
     },
     daySelected: {

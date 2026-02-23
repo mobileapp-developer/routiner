@@ -1,14 +1,31 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {useUser} from "@clerk/clerk-expo";
-import {View, Text, StyleSheet} from 'react-native';
-import {colors} from "@/theme/colors";
-import IconButton from "@/src/components/IconButton";
-import MoodIcon from "@/src/components/MoodIcon";
-import HorizontalCalendar from "@/src/components/Calendar";
-import DailyGoalBanner from "@/src/components/DailyGoalBanner";
+import {FlatList, StyleSheet, Text, View} from 'react-native';
+import {palette} from "@/constants/palette";
+import IconButton from "@/components/IconButton";
+import MoodIcon from "@/components/MoodIcon";
+import HorizontalCalendar from "@/components/Calendar";
+import DailyGoalBanner from "@/components/DailyGoalBanner";
+import {getUser} from "@/db/user";
+import {useHabits} from "@/hooks/useHabits";
+import HabitCard from "@/components/HabitCard";
+import {Link} from "expo-router";
 
 const Home = () => {
     const {user} = useUser();
+    const [dbUserId, setDbUserId] = useState<number | null>(null);
+
+    useEffect(() => {
+        async function fetchUser() {
+            if (!user?.id) return;
+            const result = await getUser(user.id);
+            if (result[0]) setDbUserId(result[0].id);
+        }
+
+        fetchUser();
+    }, [user?.id]);
+
+    const {habits, loading} = useHabits(dbUserId!);
 
     return (
         <View style={styles.container}>
@@ -38,14 +55,36 @@ const Home = () => {
 
             {/* Calendar */}
             <View>
-                <HorizontalCalendar
-                    daysCount={10}
-                />
+                <HorizontalCalendar daysCount={10}/>
             </View>
 
             <View style={styles.dailyProgress}>
                 <DailyGoalBanner/>
             </View>
+
+            <View style={styles.section}>
+                <Text style={styles.sectionTitle}>Habits</Text>
+
+                <Link href={"/(auth)/(tabs)/search"}>
+                    <Text style={styles.sectionLink}>VIEW ALL</Text>
+                </Link>
+            </View>
+
+            <FlatList
+                data={habits}
+                keyExtractor={(item) => item.habit.id.toString()}
+                renderItem={({item}) => (
+                    <HabitCard
+                        habit={item.habit}
+                        currentValue={item.currentValue}
+                        onPress={() => console.log('pressed', item.habit.name)}
+                    />
+                )}
+                style={styles.habitsList}
+                ListEmptyComponent={
+                    !loading ? <Text style={styles.empty}>Немає звичок. Додай першу!</Text> : null
+                }
+            />
         </View>
     );
 };
@@ -53,21 +92,20 @@ const Home = () => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: colors.primary.blue[10],
+        backgroundColor: palette.primary.blue[10],
     },
     content: {
         paddingVertical: 16,
         flex: 2
     },
     header: {
-        paddingBottom: 16,
-        backgroundColor: colors.primary.white,
+        backgroundColor: palette.primary.white,
         paddingHorizontal: 20,
         borderBottomWidth: 1.5,
-        borderBottomColor: colors.primary.black[10],
+        borderBottomColor: palette.primary.black[10],
     },
     iconButtonsContainer: {
-        marginTop: 90,
+        marginTop: 70,
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
@@ -88,15 +126,43 @@ const styles = StyleSheet.create({
         fontWeight: '400',
         lineHeight: 24,
         letterSpacing: 0,
-        color: colors.primary.black[40],
+        color: palette.primary.black[40],
     },
     moodIcon: {
         alignSelf: 'center',
         justifyContent: 'center',
     },
     dailyProgress: {
-        marginHorizontal: 24,
+        marginHorizontal: 18,
         marginTop: 4,
+    },
+    section: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        padding: 16,
+    },
+    sectionTitle: {
+        fontSize: 16,
+        fontWeight: '600',
+        lineHeight: 24,
+        letterSpacing: 0,
+        color: palette.primary.black[100],
+    },
+    sectionLink: {
+        fontSize: 14,
+        fontWeight: '700',
+        lineHeight: 16,
+        letterSpacing: 0,
+        color: palette.primary.blue[100],
+    },
+    habitsList: {
+        paddingHorizontal: 16,
+    },
+    empty: {
+        textAlign: 'center',
+        marginTop: 32,
+        color: palette.primary.black[40],
     }
 });
 

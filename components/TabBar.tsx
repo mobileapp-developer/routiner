@@ -1,8 +1,8 @@
-import React, { useRef, useCallback } from 'react'
-import { Animated, Pressable, StyleSheet } from 'react-native'
-import { BottomTabBarProps } from '@react-navigation/bottom-tabs'
+import React, {useCallback, useRef} from 'react'
+import {Animated, Pressable, StyleSheet} from 'react-native'
+import {BottomTabBarProps} from '@react-navigation/bottom-tabs'
 import * as Haptics from 'expo-haptics'
-import { colors } from '@/theme/colors'
+import {palette} from '@/constants/palette'
 
 type TabItemProps = {
     route: any
@@ -33,8 +33,8 @@ function TabItem({ isFocused, options, onPress }: TabItemProps) {
     }, [])
 
     const iconColor = isFocused
-        ? colors.primary.blue[100]
-        : colors.primary.black[40]
+        ? palette.primary.blue[100]
+        : palette.primary.black[40]
 
     return (
         <Pressable
@@ -105,7 +105,7 @@ const styles = StyleSheet.create({
         height: 70,
         backgroundColor: '#ffffff',
         borderWidth: 0.5,
-        borderColor: colors.primary.black[20],
+        borderColor: palette.primary.black[20],
         borderRadius: 70,
         alignItems: 'center',
         justifyContent: 'space-around',
