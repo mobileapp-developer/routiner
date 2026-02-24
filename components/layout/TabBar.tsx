@@ -1,8 +1,9 @@
-import React, {useCallback, useRef} from 'react'
+import React from 'react'
 import {Animated, Pressable, StyleSheet} from 'react-native'
 import {BottomTabBarProps} from '@react-navigation/bottom-tabs'
-import * as Haptics from 'expo-haptics'
 import {palette} from '@/constants/palette'
+import {usePressAnimation} from "@/hooks/usePressAnimation";
+import {useRouter} from "expo-router";
 
 type TabItemProps = {
     route: any
@@ -11,30 +12,10 @@ type TabItemProps = {
     onPress: () => void
 }
 
-function TabItem({ isFocused, options, onPress }: TabItemProps) {
-    const scaleValue = useRef(new Animated.Value(1)).current
+function TabItem({isFocused, options, onPress}: TabItemProps) {
+    const {scaleValue, onPressOut, onPressIn} = usePressAnimation();
 
-    const onPressIn = useCallback(() => {
-        Animated.spring(scaleValue, {
-            toValue: 0.92,
-            useNativeDriver: true,
-        }).start()
-
-        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light)
-    }, [])
-
-    const onPressOut = useCallback(() => {
-        Animated.spring(scaleValue, {
-            toValue: 1,
-            friction: 4,
-            tension: 40,
-            useNativeDriver: true,
-        }).start()
-    }, [])
-
-    const iconColor = isFocused
-        ? palette.primary.blue[100]
-        : palette.primary.black[40]
+    const iconColor = isFocused ? palette.primary.blue[100] : palette.primary.black[40]
 
     return (
         <Pressable
@@ -45,7 +26,7 @@ function TabItem({ isFocused, options, onPress }: TabItemProps) {
         >
             <Animated.View
                 style={{
-                    transform: [{ scale: scaleValue }],
+                    transform: [{scale: scaleValue}],
                 }}
             >
                 {options.tabBarIcon?.({
@@ -63,13 +44,19 @@ export default function MyTabBar({
                                      descriptors,
                                      navigation,
                                  }: BottomTabBarProps) {
+    const router = useRouter();
     return (
         <Animated.View style={styles.container}>
             {state.routes.map((route, index) => {
-                const { options } = descriptors[route.key]
+                const {options} = descriptors[route.key]
                 const isFocused = state.index === index
 
                 const onPress = () => {
+                    if (route.name === 'new') {
+                        router.push('/(auth)/(modal)/add')
+                        return;
+                    }
+
                     const event = navigation.emit({
                         type: 'tabPress',
                         target: route.key,
@@ -110,7 +97,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'space-around',
         shadowColor: '#000',
-        shadowOffset: { width: 0, height: 10 },
+        shadowOffset: {width: 0, height: 10},
         shadowOpacity: 0.1,
         shadowRadius: 15,
         elevation: 5,
