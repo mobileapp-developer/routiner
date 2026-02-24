@@ -1,4 +1,4 @@
-import {int, real, text, sqliteTable} from 'drizzle-orm/sqlite-core';
+import {int, real, sqliteTable, text} from 'drizzle-orm/sqlite-core';
 import {sql} from "drizzle-orm";
 
 export const user = sqliteTable('user', {
@@ -41,3 +41,14 @@ export const habit_logs = sqliteTable('habit_logs', {
     note:       text('note'),
     loggedAt:   text('logged_at').default(sql`(datetime('now'))`),
 });
+
+export const mood_logs = sqliteTable('mood_logs', {
+    id:        int('id').primaryKey({autoIncrement: true}),
+    userId:    int('user_id').notNull().references(() => user.id),
+    mood:      text('mood', {enum: ['angry', 'sad', 'neutral', 'good', 'happy']}).notNull(),
+    date:      text('date').notNull(),
+    loggedAt:  text('logged_at').default(sql`(datetime('now'))`),
+});
+
+export type TMoodLog = typeof mood_logs.$inferSelect
+export type TInsertMoodLog = typeof mood_logs.$inferInsert
