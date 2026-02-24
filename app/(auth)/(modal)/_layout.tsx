@@ -11,6 +11,25 @@ export default function ModalLayout() {
                               contentStyle: {backgroundColor: 'transparent'},
                           }}
             />
+            <Stack.Screen name="add-habit"
+                          options={{
+                              headerShown: false,
+                              presentation: 'formSheet',
+                              sheetCornerRadius: 32,
+                              sheetAllowedDetents: [0.4],
+                              sheetGrabberVisible: true,
+                              title: '',
+                              animation: 'fade',
+                          }}
+            />
+            <Stack.Screen name="quit-habit"
+                          options={{
+                              headerShown: false,
+                              presentation: 'transparentModal',
+                              animation: 'fade',
+                              contentStyle: {backgroundColor: 'transparent'},
+                          }}
+            />
         </Stack>
     )
 }

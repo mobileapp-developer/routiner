@@ -1,30 +1,19 @@
-import React, {useEffect, useState} from 'react';
+import React from 'react';
+import {Link} from "expo-router";
 import {useUser} from "@clerk/clerk-expo";
 import {FlatList, StyleSheet, Text, View} from 'react-native';
 import {palette} from "@/constants/palette";
+import {useHabits} from "@/hooks/useHabits";
 import IconButton from "@/components/ui/IconButton";
 import MoodIcon from "@/components/habits/MoodIcon";
+import {useCurrentUser} from "@/hooks/useCurrentUser";
+import HabitCard from "@/components/habits/HabitCard";
 import HorizontalCalendar from "@/components/shared/Calendar";
 import DailyGoalBanner from "@/components/habits/DailyGoalBanner";
-import {getUser} from "@/db/user";
-import {useHabits} from "@/hooks/useHabits";
-import HabitCard from "@/components/habits/HabitCard";
-import {Link} from "expo-router";
 
 const Home = () => {
     const {user} = useUser();
-    const [dbUserId, setDbUserId] = useState<number | null>(null);
-
-    useEffect(() => {
-        async function fetchUser() {
-            if (!user?.id) return;
-            const result = await getUser(user.id);
-            if (result[0]) setDbUserId(result[0].id);
-        }
-
-        fetchUser();
-    }, [user?.id]);
-
+    const {dbUserId} = useCurrentUser();
     const {habits, loading} = useHabits(dbUserId!);
 
     return (

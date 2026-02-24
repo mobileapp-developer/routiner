@@ -1,13 +1,29 @@
-import React, {useState} from "react";
+import React from "react";
 import {Animated, FlatList, Pressable, StyleSheet, Text, View} from "react-native";
+import {logMood} from "@/db/mood";
 import {MOOD} from "@/constants/mood";
 import {palette} from "@/constants/palette";
+import {useCurrentUser} from "@/hooks/useCurrentUser";
+import {useTodayMood} from "@/hooks/useTodayMood";
 
 export default function AddMoodCard() {
-    const [selected, setSelected] = useState('');
+    const {dbUserId} = useCurrentUser();
+    const {mood: selected, setMood: setSelected} = useTodayMood(dbUserId);
 
-    const onSelect = (id: string) => {
+    const onSelect = async (id: string) => {
         setSelected(id);
+
+        if (!dbUserId) return;
+
+        const today = new Date().toISOString().split('T')[0];
+
+        await logMood({
+            userId: dbUserId,
+            mood: id as 'angry' | 'sad' | 'neutral' | 'good' | 'happy',
+            date: today,
+        });
+
+        console.log('Mood saved:', id, 'for user:', dbUserId);
     }
 
     return (
