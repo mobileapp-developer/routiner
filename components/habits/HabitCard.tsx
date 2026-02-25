@@ -7,9 +7,10 @@ type Props = {
     habit: THabit,
     currentValue: number,
     onPress: () => void,
+    onDelete: () => void,
 }
 
-export default function HabitCard({habit, currentValue, onPress}: Props) {
+export default function HabitCard({habit, currentValue, onPress, onDelete}: Props) {
     const {scaleValue, onPressIn, onPressOut} = usePressAnimation();
 
     const renderProgress = () => {
@@ -35,7 +36,7 @@ export default function HabitCard({habit, currentValue, onPress}: Props) {
                     <Text style={styles.name}>{habit.name}</Text>
                     {renderProgress()}
                 </View>
-                <Pressable style={styles.plusButton} onPress={onPress}>
+                <Pressable style={styles.plusButton} onPress={onDelete}>
                     <Text style={styles.plus}>+</Text>
                 </Pressable>
             </Pressable>

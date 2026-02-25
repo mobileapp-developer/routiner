@@ -1,4 +1,14 @@
-import {Animated, Pressable, StyleSheet, Text, TextInput, View} from "react-native";
+import {
+    Animated,
+    KeyboardAvoidingView,
+    Platform,
+    Pressable,
+    ScrollView,
+    StyleSheet,
+    Text,
+    TextInput,
+    View
+} from "react-native";
 import BackButton from "@/components/ui/BackButton";
 import {useRouter} from "expo-router";
 import AuthButton from "@/components/ui/AuthButton";
@@ -71,7 +81,7 @@ const SignUp = () => {
         try {
             setLoading(true);
 
-            const result = await signUp.attemptEmailAddressVerification({ code });
+            const result = await signUp.attemptEmailAddressVerification({code});
 
             if (result.status === 'complete') {
                 router.replace({
@@ -147,30 +157,40 @@ const SignUp = () => {
     }
 
     return (
-        <Animated.View style={styles.container}>
+        <KeyboardAvoidingView
+            style={styles.container}
+            behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+        >
             <Animated.View style={styles.header}>
                 <BackButton/>
                 <Text style={styles.headerText}>Create Account</Text>
             </Animated.View>
 
-            <View style={styles.inputs}>
-                <Text style={styles.placeholderText}>NAME</Text>
-                {renderInput(name, setName, 'Enter your name')}
+            <ScrollView
+                style={styles.scrollView}
+                contentContainerStyle={{flexGrow: 1}}
+                keyboardShouldPersistTaps="handled"
+            >
+                <View style={styles.inputs}>
+                    <Text style={styles.placeholderText}>NAME</Text>
+                    {renderInput(name, setName, 'Enter your name')}
 
-                <Text style={styles.placeholderText}>SURNAME</Text>
-                {renderInput(surname, setSurname, 'Enter your surname')}
+                    <Text style={styles.placeholderText}>SURNAME</Text>
+                    {renderInput(surname, setSurname, 'Enter your surname')}
 
-                <Text style={styles.placeholderText}>E-MAIL</Text>
-                {renderInput(email, setEmail, 'Enter your email')}
+                    <Text style={styles.placeholderText}>E-MAIL</Text>
+                    {renderInput(email, setEmail, 'Enter your email')}
 
-                <Text style={styles.placeholderText}>PASSWORD</Text>
-                {renderInput(password, setPassword, 'Enter your password', true)}
+                    <Text style={styles.placeholderText}>PASSWORD</Text>
+                    {renderInput(password, setPassword, 'Enter your password', true)}
 
-                {errorMessage && (
-                    <Text style={styles.errorText}>{errorMessage}</Text>
-                )}
-            </View>
+                    {errorMessage && (
+                        <Text style={styles.errorText}>{errorMessage}</Text>
+                    )}
+                </View>
+            </ScrollView>
 
+            {/* Кнопка ПОЗА ScrollView — завжди видима над клавіатурою */}
             <View style={styles.footer}>
                 <AuthButton
                     text={loading ? 'Signing in...' : 'Next'}
@@ -183,13 +203,15 @@ const SignUp = () => {
                     fontSize={14}
                 />
             </View>
-        </Animated.View>
+        </KeyboardAvoidingView>
     );
-};
-
+}
 
 const styles = StyleSheet.create({
     container: {
+        flex: 1,
+    },
+    scrollView: {
         flex: 1,
     },
     header: {
@@ -212,7 +234,7 @@ const styles = StyleSheet.create({
         right: 85,
     },
     inputs: {
-        paddingVertical: 24,
+        paddingTop: 24,
     },
     placeholderText: {
         fontSize: 10,
@@ -267,12 +289,8 @@ const styles = StyleSheet.create({
         marginTop: 12,
     },
     footer: {
-        flex: 1,
-        marginTop: 32,
         alignItems: 'center',
-        justifyContent: 'flex-end',
-        paddingVertical: 32,
-        marginVertical: 32,
+        paddingBottom: 24,
     },
     createAccountText: {
         fontSize: 14,

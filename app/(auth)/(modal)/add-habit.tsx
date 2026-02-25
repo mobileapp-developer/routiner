@@ -4,10 +4,30 @@ import {palette} from "@/constants/palette";
 import {POPULAR_HABITS} from "@/constants/popularHabits";
 import {useSlideAnimation} from "@/hooks/useSlideAnimation";
 import {PopularHabitCard} from '@/components/habits/PopularHabitCard'
+import {useCurrentUser} from "@/hooks/useCurrentUser";
+import {createHabit} from "@/db/habit";
 
 export default function AddHabit() {
     const router = useRouter();
     const {slideValue} = useSlideAnimation();
+    const {dbUserId} = useCurrentUser();
+
+    const handleAddPopular = async (item: typeof POPULAR_HABITS[0]) => {
+        if (!dbUserId) return;
+
+        await createHabit({
+            userId: dbUserId,
+            name: item.name,
+            icon: item.emoji,
+            color: item.color,
+            type: 'count',
+            goalValue: item.goalValue,
+            goalUnit: item.goalUnit,
+            frequencyType: 'daily',
+        });
+
+        router.dismissAll();
+    }
 
     return (
         <Pressable style={styles.overlay} onPress={() => router.back()}>
@@ -16,7 +36,7 @@ export default function AddHabit() {
 
                     <Text style={styles.label}>NEW GOOD HABIT</Text>
 
-                    <Pressable style={styles.customButton} onPress={() => router.push('/(auth)/(modal)/create-habit')}>
+                    <Pressable style={styles.customButton} onPress={() => router.push('/(auth)/(habit)/create-habit')}>
                         <Text style={styles.customText}>Create Custom Habit</Text>
                         <Animated.View style={styles.addButton}>
                             <Text style={styles.plus}>+</Text>
@@ -33,7 +53,7 @@ export default function AddHabit() {
                         contentContainerStyle={styles.row}
                         renderItem={({item}) => (
                             <PopularHabitCard
-                                onPress={() => console.log('add', item.name)}
+                                onPress={() => handleAddPopular(item)}
                                 item={item}/>
                         )}
                     />

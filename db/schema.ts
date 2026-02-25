@@ -23,7 +23,7 @@ export const habit = sqliteTable('habits', {
     type:             text('type', { enum: ['yesno', 'count', 'time'] }).notNull(),
     goalValue:        real('goal_value'),
     goalUnit:         text('goal_unit'),
-    frequencyType:    text('frequency_type', { enum: ['daily', 'weekly_days', 'weekly_times'] }).notNull(),
+    frequencyType:    text('frequency_type', { enum: ['daily', 'weekly_days', 'weekly_times', 'monthly']  }).notNull(),
     frequencyDays:    text('frequency_days'),
     frequencyTimes:   int('frequency_times'),
     isActive:         int('is_active').default(1),
