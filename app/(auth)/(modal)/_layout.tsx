@@ -22,14 +22,6 @@ export default function ModalLayout() {
                               animation: 'fade',
                           }}
             />
-            <Stack.Screen name="quit-habit"
-                          options={{
-                              headerShown: false,
-                              presentation: 'transparentModal',
-                              animation: 'fade',
-                              contentStyle: {backgroundColor: 'transparent'},
-                          }}
-            />
         </Stack>
     )
 }

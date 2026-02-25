@@ -10,11 +10,17 @@ import {useCurrentUser} from "@/hooks/useCurrentUser";
 import HabitCard from "@/components/habits/HabitCard";
 import HorizontalCalendar from "@/components/shared/Calendar";
 import DailyGoalBanner from "@/components/habits/DailyGoalBanner";
+import {deleteHabit} from "@/db/habit";
 
 const Home = () => {
     const {user} = useUser();
     const {dbUserId} = useCurrentUser();
-    const {habits, loading} = useHabits(dbUserId!);
+    const {habits, loading, refetch} = useHabits(dbUserId!);
+
+    const handleDelete = async (habitId: number) => {
+        await deleteHabit(habitId);
+        refetch();
+    };
 
     return (
         <View style={styles.container}>
@@ -66,12 +72,13 @@ const Home = () => {
                     <HabitCard
                         habit={item.habit}
                         currentValue={item.currentValue}
-                        onPress={() => console.log('pressed', item.habit.name)}
+                        onPress={() => console.log('pressed')}
+                        onDelete={() => handleDelete(item.habit.id)}
                     />
                 )}
                 style={styles.habitsList}
                 ListEmptyComponent={
-                    !loading ? <Text style={styles.empty}>Немає звичок. Додай першу!</Text> : null
+                    !loading ? <Text style={styles.empty}>You don't have any habits yet! Add one now!</Text> : null
                 }
             />
         </View>

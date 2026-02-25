@@ -16,7 +16,7 @@ export function PopularHabitCard({item, onPress}: { item: typeof POPULAR_HABITS[
             >
                 <Text style={styles.habitEmoji}>{item.emoji}</Text>
                 <Text style={styles.habitName}>{item.name}</Text>
-                <Text style={styles.habitGoal}>{item.goal}</Text>
+                <Text style={styles.habitGoal}>{item.goalValue} {item.goalUnit}</Text>
             </Pressable>
         </Animated.View>
     );

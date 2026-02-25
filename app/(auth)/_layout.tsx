@@ -23,6 +23,11 @@ export default function AuthLayout() {
                           options={{
                               headerShown: false,
                           }}/>
+            <Stack.Screen name='(habit)'
+                          options={{
+                              headerShown: false,
+                              presentation: 'fullScreenModal',
+                          }}/>
         </Stack>
     );
 }

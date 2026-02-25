@@ -35,6 +35,7 @@ export default function AddMoodCard() {
 
             <FlatList
                 horizontal={true}
+                showsHorizontalScrollIndicator={false}
                 data={MOOD}
                 keyExtractor={item => item.id}
                 renderItem={({item}) => (
@@ -78,7 +79,7 @@ const styles = StyleSheet.create({
         width: 42,
         justifyContent: 'center',
         alignItems: 'center',
-        marginLeft: 10,
+        marginLeft: 12,
         borderRadius: 12,
         borderWidth: 1,
         borderColor: palette.primary.black[10],
