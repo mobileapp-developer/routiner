@@ -4,7 +4,6 @@ import {useUser} from "@clerk/clerk-expo";
 import {FlatList, StyleSheet, Text, View} from 'react-native';
 import {palette} from "@/constants/palette";
 import {useHabits} from "@/hooks/useHabits";
-import IconButton from "@/components/ui/IconButton";
 import MoodIcon from "@/components/habits/MoodIcon";
 import {useCurrentUser} from "@/hooks/useCurrentUser";
 import HabitCard from "@/components/habits/HabitCard";
@@ -27,12 +26,7 @@ const Home = () => {
             {/* Header */}
             <View style={styles.header}>
                 <View style={styles.iconButtonsContainer}>
-                    <IconButton icon={require('../../../assets/icons/calendar.png')}
-                                onPress={() => console.log('pressed')}
-                    />
-                    <IconButton icon={require('../../../assets/icons/notification.png')}
-                                onPress={() => console.log('pressed')}
-                    />
+
                 </View>
 
                 {/* Text section */}
@@ -60,7 +54,7 @@ const Home = () => {
             <View style={styles.section}>
                 <Text style={styles.sectionTitle}>Habits</Text>
 
-                <Link href={"/(auth)/(tabs)/search"}>
+                <Link href={"/(auth)/(tabs)/explore"}>
                     <Text style={styles.sectionLink}>VIEW ALL</Text>
                 </Link>
             </View>
