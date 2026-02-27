@@ -3,7 +3,7 @@ import {Animated, FlatList, Pressable, StyleSheet, Text} from "react-native";
 import {palette} from "@/constants/palette";
 import {POPULAR_HABITS} from "@/constants/popularHabits";
 import {useSlideAnimation} from "@/hooks/useSlideAnimation";
-import {PopularHabitCard} from '@/components/habits/PopularHabitCard'
+import {PopularHabitCard} from '@/components/habits/cards/PopularHabitCard'
 import {useCurrentUser} from "@/hooks/useCurrentUser";
 import {createHabit} from "@/db/habit";
 

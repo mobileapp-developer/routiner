@@ -50,7 +50,7 @@ export default function AddMoodCard() {
                 )}
             />
         </Animated.View>
-    )
+    );
 }
 
 const styles = StyleSheet.create({
