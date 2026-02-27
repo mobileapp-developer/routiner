@@ -17,9 +17,9 @@ export default function TabLayout() {
                 }}
             />
             <Tabs.Screen
-                name="search"
+                name="explore"
                 options={{
-                    title: 'Search',
+                    title: 'Explore',
                     headerShown: false,
                     tabBarIcon: ({color}) => (
                         <Ionicons name='compass' size={32} color={color}/>
