@@ -6,7 +6,7 @@ import {palette} from "@/constants/palette";
 import {useHabits} from "@/hooks/useHabits";
 import MoodIcon from "@/components/habits/MoodIcon";
 import {useCurrentUser} from "@/hooks/useCurrentUser";
-import HabitCard from "@/components/habits/HabitCard";
+import HabitCard from "@/components/habits/cards/HabitCard";
 import HorizontalCalendar from "@/components/shared/Calendar";
 import DailyGoalBanner from "@/components/habits/DailyGoalBanner";
 import {deleteHabit} from "@/db/habit";

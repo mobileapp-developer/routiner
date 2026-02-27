@@ -1,8 +1,8 @@
 import {Animated, Pressable, StyleSheet, View} from "react-native";
 import {useSlideAnimation} from "@/hooks/useSlideAnimation";
 import {useRouter} from "expo-router";
-import AddModalCard from "@/components/habits/AddModalCard";
-import AddMoodCard from "@/components/habits/AddMoodCard";
+import AddModalCard from "@/components/habits/cards/AddModalCard";
+import AddMoodCard from "@/components/habits/cards/AddMoodCard";
 
 export default function AddModal() {
     const router = useRouter();

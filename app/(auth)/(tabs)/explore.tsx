@@ -1,14 +1,15 @@
 import React, {useState} from "react";
-import {Alert, Animated, FlatList, Pressable, ScrollView, StyleSheet, Text, TextInput, View,} from "react-native";
-import {Feather, Ionicons} from "@expo/vector-icons";
+import {Alert, FlatList, Pressable, ScrollView, StyleSheet, Text, TextInput, View,} from "react-native";
+import {Feather} from "@expo/vector-icons";
 import {palette} from "@/constants/palette";
 import {POPULAR_HABITS} from "@/constants/popularHabits";
-import {usePressAnimation} from "@/hooks/usePressAnimation";
-import {PopularHabitCard} from "@/components/habits/PopularHabitCard";
+import {PopularHabitCard} from "@/components/habits/cards/PopularHabitCard";
 import {useCurrentUser} from "@/hooks/useCurrentUser";
 import {createHabit} from "@/db/habit";
-import {Challenge, HabitClub, Learning} from "@/constants/types";
 import {CHALLENGES, HABIT_CLUBS, LEARNING_ITEMS} from "@/constants/data";
+import {ClubCard} from "@/components/habits/cards/ClubCard";
+import {ChallengeCard} from "@/components/habits/cards/ChallengeCard";
+import {LearningCard} from "@/components/habits/cards/LearningCard";
 
 function SectionHeader({title}: { title: string }) {
     return (
@@ -16,91 +17,6 @@ function SectionHeader({title}: { title: string }) {
             <Text style={styles.sectionTitle}>{title}</Text>
             <Text style={styles.sectionLink}>VIEW ALL</Text>
         </View>
-    );
-}
-
-function ClubCard({club}: { club: HabitClub }) {
-    const {scaleValue, onPressIn, onPressOut} = usePressAnimation();
-    return (
-        <Animated.View style={{transform: [{scale: scaleValue}]}}>
-            <Pressable
-                style={styles.clubCard}
-                onPressIn={onPressIn}
-                onPressOut={onPressOut}
-            >
-                <View style={styles.clubIconBox}>
-                    <Text style={styles.clubEmoji}>{club.emoji}</Text>
-                </View>
-                <Text style={styles.clubName}>{club.name}</Text>
-                <Text style={styles.clubMembers}>{club.members}</Text>
-            </Pressable>
-        </Animated.View>
-    );
-}
-
-function ChallengeCard({item}: { item: Challenge }) {
-    const {scaleValue, onPressIn, onPressOut} = usePressAnimation();
-    return (
-        <Animated.View style={{transform: [{scale: scaleValue}]}}>
-            <Pressable
-                style={styles.challengeCard}
-                onPressIn={onPressIn}
-                onPressOut={onPressOut}
-            >
-                <Ionicons
-                    name='time-outline'
-                    size={22}
-                    color={palette.primary.white}
-                    style={{marginBottom: 4}}
-                />
-                <Text style={styles.challengeTitle}>{item.title}</Text>
-                <Text style={styles.challengeTimeLeft}>{item.timeLeft}</Text>
-
-                <View style={styles.challengeProgressBg}>
-                    <View style={styles.challengeProgressFill}/>
-                </View>
-
-                <View style={styles.challengeFriendsRow}>
-                    <View style={styles.challengeAvatarStack}>
-                        {Array.from({length: Math.min(item.friendsJoined, 2)}).map(
-                            (_, i) => (
-                                <View
-                                    key={`avatar-${i}`}
-                                    style={[styles.challengeAvatar, {left: i * 16}]}
-                                />
-                            ),
-                        )}
-                    </View>
-                    <Text style={styles.challengeFriendsText}>
-                        {item.friendsJoined} friend{item.friendsJoined !== 1 ? "s" : ""}{" "}
-                        joined
-                    </Text>
-                </View>
-            </Pressable>
-        </Animated.View>
-    );
-}
-
-function LearningCard({item}: { item: Learning }) {
-    const {scaleValue, onPressIn, onPressOut} = usePressAnimation();
-    return (
-        <Animated.View style={{transform: [{scale: scaleValue}]}}>
-            <Pressable
-                style={styles.learningCard}
-                onPressIn={onPressIn}
-                onPressOut={onPressOut}
-            >
-                <View
-                    style={[styles.learningImage, {backgroundColor: item.bgColor}]}
-                />
-                <View style={styles.learningFooter}>
-                    <View style={styles.learningBadge}>
-                        <Feather name="book-open" size={11} color="#fff"/>
-                    </View>
-                    <Text style={styles.learningTitle}>{item.title}</Text>
-                </View>
-            </Pressable>
-        </Animated.View>
     );
 }
 
@@ -295,142 +211,7 @@ const styles = StyleSheet.create({
         fontWeight: "700",
         color: palette.primary.blue[100],
     },
-    suggestedCard: {
-        width: 120,
-        minHeight: 110,
-        borderRadius: 16,
-        padding: 14,
-        marginRight: 12,
-        gap: 4,
-        justifyContent: "flex-end",
-    },
-    suggestedEmoji: {
-        fontSize: 30,
-        marginBottom: 4,
-    },
-    suggestedName: {
-        fontSize: 15,
-        fontWeight: "700",
-        color: palette.primary.black[100],
-    },
-    suggestedGoal: {
-        fontSize: 13,
-        color: palette.primary.black[60],
-    },
-    clubCard: {
-        width: 130,
-        borderRadius: 16,
-        borderWidth: 1.5,
-        borderColor: palette.primary.black[10],
-        backgroundColor: palette.primary.white,
-        padding: 14,
-        marginRight: 12,
-        gap: 6,
-    },
-    clubIconBox: {
-        width: 44,
-        height: 44,
-        borderRadius: 12,
-        backgroundColor: palette.primary.blue[10],
-        alignItems: "center",
-        justifyContent: "center",
-        marginBottom: 4,
-    },
-    clubEmoji: {
-        fontSize: 24,
-    },
-    clubName: {
-        fontSize: 14,
-        fontWeight: "700",
-        color: palette.primary.black[100],
-    },
-    clubMembers: {
-        fontSize: 12,
-        color: palette.primary.black[40],
-    },
-    challengeCard: {
-        width: 185,
-        backgroundColor: palette.primary.blue[100],
-        borderRadius: 20,
-        padding: 16,
-        marginRight: 14,
-        gap: 4,
-    },
-    challengeTitle: {
-        fontSize: 15,
-        fontWeight: "700",
-        color: "#fff",
-    },
-    challengeTimeLeft: {
-        fontSize: 11,
-        color: "rgba(255,255,255,0.75)",
-    },
-    challengeProgressBg: {
-        height: 5,
-        borderRadius: 4,
-        backgroundColor: "rgba(255,255,255,0.3)",
-        marginVertical: 8,
-    },
-    challengeProgressFill: {
-        width: "55%",
-        height: "100%",
-        borderRadius: 4,
-        backgroundColor: "#fff",
-    },
-    challengeFriendsRow: {
-        flexDirection: "row",
-        alignItems: "center",
-        gap: 10,
-        marginTop: 2,
-    },
-    challengeAvatarStack: {
-        flexDirection: "row",
-        position: "relative",
-        width: 36,
-        height: 24,
-    },
-    challengeAvatar: {
-        position: "absolute",
-        width: 24,
-        height: 24,
-        borderRadius: 12,
-        backgroundColor: palette.primary.blue[40],
-        borderWidth: 2,
-        borderColor: palette.primary.blue[100],
-    },
-    challengeFriendsText: {
-        fontSize: 12,
-        color: "rgba(255,255,255,0.9)",
-    },
-    learningCard: {
-        width: 185,
-        height: 155,
-        borderRadius: 18,
-        overflow: "hidden",
-        marginRight: 14,
-        backgroundColor: palette.primary.black[20],
-    },
-    learningImage: {
-        flex: 1,
-    },
-    learningFooter: {
-        backgroundColor: palette.primary.blue[100],
-        padding: 12,
-        gap: 6,
-    },
-    learningBadge: {
-        width: 20,
-        height: 20,
-        borderRadius: 5,
-        backgroundColor: "rgba(255,255,255,0.25)",
-        alignItems: "center",
-        justifyContent: "center",
-    },
-    learningTitle: {
-        fontSize: 13,
-        fontWeight: "600",
-        color: "#fff",
-    },
+
 });
 
 export default Explore;
