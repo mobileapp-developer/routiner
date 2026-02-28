@@ -30,7 +30,7 @@ const Page = () => {
 
         await createHabit({
             userId:        newUser.lastInsertRowId,
-            name:          habit!.text,
+            name:          habit!.name,
             icon:          habit!.emoji,
             type:          'yesno',
             frequencyType: 'daily',
@@ -58,7 +58,7 @@ const Page = () => {
                     <Pressable key={habit.id} onPress={() => setSelectedHabit(habit.id)}>
                         <View style={[styles.card, selectedHabit === habit.id && styles.selectedCard]}>
                             <Text style={styles.emoji}>{habit.emoji}</Text>
-                            <Text style={styles.habitText}>{habit.text}</Text>
+                            <Text style={styles.habitText}>{habit.name}</Text>
                         </View>
                     </Pressable>
                 ))}
