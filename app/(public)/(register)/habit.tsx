@@ -29,10 +29,10 @@ const Page = () => {
         });
 
         await createHabit({
-            userId: newUser.lastInsertRowId,
-            name: habit!.text,
-            icon: habit!.emoji,
-            type: 'yesno',
+            userId:        newUser.lastInsertRowId,
+            name:          habit!.text,
+            icon:          habit!.emoji,
+            type:          'yesno',
             frequencyType: 'daily',
         });
 
