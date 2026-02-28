@@ -24,8 +24,8 @@ export function PopularHabitCard({item, onPress}: { item: typeof POPULAR_HABITS[
 
 const styles = StyleSheet.create({
     habitCard: {
-        height: 100,
-        width: 130,
+        height: 120,
+        width: 150,
         borderRadius: 16,
         padding: 12,
         gap: 4,

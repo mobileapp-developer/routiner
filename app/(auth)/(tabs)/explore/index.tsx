@@ -1,20 +1,31 @@
 import React, {useState} from "react";
+<<<<<<< Updated upstream:app/(auth)/(tabs)/explore.tsx
 import {Alert, Animated, FlatList, Pressable, ScrollView, StyleSheet, Text, TextInput, View,} from "react-native";
 import {Feather, Ionicons} from "@expo/vector-icons";
+=======
+import {Alert, FlatList, Pressable, ScrollView, StyleSheet, Text, TextInput, View,} from "react-native";
+import {Feather} from "@expo/vector-icons";
+import {Link} from "expo-router";
+>>>>>>> Stashed changes:app/(auth)/(tabs)/explore/index.tsx
 import {palette} from "@/constants/palette";
 import {POPULAR_HABITS} from "@/constants/popularHabits";
 import {usePressAnimation} from "@/hooks/usePressAnimation";
 import {PopularHabitCard} from "@/components/habits/PopularHabitCard";
 import {useCurrentUser} from "@/hooks/useCurrentUser";
 import {createHabit} from "@/db/habit";
+<<<<<<< Updated upstream:app/(auth)/(tabs)/explore.tsx
 import {Challenge, HabitClub, Learning} from "@/constants/types";
 import {CHALLENGES, HABIT_CLUBS, LEARNING_ITEMS} from "@/constants/data";
+=======
+import {LEARNING_ITEMS} from "@/constants/data";
+import {LearningCard} from "@/components/habits/cards/LearningCard";
+>>>>>>> Stashed changes:app/(auth)/(tabs)/explore/index.tsx
 
-function SectionHeader({title}: { title: string }) {
+function SectionHeader({title, href}: { title: string; href: string }) {
     return (
         <View style={styles.sectionRow}>
             <Text style={styles.sectionTitle}>{title}</Text>
-            <Text style={styles.sectionLink}>VIEW ALL</Text>
+            <Link href={href as any} style={styles.sectionLink}>VIEW ALL</Link>
         </View>
     );
 }
@@ -127,10 +138,8 @@ const Explore = () => {
 
     const q = query.toLowerCase();
 
-    const filterHabits     = POPULAR_HABITS.filter(i => i.name.toLowerCase().includes(q))
-    const filterClubs      = HABIT_CLUBS.filter(i => i.name.toLowerCase().includes(q))
-    const filterChallenges = CHALLENGES.filter(i => i.title.toLowerCase().includes(q))
-    const filterLearning   = LEARNING_ITEMS.filter(i => i.title.toLowerCase().includes(q))
+    const filterHabits   = POPULAR_HABITS.filter(i => i.name.toLowerCase().includes(q));
+    const filterLearning = LEARNING_ITEMS.filter(i => i.title.toLowerCase().includes(q));
 
     return (
         <View style={styles.container}>
@@ -176,7 +185,7 @@ const Explore = () => {
                 contentContainerStyle={styles.scroll}
             >
                 {/* Suggested for You */}
-                <SectionHeader title="Suggested for You"/>
+                <SectionHeader title="Suggested for You" href="/explore/suggested" />
                 <FlatList
                     data={filterHabits}
                     keyExtractor={(item) => item.id}
@@ -190,34 +199,8 @@ const Explore = () => {
                     )}
                 />
 
-                {/* Habit Clubs */}
-                <SectionHeader title="Habit Clubs"/>
-                <FlatList
-                    data={filterClubs}
-                    keyExtractor={(item) => item.id}
-                    horizontal={true}
-                    showsHorizontalScrollIndicator={false}
-                    contentContainerStyle={styles.hList}
-                    renderItem={({item}) => (
-                        <ClubCard key={item.id} club={item}/>
-                    )}
-                />
-
-                {/* Challenges */}
-                <SectionHeader title="Challenges"/>
-                <FlatList
-                    data={filterChallenges}
-                    keyExtractor={(item) => item.id}
-                    horizontal={true}
-                    showsHorizontalScrollIndicator={false}
-                    contentContainerStyle={styles.hList}
-                    renderItem={({item}) => (
-                        <ChallengeCard key={item.id} item={item}/>
-                    )}
-                />
-
                 {/* Learning */}
-                <SectionHeader title="Learning"/>
+                <SectionHeader title="Learning" href="/explore/learning" />
                 <FlatList
                     data={filterLearning}
                     keyExtractor={(item) => item.id}
@@ -225,7 +208,7 @@ const Explore = () => {
                     showsHorizontalScrollIndicator={false}
                     contentContainerStyle={styles.hList}
                     renderItem={({item}) => (
-                        <LearningCard key={item.id} item={item}/>
+                        <LearningCard key={item.id} item={item} />
                     )}
                 />
             </ScrollView>
@@ -295,6 +278,7 @@ const styles = StyleSheet.create({
         fontWeight: "700",
         color: palette.primary.blue[100],
     },
+<<<<<<< Updated upstream:app/(auth)/(tabs)/explore.tsx
     suggestedCard: {
         width: 120,
         minHeight: 110,
@@ -431,6 +415,9 @@ const styles = StyleSheet.create({
         fontWeight: "600",
         color: "#fff",
     },
+=======
+>>>>>>> Stashed changes:app/(auth)/(tabs)/explore/index.tsx
 });
 
 export default Explore;
+

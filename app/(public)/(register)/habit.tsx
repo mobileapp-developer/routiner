@@ -29,10 +29,17 @@ const Page = () => {
         });
 
         await createHabit({
+<<<<<<< Updated upstream
             userId: newUser.lastInsertRowId,
             name: habit!.text,
             icon: habit!.emoji,
             type: 'yesno',
+=======
+            userId:        newUser.lastInsertRowId,
+            name:          habit!.name,
+            icon:          habit!.emoji,
+            type:          'yesno',
+>>>>>>> Stashed changes
             frequencyType: 'daily',
         });
 
@@ -58,7 +65,7 @@ const Page = () => {
                     <Pressable key={habit.id} onPress={() => setSelectedHabit(habit.id)}>
                         <View style={[styles.card, selectedHabit === habit.id && styles.selectedCard]}>
                             <Text style={styles.emoji}>{habit.emoji}</Text>
-                            <Text style={styles.habitText}>{habit.text}</Text>
+                            <Text style={styles.habitText}>{habit.name}</Text>
                         </View>
                     </Pressable>
                 ))}
