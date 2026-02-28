@@ -1,3 +1,5 @@
+import {ImageSourcePropType} from "react-native";
+
 export type HabitClub = {
     id: string;
     name: string;
@@ -15,5 +17,6 @@ export type Challenge = {
 export type Learning = {
     id: string;
     title: string;
-    bgColor: string
+    bgColor: string;
+    image: ImageSourcePropType;
 };

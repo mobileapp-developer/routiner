@@ -6,16 +6,21 @@ import {POPULAR_HABITS} from "@/constants/popularHabits";
 import {PopularHabitCard} from "@/components/habits/cards/PopularHabitCard";
 import {useCurrentUser} from "@/hooks/useCurrentUser";
 import {createHabit} from "@/db/habit";
-import {CHALLENGES, HABIT_CLUBS, LEARNING_ITEMS} from "@/constants/data";
-import {ClubCard} from "@/components/habits/cards/ClubCard";
-import {ChallengeCard} from "@/components/habits/cards/ChallengeCard";
+import {LEARNING_ITEMS} from "@/constants/data";
 import {LearningCard} from "@/components/habits/cards/LearningCard";
+import {Link} from "expo-router";
 
-function SectionHeader({title}: { title: string }) {
+function SectionHeader({title, href}: { title: string; href?: string }) {
     return (
         <View style={styles.sectionRow}>
             <Text style={styles.sectionTitle}>{title}</Text>
-            <Text style={styles.sectionLink}>VIEW ALL</Text>
+            {href ? (
+                <Link href={href as any} style={styles.sectionLink}>
+                    VIEW ALL
+                </Link>
+            ) : (
+                <Text style={styles.sectionLink}>VIEW ALL</Text>
+            )}
         </View>
     );
 }
@@ -43,10 +48,8 @@ const Explore = () => {
 
     const q = query.toLowerCase();
 
-    const filterHabits     = POPULAR_HABITS.filter(i => i.name.toLowerCase().includes(q))
-    const filterClubs      = HABIT_CLUBS.filter(i => i.name.toLowerCase().includes(q))
-    const filterChallenges = CHALLENGES.filter(i => i.title.toLowerCase().includes(q))
-    const filterLearning   = LEARNING_ITEMS.filter(i => i.title.toLowerCase().includes(q))
+    const filterHabits     = POPULAR_HABITS.filter(i => i.name.toLowerCase().includes(q));
+    const filterLearning   = LEARNING_ITEMS.filter(i => i.title.toLowerCase().includes(q));
 
     return (
         <View style={styles.container}>
@@ -92,48 +95,23 @@ const Explore = () => {
                 contentContainerStyle={styles.scroll}
             >
                 {/* Suggested for You */}
-                <SectionHeader title="Suggested for You"/>
+                <SectionHeader title="Suggested for You" href="/(auth)/(tabs)/explore/suggested"/>
                 <FlatList
                     data={filterHabits}
                     keyExtractor={(item) => item.id}
                     horizontal={true}
                     showsHorizontalScrollIndicator={false}
-                    contentContainerStyle={{paddingHorizontal: 20, gap: 12}}
+                    contentContainerStyle={styles.hList}
                     renderItem={({item}) => (
                         <PopularHabitCard
                             onPress={() => handleAddPopular(item)}
-                            item={item}/>
-                    )}
-                />
-
-                {/* Habit Clubs */}
-                <SectionHeader title="Habit Clubs"/>
-                <FlatList
-                    data={filterClubs}
-                    keyExtractor={(item) => item.id}
-                    horizontal={true}
-                    showsHorizontalScrollIndicator={false}
-                    contentContainerStyle={styles.hList}
-                    renderItem={({item}) => (
-                        <ClubCard key={item.id} club={item}/>
-                    )}
-                />
-
-                {/* Challenges */}
-                <SectionHeader title="Challenges"/>
-                <FlatList
-                    data={filterChallenges}
-                    keyExtractor={(item) => item.id}
-                    horizontal={true}
-                    showsHorizontalScrollIndicator={false}
-                    contentContainerStyle={styles.hList}
-                    renderItem={({item}) => (
-                        <ChallengeCard key={item.id} item={item}/>
+                            item={item}
+                        />
                     )}
                 />
 
                 {/* Learning */}
-                <SectionHeader title="Learning"/>
+                <SectionHeader title="Learning" href="/(auth)/(tabs)/explore/learning"/>
                 <FlatList
                     data={filterLearning}
                     keyExtractor={(item) => item.id}
@@ -193,6 +171,7 @@ const styles = StyleSheet.create({
     },
     hList: {
         paddingHorizontal: 20,
+        gap: 12,
     },
     sectionRow: {
         flexDirection: "row",
@@ -211,7 +190,7 @@ const styles = StyleSheet.create({
         fontWeight: "700",
         color: palette.primary.blue[100],
     },
-
 });
 
 export default Explore;
+
