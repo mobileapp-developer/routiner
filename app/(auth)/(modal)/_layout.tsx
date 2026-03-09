@@ -8,7 +8,9 @@ export default function ModalLayout() {
                               headerShown: false,
                               presentation: 'transparentModal',
                               animation: 'fade',
-                              contentStyle: {backgroundColor: 'transparent'},
+                              contentStyle: {
+                                  backgroundColor: 'transparent'
+                              },
                           }}
             />
             <Stack.Screen name="add-habit"
@@ -20,6 +22,16 @@ export default function ModalLayout() {
                               sheetGrabberVisible: true,
                               title: '',
                               animation: 'fade',
+                          }}
+            />
+            <Stack.Screen name="log-habit"
+                          options={{
+                              headerShown: false,
+                              presentation: 'transparentModal',
+                              animation: 'fade',
+                              contentStyle: {
+                                  backgroundColor: 'transparent'
+                              },
                           }}
             />
         </Stack>

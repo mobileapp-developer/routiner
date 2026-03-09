@@ -15,3 +15,4 @@ export async function getHabits(userId: number) {
 export async function deleteHabit(habitId: number) {
     return db.delete(habit).where(eq(habit.id, habitId));
 }
+

@@ -1,17 +1,124 @@
-import {Animated, Pressable, StyleSheet, Text, View} from "react-native";
+import {Alert, Animated, Pressable, StyleSheet, Text, View} from "react-native";
 import {THabit} from "@/db/schema";
 import {usePressAnimation} from "@/hooks/usePressAnimation";
 import {palette} from "@/constants/palette";
+import Swipeable, {SwipeableMethods} from "react-native-gesture-handler/ReanimatedSwipeable";
+import {Entypo, FontAwesome5, MaterialIcons} from "@expo/vector-icons";
+import {useRef} from "react";
 
 type Props = {
     habit: THabit,
     currentValue: number,
     onPress: () => void,
     onDelete: () => void,
+    onDone: () => void,
+    onFail: () => void,
+    onSkip: () => void,
+    onLogPress: () => void,
 }
 
-export default function HabitCard({habit, currentValue, onPress, onDelete}: Props) {
+export default function HabitCard({habit, currentValue, onPress, onDelete, onFail, onSkip, onDone, onLogPress}: Props) {
     const {scaleValue, onPressIn, onPressOut} = usePressAnimation();
+
+    const doneScale     = useRef(new Animated.Value(1)).current;
+    const doneBgOpacity = useRef(new Animated.Value(0)).current;
+    const doneRotate    = useRef(new Animated.Value(0)).current;
+    const swipeableRef  = useRef<SwipeableMethods>(null);
+
+    const handleDonePress = () => {
+        Animated.sequence([
+            Animated.parallel([
+                Animated.timing(doneScale, {
+                    toValue: 0.75,
+                    duration: 50,
+                    useNativeDriver: true,
+                }),
+                Animated.timing(doneBgOpacity, {
+                    toValue: 1,
+                    duration: 80,
+                    useNativeDriver: true,
+                }),
+            ]),
+            Animated.parallel([
+                Animated.spring(doneScale, {
+                    toValue: 1,
+                    useNativeDriver: true,
+                    bounciness: 18,
+                    speed: 14,
+                }),
+                Animated.timing(doneRotate, {
+                    toValue: 1,
+                    duration: 300,
+                    useNativeDriver: true,
+                }),
+                Animated.timing(doneBgOpacity, {
+                    toValue: 0,
+                    duration: 400,
+                    useNativeDriver: true,
+                }),
+            ]),
+        ]).start(() => {
+            doneRotate.setValue(0);
+            swipeableRef.current?.close();
+        });
+
+        onDone();
+    };
+
+    const handleDeletePress = () => {
+        Alert.alert(
+            'Delete habit',
+            'Are you sure you want to delete this habit?',
+            [
+                {
+                    text: 'Cancel',
+                    style: 'cancel',
+                },
+                {
+                    text: 'Delete',
+                    style: 'destructive',
+                    onPress: onDelete,
+                },
+            ]
+        );
+    };
+
+    const rotateInterpolate = doneRotate.interpolate({
+        inputRange: [0, 1],
+        outputRange: ['0deg', '360deg'],
+    });
+
+    const renderRightActions = () => (
+        <View style={styles.rightActions}>
+            <Pressable style={[styles.action]} onPress={onFail}>
+                <Entypo name='cross' size={24} color={palette.primary.redError[100]}/>
+                <Text style={styles.actionLabel}>Fail</Text>
+            </Pressable>
+            <Pressable style={[styles.action]} onPress={onSkip}>
+                <Entypo name="chevron-right" size={24} color={palette.primary.black[100]}/>
+                <Text style={styles.actionLabel}>Skip</Text>
+            </Pressable>
+        </View>
+    );
+
+    const renderLeftActions = () => (
+        <Animated.View style={styles.leftActions}>
+            <Pressable style={[styles.action]} onPress={handleDeletePress}>
+                <FontAwesome5 name='trash-alt' size={24} color={palette.primary.redError[100]}/>
+                <Text style={styles.actionLabel}>Delete</Text>
+            </Pressable>
+
+            <Animated.View style={[styles.action, styles.doneAction, {transform: [{scale: doneScale}]}]}>
+                <Animated.View style={[StyleSheet.absoluteFillObject, styles.doneActionFlash, {opacity: doneBgOpacity}]}/>
+                <Pressable style={styles.doneActionInner} onPress={handleDonePress}>
+                    <Animated.View style={{transform: [{rotate: rotateInterpolate}]}}>
+                        <MaterialIcons name='done-all' size={24} color={palette.primary.green[100]}/>
+                    </Animated.View>
+                    <Text style={styles.actionLabel}>Done</Text>
+                </Pressable>
+            </Animated.View>
+        </Animated.View>
+    );
 
     const renderProgress = () => {
         if (habit.type === 'yesno') {
@@ -27,20 +134,28 @@ export default function HabitCard({habit, currentValue, onPress, onDelete}: Prop
     }
 
     return (
-        <Animated.View style={{transform: [{scale: scaleValue}]}}>
-            <Pressable style={styles.card} onPress={onPress} onPressIn={onPressIn} onPressOut={onPressOut}>
-                <View style={styles.left}>
-                    <Text style={styles.icon}>{habit.icon ?? '📌'}</Text>
-                </View>
-                <View style={styles.info}>
-                    <Text style={styles.name}>{habit.name}</Text>
-                    {renderProgress()}
-                </View>
-                <Pressable style={styles.plusButton} onPress={onDelete}>
-                    <Text style={styles.plus}>+</Text>
+        <Swipeable
+            ref={swipeableRef}
+            renderLeftActions={renderLeftActions}
+            renderRightActions={renderRightActions}
+            overshootLeft={false}
+            overshootRight={false}
+        >
+            <Animated.View style={{transform: [{scale: scaleValue}]}}>
+                <Pressable style={styles.card} onPress={onPress} onPressIn={onPressIn} onPressOut={onPressOut}>
+                    <View style={styles.left}>
+                        <Text style={styles.icon}>{habit.icon ?? '📌'}</Text>
+                    </View>
+                    <View style={styles.info}>
+                        <Text style={styles.name}>{habit.name}</Text>
+                        {renderProgress()}
+                    </View>
+                    <Pressable style={styles.plusButton} onPress={onLogPress}>
+                        <Text style={styles.plus}>+</Text>
+                    </Pressable>
                 </Pressable>
-            </Pressable>
-        </Animated.View>
+            </Animated.View>
+        </Swipeable>
     )
 }
 
@@ -85,6 +200,57 @@ const styles = StyleSheet.create({
     },
     plus: {
         fontSize: 30,
+        color: palette.primary.black[100],
+    },
+    doneAction: {
+        overflow: 'hidden',
+    },
+    doneActionFlash: {
+        borderRadius: 20,
+        backgroundColor: palette.primary.green[20],
+    },
+    doneActionInner: {
+        flex: 1,
+        width: '100%',
+        alignItems: 'center',
+        justifyContent: 'center',
+        gap: 4,
+    },
+    leftActions: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        marginBottom: 12,
+        borderRadius: 24,
+        borderWidth: 1.5,
+        borderColor: palette.primary.black[10],
+        backgroundColor: palette.primary.white,
+        gap: 8,
+    },
+    rightActions: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        marginBottom: 12,
+        borderRadius: 24,
+        borderWidth: 1.5,
+        borderColor: palette.primary.black[10],
+        backgroundColor: palette.primary.white,
+        gap: 8,
+    },
+    action: {
+        width: 70,
+        height: 80,
+        borderRadius: 20,
+        alignItems: 'center',
+        justifyContent: 'center',
+        gap: 4,
+    },
+    actionText: {
+        fontSize: 20,
+        color: palette.primary.black[100],
+    },
+    actionLabel: {
+        fontSize: 12,
+        fontWeight: '600',
         color: palette.primary.black[100],
     },
 });
