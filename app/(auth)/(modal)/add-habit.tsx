@@ -1,16 +1,20 @@
 import {useRouter} from "expo-router";
 import {Animated, FlatList, Pressable, StyleSheet, Text} from "react-native";
 import {palette} from "@/constants/palette";
-import {POPULAR_HABITS} from "@/constants/popularHabits";
+import {POPULAR_HABITS} from "@/constants/habits";
 import {useSlideAnimation} from "@/hooks/useSlideAnimation";
 import {PopularHabitCard} from '@/components/habits/cards/PopularHabitCard'
 import {useCurrentUser} from "@/hooks/useCurrentUser";
 import {createHabit} from "@/db/habit";
+import {useQueryClient} from "@tanstack/react-query";
+import {DAILY_GOALS_QUERY_KEY} from "@/hooks/useDailyGoal";
 
 export default function AddHabit() {
     const router = useRouter();
     const {slideValue} = useSlideAnimation();
     const {dbUserId} = useCurrentUser();
+
+    const queryClient = useQueryClient();
 
     const handleAddPopular = async (item: typeof POPULAR_HABITS[0]) => {
         if (!dbUserId) return;
@@ -24,6 +28,10 @@ export default function AddHabit() {
             goalValue: item.goalValue,
             goalUnit: item.goalUnit,
             frequencyType: 'daily',
+        });
+
+        await queryClient.invalidateQueries({
+            queryKey: DAILY_GOALS_QUERY_KEY
         });
 
         router.dismissAll();

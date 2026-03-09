@@ -20,3 +20,19 @@ export type Learning = {
     bgColor: string;
     image: ImageSourcePropType;
 };
+
+export type HabitForm = {
+    name: string;
+    goalValue: string;
+    goalUnit: string;
+    icon: string;
+    iconName: string;
+    color: string;
+    colorName: string;
+    frequencyType: FrequencyType;
+    habitType: HabitType;
+};
+
+export type FrequencyType = "daily" | "weekly_times" | "monthly";
+
+export type HabitType = 'yesno' | 'count' | 'time';
