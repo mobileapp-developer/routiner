@@ -1,5 +1,5 @@
 import React from 'react';
-import {Link} from "expo-router";
+import {Link, useRouter} from "expo-router";
 import {useUser} from "@clerk/clerk-expo";
 import {FlatList, StyleSheet, Text, View} from 'react-native';
 import {palette} from "@/constants/palette";
@@ -10,8 +10,10 @@ import HabitCard from "@/components/habits/cards/HabitCard";
 import HorizontalCalendar from "@/components/shared/Calendar";
 import DailyGoalBanner from "@/components/habits/DailyGoalBanner";
 import {deleteHabit} from "@/db/habit";
+import {logHabit} from "@/db/habit_logs";
 
 const Home = () => {
+    const router = useRouter();
     const {user} = useUser();
     const {dbUserId} = useCurrentUser();
     const {habits, loading, refetch} = useHabits(dbUserId!);
@@ -20,6 +22,23 @@ const Home = () => {
         await deleteHabit(habitId);
         refetch();
     };
+
+    const handleDone = async (habitId: number, goalValue: number) => {
+        console.log('done pressed', habitId);
+        await logHabit(habitId, 'done', goalValue);
+        console.log('done logged');
+        await refetch();
+    };
+
+    const handleFail = async (habitId: number) => {
+        await logHabit(habitId, 'fail', 0);
+        await refetch();
+    };
+
+    const handleSkip = async (habitId: number) => {
+        await logHabit(habitId, 'skip', 0);
+        await refetch();
+    }
 
     return (
         <View style={styles.container}>
@@ -68,6 +87,18 @@ const Home = () => {
                         currentValue={item.currentValue}
                         onPress={() => console.log('pressed')}
                         onDelete={() => handleDelete(item.habit.id)}
+                        onDone={() => handleDone(item.habit.id, item.habit.goalValue ?? 1)}
+                        onSkip={() => handleSkip(item.habit.id)}
+                        onFail={() => handleFail(item.habit.id)}
+                        onLogPress={() => router.push({
+                            pathname: '/(auth)/(modal)/log-habit',
+                            params: {
+                                habitId: item.habit.id,
+                                habitName: item.habit.name,
+                                goalUnit: item.habit.goalUnit ?? '',
+                                goalValue: item.habit.goalValue ?? 1,
+                            }
+                        })}
                     />
                 )}
                 style={styles.habitsList}

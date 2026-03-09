@@ -38,6 +38,7 @@ export const habit_logs = sqliteTable('habit_logs', {
     habitId:    int('habit_id').notNull().references(() => habit.id),
     date:       text('date').notNull(),
     value:      real('value').default(1),
+    status:     text('status', {enum: ['done', 'skip', 'fail']}).default('done'),
     note:       text('note'),
     loggedAt:   text('logged_at').default(sql`(datetime('now'))`),
 });
