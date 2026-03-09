@@ -2,7 +2,7 @@ import React, {useState} from "react";
 import {Alert, FlatList, Pressable, ScrollView, StyleSheet, Text, TextInput, View,} from "react-native";
 import {Feather} from "@expo/vector-icons";
 import {palette} from "@/constants/palette";
-import {POPULAR_HABITS} from "@/constants/popularHabits";
+import {POPULAR_HABITS} from "@/constants/habits";
 import {PopularHabitCard} from "@/components/habits/cards/PopularHabitCard";
 import {useCurrentUser} from "@/hooks/useCurrentUser";
 import {createHabit} from "@/db/habit";

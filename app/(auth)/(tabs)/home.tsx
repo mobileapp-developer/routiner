@@ -11,6 +11,8 @@ import HorizontalCalendar from "@/components/shared/Calendar";
 import DailyGoalBanner from "@/components/habits/DailyGoalBanner";
 import {deleteHabit} from "@/db/habit";
 import {logHabit} from "@/db/habit_logs";
+import {useQueryClient} from "@tanstack/react-query";
+import {DAILY_GOALS_QUERY_KEY} from "@/hooks/useDailyGoal";
 
 const Home = () => {
     const router = useRouter();
@@ -18,8 +20,14 @@ const Home = () => {
     const {dbUserId} = useCurrentUser();
     const {habits, loading, refetch} = useHabits(dbUserId!);
 
+    const queryClient = useQueryClient()
+
     const handleDelete = async (habitId: number) => {
         await deleteHabit(habitId);
+
+        queryClient.invalidateQueries({
+            queryKey: DAILY_GOALS_QUERY_KEY
+        })
         refetch();
     };
 
@@ -27,11 +35,20 @@ const Home = () => {
         console.log('done pressed', habitId);
         await logHabit(habitId, 'done', goalValue);
         console.log('done logged');
+
+        queryClient.invalidateQueries({
+            queryKey: DAILY_GOALS_QUERY_KEY
+        })
         await refetch();
     };
 
     const handleFail = async (habitId: number) => {
         await logHabit(habitId, 'fail', 0);
+
+        queryClient.invalidateQueries({
+            queryKey: DAILY_GOALS_QUERY_KEY
+        })
+
         await refetch();
     };
 
