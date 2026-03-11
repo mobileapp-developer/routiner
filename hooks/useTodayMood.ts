@@ -1,17 +1,19 @@
-import {useEffect, useState} from 'react';
-import {getTodayMood} from '@/db/mood';
+import {getMoodByDate} from '@/db/mood';
+import {useQuery} from "@tanstack/react-query";
 
-export function useTodayMood(userId: number | null) {
-    const [mood, setMood] = useState<string | null>(null);
+export const MOOD_QUERY_KEY = ['mood'];
 
-    useEffect(() => {
-        if (!userId) return;
-        async function fetch() {
-            const result = await getTodayMood(userId!);
-            if (result) setMood(result.mood);
-        }
-        fetch();
-    }, [userId]);
+export function useTodayMood(userId: number | null, selectedDate?: Date) {
+    const targetDate = (selectedDate ?? new Date()).toISOString().split('T')[0];
 
-    return {mood, setMood};
+    const {data, refetch} = useQuery({
+        queryKey: [...MOOD_QUERY_KEY, userId, targetDate],
+        queryFn: async () => {
+            const result = await getMoodByDate(userId!, targetDate);
+            return result?.mood ?? null;
+        },
+        enabled: !!userId
+    });
+
+    return {mood: data ?? null, refetch}
 }

@@ -5,11 +5,12 @@ import {useQuery} from "@tanstack/react-query"
 
 export const DAILY_GOALS_QUERY_KEY = ["daily-goals"]
 
-export function useDailyGoals(userId: number) {
+export function useDailyGoals(userId: number, selectedDate?: Date) {
+	const targetDate = (selectedDate ?? new Date()).toISOString().split("T")[0];
+
 	const {data} = useQuery({
-		queryKey: DAILY_GOALS_QUERY_KEY,
+		queryKey: [...DAILY_GOALS_QUERY_KEY, targetDate],
 		queryFn: async () => {
-			const today = new Date().toISOString().split("T")[0];
 
 			const allHabits = await db
 				.select()
@@ -19,7 +20,7 @@ export function useDailyGoals(userId: number) {
 			const logs = await db
 				.select()
 				.from(habit_logs)
-				.where(eq(habit_logs.date, today));
+				.where(eq(habit_logs.date, targetDate));
 
 			const completedCount = allHabits.filter((h) => {
 				const habitLog = logs.find((l) => l.habitId === h.id);

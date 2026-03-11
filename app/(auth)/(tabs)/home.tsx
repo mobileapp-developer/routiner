@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {Link, useRouter} from "expo-router";
 import {useUser} from "@clerk/clerk-expo";
 import {FlatList, StyleSheet, Text, View} from 'react-native';
@@ -18,34 +18,35 @@ const Home = () => {
     const router = useRouter();
     const {user} = useUser();
     const {dbUserId} = useCurrentUser();
-    const {habits, loading, refetch} = useHabits(dbUserId!);
+    const [selectedDate, setSelectedDate] = useState<Date>(new Date());
+    const {habits, loading, refetch} = useHabits(dbUserId!, selectedDate);
 
     const queryClient = useQueryClient()
 
     const handleDelete = async (habitId: number) => {
         await deleteHabit(habitId);
 
-        queryClient.invalidateQueries({
+        await queryClient.invalidateQueries({
             queryKey: DAILY_GOALS_QUERY_KEY
         })
-        refetch();
+        await refetch();
     };
 
     const handleDone = async (habitId: number, goalValue: number) => {
         console.log('done pressed', habitId);
-        await logHabit(habitId, 'done', goalValue);
+        await logHabit(habitId, 'done', goalValue, selectedDate.toISOString().split('T')[0]);
         console.log('done logged');
 
-        queryClient.invalidateQueries({
+        await queryClient.invalidateQueries({
             queryKey: DAILY_GOALS_QUERY_KEY
         })
         await refetch();
     };
 
     const handleFail = async (habitId: number) => {
-        await logHabit(habitId, 'fail', 0);
+        await logHabit(habitId, 'fail', 0, selectedDate.toISOString().split('T')[0]);
 
-        queryClient.invalidateQueries({
+        await queryClient.invalidateQueries({
             queryKey: DAILY_GOALS_QUERY_KEY
         })
 
@@ -53,7 +54,7 @@ const Home = () => {
     };
 
     const handleSkip = async (habitId: number) => {
-        await logHabit(habitId, 'skip', 0);
+        await logHabit(habitId, 'skip', 0, selectedDate.toISOString().split('T')[0]);
         await refetch();
     }
 
@@ -80,7 +81,7 @@ const Home = () => {
 
             {/* Calendar */}
             <View>
-                <HorizontalCalendar daysCount={10}/>
+                <HorizontalCalendar onDaySelect={(date) => setSelectedDate(date)}/>
             </View>
 
             <View style={styles.dailyProgress}>
@@ -88,7 +89,11 @@ const Home = () => {
             </View>
 
             <View style={styles.section}>
-                <Text style={styles.sectionTitle}>Habits</Text>
+                <Text style={styles.sectionTitle}>
+                    {selectedDate.toDateString() === new Date().toDateString()
+                        ? 'Today\'s Habits'
+                        : selectedDate.toLocaleDateString('en-US', {month: 'short', day: 'numeric'})}
+                </Text>
 
                 <Link href={"/(auth)/(tabs)/explore"}>
                     <Text style={styles.sectionLink}>VIEW ALL</Text>
