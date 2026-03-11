@@ -11,17 +11,16 @@ interface HorizontalCalendarProps {
     onDaySelect?: (date: Date) => void;
 }
 
-interface HorizontalCalendarProps {
-    onDaySelect?: (date: Date) => void;
-    daysCount?: number;
-}
+const PAST_DAYS = 30;
+const FUTURE_DAYS = 6;
 
-const generateDays = (count = 60) => {
+const generateDays = () => {
     const today = new Date();
+    const total = PAST_DAYS + 1 + FUTURE_DAYS;
 
-    return Array.from({length: count}, (_, i) => {
+    return Array.from({length: total}, (_, i) => {
         const date = new Date(today);
-        date.setDate(today.getDate() - 7 + i);
+        date.setDate(today.getDate() - PAST_DAYS + i);
         return date;
     });
 };

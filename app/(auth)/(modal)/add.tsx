@@ -25,7 +25,7 @@ export default function AddModal() {
                             onPress={() => router.push('/(auth)/(modal)/add-habit')}
                         />
                     </View>
-                    <AddMoodCard/>
+                    <AddMoodCard />
                 </Pressable>
             </Animated.View>
         </Pressable>

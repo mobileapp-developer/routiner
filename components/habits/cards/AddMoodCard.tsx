@@ -4,33 +4,45 @@ import {logMood} from "@/db/mood";
 import {MOOD} from "@/constants/mood";
 import {palette} from "@/constants/palette";
 import {useCurrentUser} from "@/hooks/useCurrentUser";
-import {useTodayMood} from "@/hooks/useTodayMood";
+import {MOOD_QUERY_KEY, useTodayMood} from "@/hooks/useTodayMood";
+import {useQueryClient} from "@tanstack/react-query";
 
-export default function AddMoodCard() {
+interface AddMoodCardProps {
+    selectedDate?: Date;
+}
+
+export default function AddMoodCard({selectedDate}: AddMoodCardProps) {
+    const targetDate = (selectedDate ?? new Date()).toISOString().split('T')[0];
+    const queryClient = useQueryClient();
     const {dbUserId} = useCurrentUser();
-    const {mood: selected, setMood: setSelected} = useTodayMood(dbUserId);
+    const {mood: selected} = useTodayMood(dbUserId, selectedDate);
+
+    const isToday = !selectedDate ||
+        selectedDate.toDateString() === new Date().toDateString();
 
     const onSelect = async (id: string) => {
-        setSelected(id);
-
-        if (!dbUserId) return;
-
-        const today = new Date().toISOString().split('T')[0];
+        if (!isToday || !dbUserId) return;
 
         await logMood({
             userId: dbUserId,
             mood: id as 'angry' | 'sad' | 'neutral' | 'good' | 'happy',
-            date: today,
+            date: targetDate,
         });
 
-        console.log('Mood saved:', id, 'for user:', dbUserId);
+        await queryClient.invalidateQueries({
+            queryKey: [...MOOD_QUERY_KEY, dbUserId, targetDate]
+        });
     }
 
     return (
         <Animated.View style={styles.card}>
             <View style={styles.left}>
-                <Text style={styles.title}>Add Mood</Text>
-                <Text style={styles.subtitle}>How're you feeling?</Text>
+                <Text style={styles.title}>
+                    {isToday ? 'Add Mood' : 'Mood'}
+                </Text>
+                <Text style={styles.subtitle}>
+                    {isToday ? "How're you feeling?" : selected ? 'Mood that day' : 'No mood logged'}
+                </Text>
             </View>
 
             <FlatList
@@ -39,13 +51,16 @@ export default function AddMoodCard() {
                 data={MOOD}
                 keyExtractor={item => item.id}
                 renderItem={({item}) => (
-                    <Pressable onPress={() => onSelect(item.id)} style={[
-                        styles.emojiButton,
-                        selected === item.id && styles.emojiSelected
-                    ]}>
-                        <Text style={styles.emoji}>
-                            {item.emoji}
-                        </Text>
+                    <Pressable
+                        onPress={() => onSelect(item.id)}
+                        disabled={!isToday}
+                        style={[
+                            styles.emojiButton,
+                            selected === item.id && styles.emojiSelected,
+                            !isToday && selected !== item.id && styles.emojiDimmed,
+                        ]}
+                    >
+                        <Text style={styles.emoji}>{item.emoji}</Text>
                     </Pressable>
                 )}
             />
@@ -92,5 +107,8 @@ const styles = StyleSheet.create({
         borderWidth: 1.5,
         borderColor: palette.primary.blue[100],
         backgroundColor: palette.primary.blue[10],
+    },
+    emojiDimmed: {
+        opacity: 0.3,
     },
 });

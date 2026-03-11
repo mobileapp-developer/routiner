@@ -2,8 +2,8 @@ import {habit_logs} from "@/db/schema";
 import {db} from "@/db/database";
 import {and, eq} from "drizzle-orm";
 
-export async function logHabit(habitId: number, status: 'done' | 'skip' | 'fail', value = 1) {
-    const today = new Date().toISOString().split('T')[0];
+export async function logHabit(habitId: number, status: 'done' | 'skip' | 'fail', value = 1, date?: string) {
+    const today = date ?? new Date().toISOString().split('T')[0];
 
     const existing = await db
         .select()
