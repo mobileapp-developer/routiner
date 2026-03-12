@@ -11,9 +11,12 @@ export async function logHabit(habitId: number, status: 'done' | 'skip' | 'fail'
         .where(and(eq(habit_logs.habitId, habitId), eq(habit_logs.date, today)));
 
     if (existing[0]) {
+        const newValue = (status === 'fail' || status === 'skip')
+            ? 0
+            : (existing[0].value ?? 0) + value;
         return db
             .update(habit_logs)
-            .set({value, status})
+            .set({value: newValue, status})
             .where(eq(habit_logs.id, existing[0].id))
     }
 

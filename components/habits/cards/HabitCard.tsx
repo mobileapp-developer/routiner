@@ -5,6 +5,7 @@ import {palette} from "@/constants/palette";
 import Swipeable, {SwipeableMethods} from "react-native-gesture-handler/ReanimatedSwipeable";
 import {Entypo, FontAwesome5, MaterialIcons} from "@expo/vector-icons";
 import {useRef} from "react";
+import CircularProgress from "@/components/ui/CircularProgress";
 
 type Props = {
     habit: THabit,
@@ -133,6 +134,12 @@ export default function HabitCard({habit, currentValue, onPress, onDelete, onFai
         }
     }
 
+    const getProgressPercentage = () => {
+        if (habit.type === 'yesno') return currentValue >= 1 ? 100 : 0;
+        const goal = habit.goalValue ?? 1;
+        return Math.min(Math.round((currentValue / goal) * 100), 100);
+    }
+
     return (
         <Swipeable
             ref={swipeableRef}
@@ -144,6 +151,12 @@ export default function HabitCard({habit, currentValue, onPress, onDelete, onFai
             <Animated.View style={{transform: [{scale: scaleValue}]}}>
                 <Pressable style={styles.card} onPress={onPress} onPressIn={onPressIn} onPressOut={onPressOut}>
                     <View style={styles.left}>
+                        <CircularProgress
+                            percentage={getProgressPercentage()}
+                            size={56}
+                            strokeWidth={3}
+                            color={palette.primary.blue[100]}
+                        />
                         <Text style={styles.icon}>{habit.icon ?? '📌'}</Text>
                     </View>
                     <View style={styles.info}>
@@ -172,10 +185,15 @@ const styles = StyleSheet.create({
         marginBottom: 12,
     },
     left: {
+        width: 56,
+        height: 56,
         marginRight: 12,
+        alignItems: 'center',
+        justifyContent: 'center',
     },
     icon: {
-        fontSize: 28,
+        position: 'absolute',
+        fontSize: 26,
     },
     info: {
         flex: 1,

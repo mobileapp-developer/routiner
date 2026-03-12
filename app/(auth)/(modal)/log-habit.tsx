@@ -4,9 +4,12 @@ import {useSlideAnimation} from "@/hooks/useSlideAnimation";
 import {palette} from "@/constants/palette";
 import {useState} from "react";
 import {logHabit} from "@/db/habit_logs";
+import {useQueryClient} from "@tanstack/react-query";
+import {DAILY_GOALS_QUERY_KEY} from "@/hooks/useDailyGoal";
 
 export default function LogHabit() {
     const router = useRouter();
+    const queryClient = useQueryClient();
     const {slideValue} = useSlideAnimation();
     const {habitId, habitName, goalUnit, goalValue} = useLocalSearchParams<{
         habitId: string;
@@ -21,6 +24,9 @@ export default function LogHabit() {
         if (!value || !habitId) return;
 
         await logHabit(Number(habitId), 'done', Number(value));
+        await queryClient.invalidateQueries({
+            queryKey: DAILY_GOALS_QUERY_KEY
+        });
         router.back();
     };
 

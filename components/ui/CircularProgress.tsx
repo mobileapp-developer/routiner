@@ -1,20 +1,41 @@
-import {Text, View} from "react-native";
+import {Animated, Text, View} from "react-native";
 import Svg, {Circle} from "react-native-svg";
+import {useEffect, useRef} from "react";
+
+const AnimatedCircle = Animated.createAnimatedComponent(Circle);
 
 interface Props {
-    percentage: number;
-    size?: number;
-    strokeWidth?: number;
+    percentage:     number;
+    size?:          number;
+    strokeWidth?:   number;
+    color?:         string;
+    showLabel?:     boolean;
 }
 
 export default function CircularProgress({
                                              percentage,
                                              size = 64,
                                              strokeWidth = 4,
+                                             color = '#4F46E5',
+                                             showLabel = false,
                                          }: Props) {
     const radius = (size - 4 * strokeWidth) / 2;
     const circumference = 2 * Math.PI * radius;
-    const progressOffset = circumference - (percentage / 100) * circumference;
+
+    const animatedProgress = useRef(new Animated.Value(0)).current;
+
+    useEffect(() => {
+        Animated.timing(animatedProgress, {
+            toValue: percentage,
+            duration: 800,
+            useNativeDriver: true,
+        }).start();
+    }, [percentage]);
+
+    const strokeDashoffset = animatedProgress.interpolate({
+        inputRange: [0, 100],
+        outputRange: [circumference, 0],
+    });
 
     return (
         <View
@@ -30,27 +51,29 @@ export default function CircularProgress({
                     cx={size / 2}
                     cy={size / 2}
                     r={radius}
-                    stroke="rgba(255,255,255,0.25)"
+                    stroke="rgba(0,0,0,0.08)"
                     strokeWidth={strokeWidth}
                     fill="none"
                 />
-                <Circle
+                <AnimatedCircle
                     cx={size / 2}
                     cy={size / 2}
                     r={radius}
-                    stroke="#ffffff"
+                    stroke={color}
                     strokeWidth={strokeWidth}
                     fill="none"
                     strokeDasharray={circumference}
-                    strokeDashoffset={progressOffset}
+                    strokeDashoffset={strokeDashoffset}
                     strokeLinecap="round"
                     rotation="-90"
                     origin={`${size / 2}, ${size / 2}`}
                 />
             </Svg>
-            <Text style={{color: "#fff", fontSize: 13, fontWeight: "700"}}>
-                %{percentage}
-            </Text>
+            {showLabel && (
+                <Text style={{color, fontSize: 13, fontWeight: "700"}}>
+                    {percentage}%
+                </Text>
+            )}
         </View>
     );
 }

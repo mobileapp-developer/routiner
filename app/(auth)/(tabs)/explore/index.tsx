@@ -1,5 +1,5 @@
-import React, {useState} from "react";
-import {Alert, FlatList, Pressable, ScrollView, StyleSheet, Text, TextInput, View,} from "react-native";
+import React, {useRef, useState} from "react";
+import {Alert, Animated, FlatList, Pressable, ScrollView, StyleSheet, Text, TextInput, View,} from "react-native";
 import {Feather} from "@expo/vector-icons";
 import {palette} from "@/constants/palette";
 import {POPULAR_HABITS} from "@/constants/habits";
@@ -30,6 +30,35 @@ const Explore = () => {
     const [query, setQuery] = useState('');
     const [isSearching, setIsSearching] = useState(false);
 
+    const searchWidth  = useRef(new Animated.Value(0)).current;
+    const titleOpacity = useRef(new Animated.Value(1)).current;
+    const inputOpacity = useRef(new Animated.Value(0)).current;
+
+    const openSearch = () => {
+        setIsSearching(true);
+        Animated.parallel([
+            Animated.timing(searchWidth, {toValue: 1, duration: 300, useNativeDriver: false}),
+            Animated.timing(titleOpacity, {toValue: 0, duration: 150, useNativeDriver: true}),
+            Animated.timing(inputOpacity, {toValue: 1, duration: 300, useNativeDriver: true}),
+        ]).start();
+    };
+
+    const closeSearch = () => {
+        Animated.parallel([
+            Animated.timing(searchWidth,  {toValue: 0, duration: 250, useNativeDriver: false}),
+            Animated.timing(titleOpacity, {toValue: 1, duration: 250, useNativeDriver: true}),
+            Animated.timing(inputOpacity, {toValue: 0, duration: 150, useNativeDriver: true}),
+        ]).start(() => {
+            setIsSearching(false);
+            setQuery('');
+        });
+    };
+
+    const animatedWidth = searchWidth.interpolate({
+        inputRange: [0, 1],
+        outputRange: [0, 320],
+    });
+
     const handleAddPopular = async (item: typeof POPULAR_HABITS[0]) => {
         if (!dbUserId) return;
 
@@ -48,43 +77,41 @@ const Explore = () => {
 
     const q = query.toLowerCase();
 
-    const filterHabits     = POPULAR_HABITS.filter(i => i.name.toLowerCase().includes(q));
-    const filterLearning   = LEARNING_ITEMS.filter(i => i.title.toLowerCase().includes(q));
+    const filterHabits   = POPULAR_HABITS.filter(i => i.name.toLowerCase().includes(q));
+    const filterLearning = LEARNING_ITEMS.filter(i => i.title.toLowerCase().includes(q));
 
     return (
         <View style={styles.container}>
             <View style={styles.header}>
                 <View style={styles.headerRow}>
-                    {isSearching ? (
-                        <TextInput
-                            autoFocus
-                            value={query}
-                            onChangeText={setQuery}
-                            placeholder="Search habits, clubs..."
-                            style={styles.searchInput}
-                            onBlur={() => {
-                                if (!query) setIsSearching(false);
-                            }}
-                        />
-                    ) : (
-                        <Text style={styles.headerTitle}>Explore</Text>
+                    <Animated.Text style={[styles.headerTitle, {opacity: titleOpacity}]} numberOfLines={1}>
+                        Explore
+                    </Animated.Text>
+
+                    {isSearching && (
+                        <Animated.View style={[styles.searchInputWrapper, {width: animatedWidth}]}>
+                            <Animated.View style={{flex: 1, opacity: inputOpacity}}>
+                                <TextInput
+                                    autoFocus
+                                    value={query}
+                                    onChangeText={setQuery}
+                                    placeholder="Search habits..."
+                                    placeholderTextColor={palette.primary.black[40]}
+                                    style={styles.searchInput}
+                                />
+                            </Animated.View>
+                        </Animated.View>
                     )}
 
                     <Pressable
                         style={styles.searchBtn}
-                        onPress={() => {
-                            if (isSearching) {
-                                setQuery('');
-                                setIsSearching(false);
-                            } else {
-                                setIsSearching(true);
-                            }
-                        }}
+                        onPress={isSearching ? closeSearch : openSearch}
+                        hitSlop={8}
                     >
                         <Feather
                             name={isSearching ? 'x' : 'search'}
-                            size={18}
-                            color={palette.primary.black[60]}
+                            size={20}
+                            color={palette.primary.black[100]}
                         />
                     </Pressable>
                 </View>
@@ -142,10 +169,14 @@ const styles = StyleSheet.create({
     },
     headerRow: {
         flexDirection: "row",
-        justifyContent: "space-between",
+        justifyContent: "flex-end",
         alignItems: "center",
+        gap: 10,
+        height: 44,
     },
     headerTitle: {
+        position: 'absolute',
+        left: 0,
         fontSize: 28,
         fontWeight: "700",
         color: palette.primary.black[100],
@@ -157,13 +188,24 @@ const styles = StyleSheet.create({
         backgroundColor: palette.primary.black[10],
         alignItems: "center",
         justifyContent: "center",
+        flexShrink: 0,
+    },
+    searchInputWrapper: {
+        height: 40,
+        backgroundColor: palette.primary.black[10],
+        borderRadius: 20,
+        overflow: 'hidden',
+        justifyContent: 'center',
+    },
+    searchIcon: {
+        marginRight: 6,
     },
     searchInput: {
-        flex: 1,
-        fontSize: 18,
-        fontWeight: '600',
+        fontSize: 15,
+        fontWeight: '500',
         color: palette.primary.black[100],
-        paddingVertical: 4,
+        paddingVertical: 12,
+        paddingHorizontal: 16,
     },
     scroll: {
         paddingTop: 24,

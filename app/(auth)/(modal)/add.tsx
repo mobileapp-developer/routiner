@@ -1,4 +1,4 @@
-import {Animated, Pressable, StyleSheet, View} from "react-native";
+import {Alert, Animated, Pressable, StyleSheet, View} from "react-native";
 import {useSlideAnimation} from "@/hooks/useSlideAnimation";
 import {useRouter} from "expo-router";
 import AddModalCard from "@/components/habits/cards/AddModalCard";
@@ -16,7 +16,7 @@ export default function AddModal() {
                             title='Quit Bad Habit'
                             subtitle='Never too late...'
                             icon={require('@/assets/icons/shield-failed.png')}
-                            onPress={() => router.push('/(auth)/(modal)/quit-habit')}
+                            onPress={() => Alert.alert('Coming Soon!')}
                         />
                         <AddModalCard
                             title='New Good Habit'
@@ -25,7 +25,7 @@ export default function AddModal() {
                             onPress={() => router.push('/(auth)/(modal)/add-habit')}
                         />
                     </View>
-                    <AddMoodCard />
+                    <AddMoodCard/>
                 </Pressable>
             </Animated.View>
         </Pressable>

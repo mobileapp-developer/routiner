@@ -1,8 +1,7 @@
 import {useAuth} from "@clerk/clerk-expo";
 import {LinearGradient} from "expo-linear-gradient";
-import {useRouter} from "expo-router";
 import {useEffect, useState} from "react";
-import {Animated, Pressable, StyleSheet, Text, View} from "react-native";
+import {Alert, Animated, Pressable, StyleSheet, Text, View} from "react-native";
 import CircularProgress from "@/components/ui/CircularProgress";
 import {getUser} from "@/db/user";
 import {useDailyGoals} from "@/hooks/useDailyGoal";
@@ -10,7 +9,6 @@ import {usePressAnimation} from "@/hooks/usePressAnimation";
 import {palette} from "@/constants/palette";
 
 const DailyGoalBanner = () => {
-    const router = useRouter();
     const {userId: clerkId} = useAuth();
     const [userId, setUserId] = useState<number | null>(null);
     const {completed, total} = useDailyGoals(userId ?? 0);
@@ -28,7 +26,7 @@ const DailyGoalBanner = () => {
 
     return (
         <Animated.View style={{transform: [{scale: scaleValue}]}}>
-            <Pressable onPress={() => router.push("/(auth)/(tabs)/home")} onPressIn={onPressIn} onPressOut={onPressOut}>
+            <Pressable onPress={() => Alert.alert("Coming Soon!")} onPressIn={onPressIn} onPressOut={onPressOut}>
                 <LinearGradient
                     colors={["#000DFF", "#6B73FF"]}
                     style={styles.container}
@@ -38,7 +36,7 @@ const DailyGoalBanner = () => {
                     {/* Content */}
                     <View style={styles.content}>
                         <View style={styles.progressBarContainer}>
-                            <CircularProgress percentage={percentage}/>
+                            <CircularProgress percentage={percentage} color={palette.primary.white} showLabel/>
                         </View>
                         <View>
                             <Text style={styles.dailyButtonTitle}>Your daily goals almost done! 🔥</Text>
