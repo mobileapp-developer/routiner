@@ -32,10 +32,9 @@ const Home = () => {
         await refetch();
     };
 
-    const handleDone = async (habitId: number, goalValue: number) => {
-        console.log('done pressed', habitId);
-        await logHabit(habitId, 'done', goalValue, selectedDate.toISOString().split('T')[0]);
-        console.log('done logged');
+    const handleDone = async (habitId: number, goalValue: number, currentValue: number) => {
+        const remaining = Math.max(goalValue - currentValue, 0)
+        await logHabit(habitId, 'done', remaining, selectedDate.toISOString().split('T')[0]);
 
         await queryClient.invalidateQueries({
             queryKey: DAILY_GOALS_QUERY_KEY
@@ -109,7 +108,7 @@ const Home = () => {
                         currentValue={item.currentValue}
                         onPress={() => console.log('pressed')}
                         onDelete={() => handleDelete(item.habit.id)}
-                        onDone={() => handleDone(item.habit.id, item.habit.goalValue ?? 1)}
+                        onDone={() => handleDone(item.habit.id, item.habit.goalValue ?? 1, item.currentValue)}
                         onSkip={() => handleSkip(item.habit.id)}
                         onFail={() => handleFail(item.habit.id)}
                         onLogPress={() => router.push({
