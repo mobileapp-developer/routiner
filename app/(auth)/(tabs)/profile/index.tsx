@@ -29,6 +29,7 @@ export default function Profile() {
             allowsEditing: true,
             aspect: [1, 1],
             quality: 0.5,
+            base64: true,
         });
 
         if (result.canceled || !result.assets?.length) return;
@@ -36,14 +37,17 @@ export default function Profile() {
         try {
             setUploading(true);
             const asset = result.assets[0];
+            const mimeType = asset.mimeType ?? 'image/jpeg';
+            const base64 = asset.base64;
 
-            // Convert local URI -> Blob -> File for Clerk upload
-            const blob = await (await fetch(asset.uri)).blob();
-            const file = new File([blob], 'avatar.jpg', {
-                type: asset.mimeType ?? 'image/jpeg',
-            });
+            if (!base64) {
+                Alert.alert('Upload failed', 'Could not read selected image. Please try again.');
+                return;
+            }
 
-            await user.setProfileImage({file});
+            const dataUrl = `data:${mimeType};base64,${base64}`;
+
+            await user.setProfileImage({file: dataUrl});
             await user.reload();
         } catch (e) {
             Alert.alert('Upload failed', 'Could not update avatar. Please try again.');

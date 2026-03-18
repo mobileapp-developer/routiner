@@ -1,5 +1,5 @@
 import {useState} from "react";
-import {Pressable, StyleSheet, Switch, Text, View} from "react-native";
+import {Alert, Pressable, StyleSheet, Switch, Text, View} from "react-native";
 import {palette} from "@/constants/palette";
 import {Ionicons} from "@expo/vector-icons";
 import BackButton from "@/components/ui/BackButton";
@@ -18,8 +18,9 @@ export default function Settings() {
         try {
             await signOut();
             router.replace('/(public)/onboarding');
-        } catch (error: any) {
-            console.log(error);
+        } catch (error) {
+            console.error('Sign out failed:', error);
+            Alert.alert('Sign Out Failed', 'Please try again.');
         }
     }
 
