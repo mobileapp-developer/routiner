@@ -1,11 +1,14 @@
-import {Tabs} from 'expo-router';
+import {Tabs, usePathname} from 'expo-router';
 import MyTabBar from '@/components/layout/TabBar';
 import {FontAwesome5, Ionicons, MaterialIcons} from "@expo/vector-icons";
 import {palette} from "@/constants/palette";
 
 export default function TabLayout() {
+    const pathname = usePathname();
+    const hideTabBar = pathname.startsWith('/profile/settings');
+
     return (
-        <Tabs tabBar={(props) => <MyTabBar {...props} />}>
+        <Tabs tabBar={(props) => (hideTabBar ? null :<MyTabBar {...props} />)}>
             <Tabs.Screen
                 name="home"
                 options={{
