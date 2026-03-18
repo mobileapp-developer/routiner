@@ -1,6 +1,6 @@
 import {db} from './database';
 import {mood_logs, TInsertMoodLog} from './schema';
-import {and, eq} from "drizzle-orm";
+import {and, eq, gte, lte} from "drizzle-orm";
 
 export async function logMood(data: TInsertMoodLog) {
     const date = data.date ?? new Date().toISOString().split('T')[0];
@@ -27,4 +27,16 @@ export async function getMoodByDate(userId: number, date: string) {
         .where(and(eq(mood_logs.userId, userId), eq(mood_logs.date, date)))
         .limit(1);
     return result[0] ?? null;
+}
+
+export async function getMoodByRange(userId: number, from: string, to: string) {
+    return db
+        .select()
+        .from(mood_logs)
+        .where(and(
+            eq(mood_logs.userId, userId),
+            gte(mood_logs.date, from),
+            lte(mood_logs.date, to)
+        ))
+        .orderBy(mood_logs.date);
 }

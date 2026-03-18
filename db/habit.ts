@@ -13,7 +13,7 @@ export async function getHabits(userId: number) {
 }
 
 export async function deleteHabit(habitId: number) {
-    await db.delete(habit).where(eq(habit_logs.habitId, habitId));
+    await  db.delete(habit_logs).where(eq(habit_logs.habitId, habitId));
     return db.delete(habit).where(eq(habit.id, habitId));
 }
 

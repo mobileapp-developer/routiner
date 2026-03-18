@@ -1,9 +1,8 @@
-import { Redirect } from 'expo-router';
-import { useAuth } from '@clerk/clerk-expo';
+import {Redirect} from 'expo-router';
+import {useAuth} from '@clerk/clerk-expo';
 
 export default function RootIndex() {
     const { isLoaded, isSignedIn } = useAuth();
-
     if (!isLoaded) return null;
 
     if (isSignedIn) {

@@ -6,11 +6,19 @@ import {useDatabaseMigrations} from "@/db/migrations";
 import {ActivityIndicator, StyleSheet, Text, View} from "react-native";
 import {GestureHandlerRootView} from "react-native-gesture-handler";
 import {QueryClient, QueryClientProvider} from "@tanstack/react-query";
+import {useEffect} from "react";
 
 const queryClient = new QueryClient()
 
 export default function RootLayout() {
     const {success, error} = useDatabaseMigrations();
+    useEffect(() => {
+        if (error) {
+            console.log('MIGRATION_ERROR_MESSAGE:', (error as any)?.message);
+            console.log('MIGRATION_ERROR_CAUSE:', (error as any)?.cause);
+            console.log('MIGRATION_ERROR_STACK:', (error as any)?.stack);
+        }
+    }, [error]);
 
     if (error) {
         return (
