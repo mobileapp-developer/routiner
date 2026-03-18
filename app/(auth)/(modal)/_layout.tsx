@@ -19,6 +19,7 @@ export default function ModalLayout() {
                               presentation: 'formSheet',
                               sheetCornerRadius: 32,
                               sheetAllowedDetents: [0.4],
+                              sheetLargestUndimmedDetentIndex: 0,
                               sheetGrabberVisible: true,
                               title: '',
                               animation: 'fade',
