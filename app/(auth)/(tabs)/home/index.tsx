@@ -13,8 +13,10 @@ import {deleteHabit} from "@/db/habit";
 import {logHabit} from "@/db/habit_logs";
 import {useQueryClient} from "@tanstack/react-query";
 import {DAILY_GOALS_QUERY_KEY} from "@/hooks/useDailyGoal";
+import {awardPoints, deductPoints} from "@/db/points";
+import {TOTAL_POINTS_QUERY_KEY} from "@/hooks/useTotalPoints";
 
-const Home = () => {
+export default function Home(){
     const router = useRouter();
     const {user} = useUser();
     const {dbUserId} = useCurrentUser();
@@ -36,17 +38,28 @@ const Home = () => {
         const remaining = Math.max(goalValue - currentValue, 0)
         await logHabit(habitId, 'done', remaining, selectedDate.toISOString().split('T')[0]);
 
+        await awardPoints(dbUserId!, habitId);
+
         await queryClient.invalidateQueries({
             queryKey: DAILY_GOALS_QUERY_KEY
-        })
+        });
+        await queryClient.invalidateQueries({
+            queryKey: [...TOTAL_POINTS_QUERY_KEY, dbUserId]
+        });
         await refetch();
     };
 
     const handleFail = async (habitId: number) => {
         await logHabit(habitId, 'fail', 0, selectedDate.toISOString().split('T')[0]);
 
+        await deductPoints(dbUserId!, habitId);
+
         await queryClient.invalidateQueries({
             queryKey: DAILY_GOALS_QUERY_KEY
+        })
+
+        await queryClient.invalidateQueries({
+            queryKey: [...TOTAL_POINTS_QUERY_KEY, dbUserId]
         })
 
         await refetch();
@@ -94,7 +107,7 @@ const Home = () => {
                         : selectedDate.toLocaleDateString('en-US', {month: 'short', day: 'numeric'})}
                 </Text>
 
-                <Link href={"/(auth)/(tabs)/explore"}>
+                <Link href={"/home/all-habits"}>
                     <Text style={styles.sectionLink}>VIEW ALL</Text>
                 </Link>
             </View>
@@ -207,5 +220,3 @@ const styles = StyleSheet.create({
         color: palette.primary.black[40],
     }
 });
-
-export default Home;

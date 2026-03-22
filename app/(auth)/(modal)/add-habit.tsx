@@ -28,6 +28,7 @@ export default function AddHabit() {
             goalValue: item.goalValue,
             goalUnit: item.goalUnit,
             frequencyType: 'daily',
+            points: item.points,
         });
 
         await queryClient.invalidateQueries({

@@ -10,7 +10,7 @@ import {useRouter} from "expo-router";
 import {usePressAnimation} from "@/hooks/usePressAnimation";
 import Dropdown from "@/components/ui/Dropdown";
 import {HabitForm} from "@/constants/types";
-import {FREQUENCY_OPTIONS, GOAL_UNIT_OPTIONS, HABIT_TYPE_OPTIONS} from "@/constants/habitOptions";
+import {FREQUENCY_OPTIONS, GOAL_UNIT_OPTIONS, HABIT_TYPE_OPTIONS, POINTS_OPTIONS} from "@/constants/habitOptions";
 import {useQueryClient} from "@tanstack/react-query";
 
 export default function CreateHabit() {
@@ -21,6 +21,7 @@ export default function CreateHabit() {
         name: "",
         goalValue: "",
         goalUnit: "",
+        points: "10",
         icon: "🚶",
         iconName: "Walking",
         color: "#FFE5D9",
@@ -35,6 +36,7 @@ export default function CreateHabit() {
     const [frequencyDropdownVisible, setFrequencyDropdownVisible] = useState(false);
     const [habitTypeDropdownVisible, setHabitTypeDropdownVisible] = useState(false);
     const [goalUnitDropdownVisible, setGoalUnitDropdownVisible] = useState(false);
+    const [pointsDropdownVisible, setPointsDropdownVisible] = useState(false);
 
     const {dbUserId} = useCurrentUser();
     const {scaleValue, onPressOut, onPressIn} = usePressAnimation();
@@ -59,6 +61,7 @@ export default function CreateHabit() {
             goalValue: form.goalValue ? parseFloat(form.goalValue) : null,
             goalUnit: form.goalUnit || null,
             frequencyType: form.frequencyType,
+            points: form.points ? parseInt(form.points) : 10,
         });
 
         await queryClient.invalidateQueries({
@@ -129,6 +132,7 @@ export default function CreateHabit() {
                             <Text style={styles.goalSub}>or more per day</Text>
                         </View>
                     </View>
+
                     <View style={styles.goalBottom}>
                         <Pressable style={styles.goalChip} onPress={() => setFrequencyDropdownVisible(true)}>
                             <Text style={styles.goalChipText}>
@@ -145,6 +149,12 @@ export default function CreateHabit() {
                         <Pressable style={styles.goalChip} onPress={() => setGoalUnitDropdownVisible(true)}>
                             <Text style={styles.goalChipText}>
                                 {form.goalUnit ? form.goalUnit : '📐 Unit'}
+                            </Text>
+                        </Pressable>
+
+                        <Pressable style={styles.goalChip} onPress={() => setPointsDropdownVisible(true)}>
+                            <Text style={styles.goalChipText}>
+                                {form.points ? `⭐ ${form.points} pts` : '⭐ Points'}
                             </Text>
                         </Pressable>
                     </View>
@@ -195,6 +205,14 @@ export default function CreateHabit() {
                 selected={form.goalUnit}
                 onSelect={(value) => updateForm('goalUnit', value)}
                 onClose={() => setGoalUnitDropdownVisible(false)}
+            />
+
+            <Dropdown
+                visible={pointsDropdownVisible}
+                options={POINTS_OPTIONS}
+                selected={form.points}
+                onSelect={(value) => updateForm('points', value)}
+                onClose={() => setPointsDropdownVisible(false)}
             />
         </View>
     );

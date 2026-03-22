@@ -3,14 +3,18 @@ import {ActivityIndicator, Alert, Image, Pressable, StyleSheet, Text, View} from
 import {useUser} from "@clerk/clerk-expo";
 import {palette} from "@/constants/palette";
 import {useRouter} from "expo-router";
-import {Ionicons} from "@expo/vector-icons";
+import {FontAwesome5, Ionicons} from "@expo/vector-icons";
 import * as ImagePicker from 'expo-image-picker';
+import {useCurrentUser} from "@/hooks/useCurrentUser";
+import {useTotalPoints} from "@/hooks/useTotalPoints";
 
 export default function Profile() {
     const [uploading, setUploading] = useState(false);
 
     const router = useRouter();
     const {user} = useUser();
+    const {dbUserId} = useCurrentUser();
+    const {data: totalPoints} = useTotalPoints(dbUserId);
 
     const onSettingsPress = () => router.push('/profile/settings');
 
@@ -70,13 +74,17 @@ export default function Profile() {
                 <View style={styles.profile}>
                     <Pressable onPress={onAvatarPress} disabled={uploading} style={styles.avatar}>
                         {user?.imageUrl ? (
-                            <Image source={{uri: user.imageUrl}} style={styles.avatarImage} />
+                            <Image source={{uri: user.imageUrl}} style={styles.avatarImage}/>
                         ) : null}
-                        {uploading ? <ActivityIndicator /> : null}
+                        {uploading ? <ActivityIndicator/> : null}
                     </Pressable>
-                    <Text style={styles.userName}>
-                        {user?.firstName} {user?.lastName}
-                    </Text>
+                    <View style={styles.userNameContainer}>
+                        <Text style={styles.userName}>{user?.firstName} {user?.lastName}</Text>
+                        <View style={styles.pointsContainer}>
+                            <FontAwesome5 name='medal' size={16} color={palette.primary.orangeWarning[100]}/>
+                            <Text style={styles.habitPoints}>{totalPoints}</Text>
+                        </View>
+                    </View>
                 </View>
             </View>
         </View>
@@ -133,15 +141,32 @@ const styles = StyleSheet.create({
         height: '100%',
         width: '100%',
     },
-    editButton: {
-
-    },
     userName: {
         fontSize: 18,
         fontWeight: '500',
         lineHeight: 24,
         letterSpacing: 0,
-        paddingHorizontal: 16,
         color: palette.primary.black[100],
+    },
+    userNameContainer: {
+        flexDirection: 'column',
+        paddingHorizontal: 16,
+    },
+    pointsContainer: {
+        width: 60,
+        flexDirection: 'row',
+        justifyContent: 'flex-start',
+        alignItems: 'center',
+        paddingHorizontal: 10,
+        paddingVertical: 2,
+        backgroundColor: palette.primary.orangeWarning[20],
+        borderColor: palette.primary.orangeWarning[80],
+        borderWidth: 0.5,
+        borderRadius: 18
+    },
+    habitPoints: {
+        fontSize: 16,
+        fontWeight: '600',
+        color: palette.primary.orangeWarning[100],
     },
 });
