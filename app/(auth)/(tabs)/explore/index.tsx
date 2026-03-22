@@ -9,6 +9,8 @@ import {createHabit} from "@/db/habit";
 import {LEARNING_ITEMS} from "@/constants/data";
 import {LearningCard} from "@/components/habits/cards/LearningCard";
 import {Link} from "expo-router";
+import {useQueryClient} from "@tanstack/react-query";
+import {DAILY_GOALS_QUERY_KEY} from "@/hooks/useDailyGoal";
 
 function SectionHeader({title, href}: { title: string; href?: string }) {
     return (
@@ -26,6 +28,7 @@ function SectionHeader({title, href}: { title: string; href?: string }) {
 }
 
 const Explore = () => {
+    const queryClient = useQueryClient();
     const {dbUserId} = useCurrentUser();
     const [query, setQuery] = useState('');
     const [isSearching, setIsSearching] = useState(false);
@@ -71,8 +74,12 @@ const Explore = () => {
             goalValue: item.goalValue,
             goalUnit: item.goalUnit,
             frequencyType: 'daily',
+            points: item.points,
         });
         Alert.alert('Habit added successfully!');
+        await queryClient.invalidateQueries({
+            queryKey: DAILY_GOALS_QUERY_KEY
+        });
     }
 
     const q = query.toLowerCase();

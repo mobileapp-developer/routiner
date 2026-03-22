@@ -1,9 +1,13 @@
 import {usePressAnimation} from "@/hooks/usePressAnimation";
-import {Animated, Pressable, StyleSheet, Text} from "react-native";
-import {POPULAR_HABITS} from "@/constants/popularHabits";
+import {Animated, Pressable, StyleSheet, Text, View} from "react-native";
+import {POPULAR_HABITS} from "@/constants/habits";
 import {palette} from "@/constants/palette";
 
-export function PopularHabitCard({item, onPress, fullWidth}: { item: typeof POPULAR_HABITS[0], onPress: () => void, fullWidth?: boolean }) {
+export function PopularHabitCard({item, onPress, fullWidth}: {
+    item: typeof POPULAR_HABITS[0],
+    onPress: () => void,
+    fullWidth?: boolean
+}) {
     const {scaleValue, onPressIn, onPressOut} = usePressAnimation();
 
     return (
@@ -14,9 +18,16 @@ export function PopularHabitCard({item, onPress, fullWidth}: { item: typeof POPU
                 onPressIn={onPressIn}
                 onPressOut={onPressOut}
             >
-                <Text style={styles.habitEmoji}>{item.emoji}</Text>
+                <View style={{flexDirection: 'row'}}>
+                    <Text style={styles.habitEmoji}>{item.emoji}</Text>
+                    <View style={styles.pointsContainer}>
+                        <Text style={styles.habitPoints}>{item.points} points ⭐</Text>
+                    </View>
+                </View>
                 <Text style={styles.habitName}>{item.name}</Text>
-                <Text style={styles.habitGoal}>{item.goalValue} {item.goalUnit}</Text>
+                <View style={styles.goalValueContainer}>
+                    <Text style={styles.habitGoal}>{item.goalValue} {item.goalUnit}</Text>
+                </View>
             </Pressable>
         </Animated.View>
     );
@@ -24,7 +35,7 @@ export function PopularHabitCard({item, onPress, fullWidth}: { item: typeof POPU
 
 const styles = StyleSheet.create({
     habitCard: {
-        height: 120,
+        height: 110,
         width: 150,
         borderRadius: 16,
         padding: 12,
@@ -45,4 +56,25 @@ const styles = StyleSheet.create({
         fontSize: 13,
         color: palette.primary.black[60],
     },
+    goalValueContainer: {
+        width: 110,
+        justifyContent: 'center',
+        paddingVertical: 2,
+        borderRadius: 18
+    },
+    pointsContainer: {
+        height: 30,
+        justifyContent: 'center',
+        paddingHorizontal: 6,
+        paddingVertical: 2,
+        backgroundColor: palette.primary.orangeWarning[20],
+        borderColor: palette.primary.orangeWarning[80],
+        borderWidth: 0.5,
+        borderRadius: 10,
+    },
+    habitPoints: {
+        fontSize: 13,
+        fontWeight: '600',
+        color: palette.primary.orangeWarning[100],
+    }
 });

@@ -23,6 +23,7 @@ export const habit = sqliteTable('habits', {
     type:             text('type', { enum: ['yesno', 'count', 'time'] }).notNull(),
     goalValue:        real('goal_value'),
     goalUnit:         text('goal_unit'),
+    points:           int('points').default(10),
     frequencyType:    text('frequency_type', { enum: ['daily', 'weekly_days', 'weekly_times', 'monthly']  }).notNull(),
     frequencyDays:    text('frequency_days'),
     frequencyTimes:   int('frequency_times'),
@@ -53,3 +54,12 @@ export const mood_logs = sqliteTable('mood_logs', {
 
 export type TMoodLog = typeof mood_logs.$inferSelect
 export type TInsertMoodLog = typeof mood_logs.$inferInsert
+
+export const points_logs = sqliteTable('points_logs', {
+    id:        int('id').primaryKey({autoIncrement: true}),
+    userId:    int('user_id').notNull().references(() => user.id),
+    habitId:   int('habit_id').notNull().references(() => habit.id),
+    points:    int('points').notNull(),
+    date:      text('date').notNull(),
+    loggedAt:  text('logged_at').default(sql`(datetime('now'))`),
+});

@@ -1,4 +1,4 @@
-import {Alert, Animated, Pressable, StyleSheet, Text, View} from "react-native";
+import {Alert, Animated, Easing, Pressable, StyleSheet, Text, View} from "react-native";
 import {THabit} from "@/db/schema";
 import {usePressAnimation} from "@/hooks/usePressAnimation";
 import {palette} from "@/constants/palette";
@@ -24,6 +24,12 @@ export default function HabitCard({habit, currentValue, onPress, onDelete, onFai
     const doneScale     = useRef(new Animated.Value(1)).current;
     const doneBgOpacity = useRef(new Animated.Value(0)).current;
     const doneRotate    = useRef(new Animated.Value(0)).current;
+    const failScale     = useRef(new Animated.Value(1)).current;
+    const failBgOpacity = useRef(new Animated.Value(0)).current;
+    const failShake     = useRef(new Animated.Value(0)).current;
+    const skipScale     = useRef(new Animated.Value(1)).current;
+    const skipBgOpacity = useRef(new Animated.Value(0)).current;
+    const skipShift     = useRef(new Animated.Value(0)).current;
     const swipeableRef  = useRef<SwipeableMethods>(null);
 
     const handleDonePress = () => {
@@ -61,9 +67,124 @@ export default function HabitCard({habit, currentValue, onPress, onDelete, onFai
         ]).start(() => {
             doneRotate.setValue(0);
             swipeableRef.current?.close();
+            onDone();
         });
+    };
+    
+    const handleFailPress = () => {
+        Animated.sequence([
+            Animated.parallel([
+                Animated.timing(failScale, {
+                    toValue: 0.75,
+                    duration: 50,
+                    useNativeDriver: true,
+                }),
+                Animated.timing(failBgOpacity, {
+                    toValue: 1,
+                    duration: 90,
+                    useNativeDriver: true,
+                }),
+            ]),
+            Animated.parallel([
+                Animated.sequence([
+                    Animated.spring(failScale, {
+                        toValue: 1.08,
+                        useNativeDriver: true,
+                        bounciness: 12,
+                        speed: 18,
+                    }),
+                    Animated.spring(failScale, {
+                        toValue: 1,
+                        useNativeDriver: true,
+                        bounciness: 14,
+                        speed: 18,
+                    }),
+                ]),
+                Animated.timing(failShake, {
+                    toValue: 1,
+                    duration: 240,
+                    easing: Easing.linear,
+                    useNativeDriver: true,
+                }),
+                Animated.timing(failBgOpacity, {
+                    toValue: 0,
+                    duration: 260,
+                    useNativeDriver: true,
+                }),
+            ]),
+        ]).start(() => {
+            failShake.setValue(0);
+            swipeableRef.current?.close();
+            onFail();
+        });
+    };
 
-        onDone();
+    const handleSkipPress = () => {
+        Animated.sequence([
+            Animated.parallel([
+                Animated.timing(skipScale, {
+                    toValue: 0.75,
+                    duration: 50,
+                    useNativeDriver: true,
+                }),
+                Animated.timing(skipBgOpacity, {
+                    toValue: 1,
+                    duration: 90,
+                    useNativeDriver: true,
+                }),
+            ]),
+            Animated.parallel([
+                Animated.sequence([
+                    Animated.spring(skipScale, {
+                        toValue: 1.06,
+                        useNativeDriver: true,
+                        bounciness: 12,
+                        speed: 18,
+                    }),
+                    Animated.spring(skipScale, {
+                        toValue: 1,
+                        useNativeDriver: true,
+                        bounciness: 14,
+                        speed: 18,
+                    }),
+                ]),
+                Animated.sequence([
+                    Animated.timing(skipShift, {
+                        toValue: 22,
+                        duration: 110,
+                        easing: Easing.out(Easing.cubic),
+                        useNativeDriver: true,
+                    }),
+                    Animated.timing(skipShift, {
+                        toValue: 12,
+                        duration: 90,
+                        easing: Easing.inOut(Easing.quad),
+                        useNativeDriver: true,
+                    }),
+                    Animated.timing(skipShift, {
+                        toValue: 26,
+                        duration: 110,
+                        easing: Easing.out(Easing.cubic),
+                        useNativeDriver: true,
+                    }),
+                    Animated.timing(skipShift, {
+                        toValue: 0,
+                        duration: 120,
+                        easing: Easing.inOut(Easing.quad),
+                        useNativeDriver: true,
+                    }),
+                ]),
+                Animated.timing(skipBgOpacity, {
+                    toValue: 0,
+                    duration: 260,
+                    useNativeDriver: true,
+                }),
+            ]),
+        ]).start(() => {
+            skipShift.setValue(0);
+            swipeableRef.current?.close();
+            onSkip();
+        });
     };
 
     const handleDeletePress = () => {
@@ -89,17 +210,33 @@ export default function HabitCard({habit, currentValue, onPress, onDelete, onFai
         outputRange: ['0deg', '360deg'],
     });
 
+    const failShakeInterpolate = failShake.interpolate({
+        inputRange: [0, 0.25, 0.5, 0.75, 1],
+        outputRange: [0, -12, 10, -8, 0],
+    });
+
     const renderRightActions = () => (
-        <View style={styles.rightActions}>
-            <Pressable style={[styles.action]} onPress={onFail}>
-                <Entypo name='cross' size={24} color={palette.primary.redError[100]}/>
-                <Text style={styles.actionLabel}>Fail</Text>
-            </Pressable>
-            <Pressable style={[styles.action]} onPress={onSkip}>
-                <Entypo name="chevron-right" size={24} color={palette.primary.black[100]}/>
-                <Text style={styles.actionLabel}>Skip</Text>
-            </Pressable>
-        </View>
+        <Animated.View style={styles.rightActions}>
+            <Animated.View style={[styles.action, styles.failAction, {transform: [{scale: failScale}]}]}>
+                <Animated.View style={[StyleSheet.absoluteFillObject, styles.failActionFlash, {opacity: failBgOpacity}]}/>
+                <Pressable style={styles.actionInner} onPress={handleFailPress}>
+                    <Animated.View style={{transform: [{translateX: failShakeInterpolate}]}}>
+                        <Entypo name='cross' size={24} color={palette.primary.redError[100]}/>
+                    </Animated.View>
+                    <Text style={styles.actionLabel}>Fail</Text>
+                </Pressable>
+            </Animated.View>
+            
+            <Animated.View style={[styles.action, styles.skipAction, {transform: [{scale: skipScale}]}]}>
+                <Animated.View style={[StyleSheet.absoluteFillObject, styles.skipActionFlash, {opacity: skipBgOpacity}]}/>
+                <Pressable style={styles.actionInner} onPress={handleSkipPress}>
+                    <Animated.View style={{transform: [{translateX: skipShift}]}}>
+                        <Entypo name="chevron-right" size={24} color={palette.primary.black[100]}/>
+                    </Animated.View>
+                    <Text style={styles.actionLabel}>Skip</Text>
+                </Pressable>
+            </Animated.View>
+        </Animated.View>
     );
 
     const renderLeftActions = () => (
@@ -223,11 +360,32 @@ const styles = StyleSheet.create({
     doneAction: {
         overflow: 'hidden',
     },
+    failAction: {
+        overflow: 'hidden',
+    },
+    skipAction: {
+        overflow: 'hidden',
+    },
     doneActionFlash: {
         borderRadius: 20,
         backgroundColor: palette.primary.green[20],
     },
+    failActionFlash: {
+        borderRadius: 20,
+        backgroundColor: palette.primary.redError[20],
+    },
+    skipActionFlash: {
+        borderRadius: 20,
+        backgroundColor: palette.primary.orangeWarning[20],
+    },
     doneActionInner: {
+        flex: 1,
+        width: '100%',
+        alignItems: 'center',
+        justifyContent: 'center',
+        gap: 4,
+    },
+    actionInner: {
         flex: 1,
         width: '100%',
         alignItems: 'center',

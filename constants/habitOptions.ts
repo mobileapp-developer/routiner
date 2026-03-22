@@ -17,3 +17,10 @@ export const GOAL_UNIT_OPTIONS = [
     {label: '🔢 Times',  value: 'times'},
     {label: '📦 Ml',     value: 'ml'},
 ];
+
+export const POINTS_OPTIONS = [
+    {label: '⭐ 10 pts',  value: '10'},
+    {label: '⭐ 20 pts',  value: '20'},
+    {label: '⭐ 50 pts',  value: '50'},
+    {label: '⭐ 100 pts', value: '100'},
+];

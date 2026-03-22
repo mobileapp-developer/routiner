@@ -25,6 +25,7 @@ export type HabitForm = {
     name: string;
     goalValue: string;
     goalUnit: string;
+    points: string;
     icon: string;
     iconName: string;
     color: string;
