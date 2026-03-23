@@ -6,10 +6,13 @@ import {useState} from "react";
 import {logHabit} from "@/db/habit_logs";
 import {useQueryClient} from "@tanstack/react-query";
 import {DAILY_GOALS_QUERY_KEY} from "@/hooks/useDailyGoal";
+import {TOTAL_POINTS_QUERY_KEY} from "@/hooks/useTotalPoints";
+import {useCurrentUser} from "@/hooks/useCurrentUser";
 
 export default function LogHabit() {
     const router = useRouter();
     const queryClient = useQueryClient();
+    const {dbUserId} = useCurrentUser();
     const {slideValue} = useSlideAnimation();
     const {habitId, habitName, goalUnit, goalValue} = useLocalSearchParams<{
         habitId: string;
@@ -24,8 +27,12 @@ export default function LogHabit() {
         if (!value || !habitId) return;
 
         await logHabit(Number(habitId), 'done', Number(value));
+
         await queryClient.invalidateQueries({
             queryKey: DAILY_GOALS_QUERY_KEY
+        });
+        await queryClient.invalidateQueries({
+            queryKey: [...TOTAL_POINTS_QUERY_KEY, dbUserId]
         });
         router.back();
     };
