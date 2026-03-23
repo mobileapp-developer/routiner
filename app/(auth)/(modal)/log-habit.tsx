@@ -31,9 +31,11 @@ export default function LogHabit() {
         await queryClient.invalidateQueries({
             queryKey: DAILY_GOALS_QUERY_KEY
         });
-        await queryClient.invalidateQueries({
-            queryKey: [...TOTAL_POINTS_QUERY_KEY, dbUserId]
-        });
+        if (dbUserId) {
+            await queryClient.invalidateQueries({
+                queryKey: [...TOTAL_POINTS_QUERY_KEY, dbUserId]
+            });
+        }
         router.back();
     };
 
@@ -62,7 +64,7 @@ export default function LogHabit() {
                             <Text style={styles.unit}>{goalUnit}</Text>
                         </View>
 
-                        <Pressable style={styles.addButton} onPress={handleAdd}>
+                        <Pressable style={styles.addButton} onPress={handleAdd} disabled={!dbUserId}>
                             <Text style={styles.addButtonText}>Add</Text>
                         </Pressable>
                     </Pressable>
