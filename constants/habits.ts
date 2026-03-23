@@ -27,3 +27,18 @@ export const HABITS = [
 ]
 
 export const POPULAR_HABITS = HABITS.slice(0, 6);
+
+export const BAD_HABITS = [
+    {id: 'smoking',    emoji: '🚬',    name: 'Smoking',          goalValue: 1,  goalUnit: 'time', color: palette.primary.black[10],          points: 50},
+    {id: 'soda',       emoji: '🥤',    name: 'Drink soda',       goalValue: 1,  goalUnit: 'time', color: palette.primary.orangeWarning[10],  points: 20},
+    {id: 'fast-food',  emoji: '🍔',    name: 'Fast food',        goalValue: 1,  goalUnit: 'time', color: palette.primary.redError[20],       points: 40},
+    {id: 'alcohol',    emoji: '🍺',    name: 'Alcohol',          goalValue: 1,  goalUnit: 'time', color: palette.primary.blueInfo[10],       points: 50},
+    {id: 'social',     emoji: '📱',    name: 'Social media',     goalValue: 30, goalUnit: 'min',  color: palette.primary.blue[20],           points: 30},
+    {id: 'late-night', emoji: '🌙',    name: 'Stay up late',     goalValue: 1,  goalUnit: 'time', color: palette.primary.black[20],          points: 30},
+    {id: 'coffee',     emoji: '☕',    name: 'Caffeine',         goalValue: 1,  goalUnit: 'cups', color: palette.primary.orangeWarning[10],  points: 20},
+    {id: 'sweets',     emoji: '🍩',    name: 'Sweets',           goalValue: 1,  goalUnit: 'time', color: palette.primary.redError[10],       points: 40},
+    {id: 'gambling',   emoji: '🎲',    name: 'Gambling',         goalValue: 1,  goalUnit: 'time', color: palette.primary.black[10],          points: 100},
+    {id: 'nail-biting',emoji: '💅',    name: 'Nail biting',      goalValue: 1,  goalUnit: 'time', color: palette.primary.green[10],          points: 30},
+]
+
+export const POPULAR_BAD_HABITS = BAD_HABITS.slice(0, 6);

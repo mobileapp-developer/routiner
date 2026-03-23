@@ -35,6 +35,18 @@ export default function ModalLayout() {
                               },
                           }}
             />
+            <Stack.Screen name='quit-habit'
+                          options={{
+                              headerShown: false,
+                              presentation: 'formSheet',
+                              sheetCornerRadius: 32,
+                              sheetAllowedDetents: [0.4],
+                              sheetLargestUndimmedDetentIndex: 0,
+                              sheetGrabberVisible: true,
+                              title: '',
+                              animation: 'fade',
+                          }}
+            />
         </Stack>
     )
 }
