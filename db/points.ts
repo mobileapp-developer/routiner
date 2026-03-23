@@ -1,6 +1,6 @@
 import {db} from "@/db/database";
 import {habit, points_logs} from "@/db/schema";
-import {and, eq} from "drizzle-orm";
+import {and, desc, eq, gte, lte} from "drizzle-orm";
 
 export async function awardPoints(userId: number, habitId: number) {
     const date = new Date().toISOString().split('T')[0];
@@ -57,4 +57,23 @@ export async function deductPoints(userId: number, habitId: number) {
         points: -points,
         date,
     });
+}
+
+export async function getPointsLogs(userId: number, from: string, to: string) {
+    return db
+        .select({
+            id: points_logs.id,
+            points: points_logs.points,
+            date: points_logs.date,
+            loggedAt: points_logs.loggedAt,
+            habitName: habit.name,
+        })
+        .from(points_logs)
+        .innerJoin(habit, eq(habit.id, points_logs.habitId))
+        .where(and(
+            eq(points_logs.userId, userId),
+            gte(points_logs.date, from),
+            lte(points_logs.date, to),
+        ))
+        .orderBy(desc(points_logs.loggedAt));
 }
