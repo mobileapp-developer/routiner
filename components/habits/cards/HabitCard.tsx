@@ -300,8 +300,16 @@ export default function HabitCard({habit, currentValue, onPress, onDelete, onFai
                         <Text style={styles.name}>{habit.name}</Text>
                         {renderProgress()}
                     </View>
-                    <Pressable style={styles.plusButton} onPress={onLogPress}>
-                        <Text style={styles.plus}>+</Text>
+                    <Pressable 
+                        style={styles.plusButton} 
+                        onPress={onLogPress}
+                        disabled={getProgressPercentage() === 100}
+                    >
+                        {getProgressPercentage() === 100 ? (
+                            <MaterialIcons name="done" size={28} color={palette.primary.green[100]} />
+                        ) : (
+                            <Text style={styles.plus}>+</Text>
+                        )}
                     </Pressable>
                 </Pressable>
             </Animated.View>
