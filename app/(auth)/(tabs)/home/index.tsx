@@ -136,6 +136,7 @@ export default function Home(){
                     />
                 )}
                 style={styles.habitsList}
+                contentContainerStyle={styles.habitsListContent}
                 ListEmptyComponent={
                     !loading ? <Text style={styles.empty}>You don't have any habits yet! Add one now!</Text> : null
                 }
@@ -213,6 +214,9 @@ const styles = StyleSheet.create({
     },
     habitsList: {
         paddingHorizontal: 16,
+    },
+    habitsListContent: {
+        paddingBottom: 100,
     },
     empty: {
         textAlign: 'center',

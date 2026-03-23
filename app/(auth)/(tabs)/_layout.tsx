@@ -5,10 +5,12 @@ import {palette} from "@/constants/palette";
 
 export default function TabLayout() {
     const pathname = usePathname();
-    const hideTabBar = pathname.startsWith('/profile/settings');
+    const hideTabBar = pathname.startsWith('/profile/settings')
+        || pathname.startsWith('/explore/suggested')
+    || pathname.startsWith('/explore/learning');
 
     return (
-        <Tabs tabBar={(props) => (hideTabBar ? null :<MyTabBar {...props} />)}>
+        <Tabs tabBar={(props) => (hideTabBar ? null : <MyTabBar {...props} />)}>
             <Tabs.Screen
                 name="home"
                 options={{
