@@ -40,9 +40,9 @@ export default function TabLayout() {
                 }}
             />
             <Tabs.Screen
-                name="challenges"
+                name="activity"
                 options={{
-                    title: 'Challenges',
+                    title: 'Activity',
                     headerShown: false,
                     tabBarIcon: ({color, size}) => (
                         <FontAwesome5 name='medal' size={size} color={color}/>

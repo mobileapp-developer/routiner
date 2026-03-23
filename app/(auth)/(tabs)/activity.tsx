@@ -61,7 +61,7 @@ function getMonthRange(offset = 0) {
     return {from, to, label: d.toLocaleDateString('en', {month: 'long', year: 'numeric'})};
 }
 
-export default function Challenges() {
+export default function Activity() {
     const {width} = useWindowDimensions();
     const chartWidth = width - 80;
 
@@ -239,6 +239,7 @@ const styles = StyleSheet.create({
         backgroundColor: palette.primary.black[10],
         borderRadius: 12,
         padding: 4,
+        gap: 4,
     },
     segmentBtn: {
         flex: 1,
@@ -247,7 +248,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     segmentBtnActive: {
-        backgroundColor: palette.primary.blue[10],
+        backgroundColor: palette.primary.white,
     },
     segmentText: {
         fontSize: 14,
