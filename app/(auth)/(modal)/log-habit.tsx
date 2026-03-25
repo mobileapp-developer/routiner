@@ -8,17 +8,19 @@ import {useQueryClient} from "@tanstack/react-query";
 import {DAILY_GOALS_QUERY_KEY} from "@/hooks/useDailyGoal";
 import {TOTAL_POINTS_QUERY_KEY} from "@/hooks/useTotalPoints";
 import {useCurrentUser} from "@/hooks/useCurrentUser";
+import {awardPoints} from "@/db/points";
 
 export default function LogHabit() {
     const router = useRouter();
     const queryClient = useQueryClient();
     const {dbUserId} = useCurrentUser();
     const {slideValue} = useSlideAnimation();
-    const {habitId, habitName, goalUnit, goalValue} = useLocalSearchParams<{
+    const {habitId, habitName, goalUnit, goalValue, currentValue} = useLocalSearchParams<{
         habitId: string;
         habitName: string;
         goalUnit: string;
         goalValue: string;
+        currentValue: string;
     }>();
 
     const [value, setValue] = useState('');
@@ -26,11 +28,22 @@ export default function LogHabit() {
     const handleAdd = async () => {
         if (!value || !habitId) return;
 
-        await logHabit(Number(habitId), 'done', Number(value));
+        const addValue = Number(value);
+        if (Number.isNaN(addValue) || addValue <= 0) return;
+
+        const goal = Number(goalValue ?? 1);
+        const current = Number(currentValue ?? 0);
+
+        await logHabit(Number(habitId), 'done', addValue);
+
+        if (dbUserId && current + addValue >= goal) {
+            await awardPoints(dbUserId, Number(habitId));
+        }
 
         await queryClient.invalidateQueries({
             queryKey: DAILY_GOALS_QUERY_KEY
         });
+
         if (dbUserId) {
             await queryClient.invalidateQueries({
                 queryKey: [...TOTAL_POINTS_QUERY_KEY, dbUserId]
@@ -38,6 +51,7 @@ export default function LogHabit() {
         }
         router.back();
     };
+
 
     return (
         <KeyboardAvoidingView

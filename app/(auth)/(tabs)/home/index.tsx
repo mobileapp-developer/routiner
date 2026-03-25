@@ -131,6 +131,7 @@ export default function Home(){
                                 habitName: item.habit.name,
                                 goalUnit: item.habit.goalUnit ?? '',
                                 goalValue: item.habit.goalValue ?? 1,
+                                currentValue: item.currentValue,
                             }
                         })}
                     />
