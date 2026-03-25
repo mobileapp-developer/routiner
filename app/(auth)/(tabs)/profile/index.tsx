@@ -8,14 +8,7 @@ import * as ImagePicker from 'expo-image-picker';
 import {useCurrentUser} from "@/hooks/useCurrentUser";
 import {useTotalPoints} from "@/hooks/useTotalPoints";
 import {usePointsLogs} from "@/hooks/usePointsLogs";
-
-type ActivityItem = {
-    id: number;
-    points: number;
-    date: string;
-    loggedAt: string | null;
-    habitName: string;
-}
+import {ActivityItem} from "@/constants/types";
 
 function formatDate(loggedAt: string | null) {
     if (!loggedAt) return '';

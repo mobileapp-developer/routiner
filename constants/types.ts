@@ -1,4 +1,5 @@
 import {ImageSourcePropType} from "react-native";
+import {THabit} from "@/db/schema";
 
 export type HabitClub = {
     id: string;
@@ -32,6 +33,24 @@ export type HabitForm = {
     colorName: string;
     frequencyType: FrequencyType;
     habitType: HabitType;
+};
+
+export type HabitWithProgress = {
+    habit: THabit;
+    currentValue: number;
+};
+
+export type DailyGoalResult = {
+    total: number;
+    completed: number;
+};
+
+export type ActivityItem = {
+    id: number;
+    points: number;
+    date: string;
+    loggedAt: string | null;
+    habitName: string;
 };
 
 export type FrequencyType = "daily" | "weekly_times" | "monthly";

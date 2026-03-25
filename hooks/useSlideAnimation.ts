@@ -1,7 +1,6 @@
 import {useEffect, useRef} from "react";
 import {Animated} from "react-native";
 
-/* Hook for smooth slide animation */
 export function useSlideAnimation() {
     const slideValue = useRef(new Animated.Value(300)).current;
 
