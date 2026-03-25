@@ -132,6 +132,7 @@ export default function Home(){
                                 goalUnit: item.habit.goalUnit ?? '',
                                 goalValue: item.habit.goalValue ?? 1,
                                 currentValue: item.currentValue,
+                                date: selectedDate.toISOString().split('T')[0],
                             }
                         })}
                     />

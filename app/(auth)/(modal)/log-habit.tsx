@@ -15,12 +15,13 @@ export default function LogHabit() {
     const queryClient = useQueryClient();
     const {dbUserId} = useCurrentUser();
     const {slideValue} = useSlideAnimation();
-    const {habitId, habitName, goalUnit, goalValue, currentValue} = useLocalSearchParams<{
+    const {habitId, habitName, goalUnit, goalValue, currentValue, date} = useLocalSearchParams<{
         habitId: string;
         habitName: string;
         goalUnit: string;
         goalValue: string;
         currentValue: string;
+        date: string;
     }>();
 
     const [value, setValue] = useState('');
@@ -34,7 +35,7 @@ export default function LogHabit() {
         const goal = Number(goalValue ?? 1);
         const current = Number(currentValue ?? 0);
 
-        await logHabit(Number(habitId), 'done', addValue);
+        await logHabit(Number(habitId), 'done', addValue, date);
 
         if (dbUserId && current + addValue >= goal) {
             await awardPoints(dbUserId, Number(habitId));
