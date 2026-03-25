@@ -230,7 +230,7 @@ const styles = StyleSheet.create({
         paddingHorizontal: 16,
     },
     pointsContainer: {
-        width: 60,
+        marginRight: 110,
         flexDirection: 'row',
         justifyContent: 'flex-start',
         alignItems: 'center',
