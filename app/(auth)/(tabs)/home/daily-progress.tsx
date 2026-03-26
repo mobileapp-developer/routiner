@@ -9,7 +9,7 @@ import {getBannerText} from "@/components/habits/DailyGoalBanner";
 import {useCompletedHabits} from "@/hooks/useCompletedHabits";
 import {StatusBar} from "expo-status-bar";
 
-export default function dailyProgress() {
+export default function DailyProgress() {
     const {dbUserId} = useCurrentUser();
     const {completed, total, goals} = useCompletedHabits(dbUserId ?? 0);
     const {scaleValue, onPressOut, onPressIn} = usePressAnimation();
