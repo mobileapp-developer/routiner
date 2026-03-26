@@ -43,6 +43,11 @@ export type HabitWithProgress = {
 export type DailyGoalResult = {
     total: number;
     completed: number;
+    goals: {
+        habit: THabit;
+        isCompleted: boolean;
+        currentValue: number;
+    }[];
 };
 
 export type ActivityItem = {

@@ -1,12 +1,22 @@
 import {useAuth} from "@clerk/clerk-expo";
 import {LinearGradient} from "expo-linear-gradient";
 import {useEffect, useState} from "react";
-import {Alert, Animated, Pressable, StyleSheet, Text, View} from "react-native";
+import {Animated, Pressable, StyleSheet, Text, View} from "react-native";
 import CircularProgress from "@/components/ui/CircularProgress";
 import {getUser} from "@/db/user";
 import {useDailyGoals} from "@/hooks/useDailyGoal";
 import {usePressAnimation} from "@/hooks/usePressAnimation";
 import {palette} from "@/constants/palette";
+import {useRouter} from "expo-router";
+
+export const getBannerText = (percentage: number) => {
+    if (percentage === 0) return "Let's start your habits! 🚀";
+    if (percentage < 25) return "Keep going! You can do your goals! 💪";
+    if (percentage < 50) return "You're making progress! 📈";
+    if (percentage < 75) return "More than halfway there! ⚡";
+    if (percentage < 100) return "Your daily goals almost done! 🔥";
+    return "Well done! All goals completed! 🎉";
+};
 
 const DailyGoalBanner = () => {
     const {userId: clerkId} = useAuth();
@@ -14,35 +24,34 @@ const DailyGoalBanner = () => {
     const {completed, total} = useDailyGoals(userId ?? 0);
     const {scaleValue, onPressIn, onPressOut} = usePressAnimation();
 
+    const router = useRouter();
+
     const percentage = total > 0 ? Math.round((completed / total) * 100) : 0;
 
     useEffect(() => {
         if (!clerkId) return;
         getUser(clerkId).then((result) => {
-            console.log("result:", result);
+            // console.log("result:", result);
             if (result[0]) setUserId(result[0].id);
         });
     }, [clerkId]);
 
     return (
         <Animated.View style={{transform: [{scale: scaleValue}]}}>
-            <Pressable onPress={() => Alert.alert("Coming Soon!")} onPressIn={onPressIn} onPressOut={onPressOut}>
+            <Pressable onPress={() => router.push('/home/daily-progress')} onPressIn={onPressIn} onPressOut={onPressOut}>
                 <LinearGradient
                     colors={["#000DFF", "#6B73FF"]}
                     style={styles.container}
                     start={{x: 0.5, y: 0.2}}
                     end={{x: 0, y: 0.5}}>
 
-                    {/* Content */}
                     <View style={styles.content}>
                         <View style={styles.progressBarContainer}>
                             <CircularProgress percentage={percentage} color={palette.primary.white} showLabel/>
                         </View>
                         <View>
-                            <Text style={styles.dailyButtonTitle}>Your daily goals almost done! 🔥</Text>
-                            <Text style={styles.dailyButtonText}>
-                                {completed} of {total} completed
-                            </Text>
+                            <Text style={styles.dailyButtonTitle}>{getBannerText(percentage)}</Text>
+                            <Text style={styles.dailyButtonText}>{completed} of {total} completed</Text>
                         </View>
                     </View>
                 </LinearGradient>
