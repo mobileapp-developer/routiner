@@ -27,6 +27,15 @@ export default function HomeLayout() {
                     headerShown: true,
                 }}
             />
+
+            <Stack.Screen
+                name='daily-progress'
+                options={{
+                    title: 'Daily Progress',
+                    headerShown: false,
+                    animation: 'fade',
+                }}
+            />
         </Stack>
     )
 }

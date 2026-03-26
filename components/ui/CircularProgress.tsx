@@ -10,6 +10,7 @@ interface Props {
     strokeWidth?:   number;
     color?:         string;
     showLabel?:     boolean;
+    fontSize?:      number;
 }
 
 export default function CircularProgress({
@@ -18,6 +19,7 @@ export default function CircularProgress({
                                              strokeWidth = 4,
                                              color = '#4F46E5',
                                              showLabel = false,
+                                             fontSize = 13,
                                          }: Props) {
     const radius = (size - 4 * strokeWidth) / 2;
     const circumference = 2 * Math.PI * radius;
@@ -70,7 +72,7 @@ export default function CircularProgress({
                 />
             </Svg>
             {showLabel && (
-                <Text style={{color, fontSize: 13, fontWeight: "700"}}>
+                <Text style={{color, fontSize: fontSize, fontWeight: "700"}}>
                     {percentage}%
                 </Text>
             )}

@@ -7,7 +7,9 @@ export default function TabLayout() {
     const pathname = usePathname();
     const hideTabBar = pathname.startsWith('/profile/settings')
         || pathname.startsWith('/explore/suggested')
-    || pathname.startsWith('/explore/learning');
+        || pathname.startsWith('/explore/learning')
+        || pathname.startsWith('/home/daily-progress')
+
 
     return (
         <Tabs tabBar={(props) => (hideTabBar ? null : <MyTabBar {...props} />)}>

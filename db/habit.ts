@@ -18,7 +18,6 @@ export async function deleteHabit(habitId: number) {
     return db.delete(habit).where(eq(habit.id, habitId));
 }
 
-
 export async function getHabitsWithProgress(userId: number, dateStr: string): Promise<HabitWithProgress[]> {
     const allHabits = await db
         .select()
@@ -62,7 +61,7 @@ export async function getDailyGoals(userId: number, targetDate: string): Promise
     const habitIds = allHabits.map(h => h.id);
 
     if (habitIds.length === 0) {
-        return {total: 0, completed: 0};
+        return {total: 0, completed: 0, goals: []};
     }
 
     const logs = await db
@@ -73,19 +72,31 @@ export async function getDailyGoals(userId: number, targetDate: string): Promise
             inArray(habit_logs.habitId, habitIds)
         ));
 
-    const completedCount = allHabits.filter((h) => {
+    const goals = allHabits.map((h) => {
         const habitLog = logs.find((l) => l.habitId === h.id);
-        if (!habitLog) return false;
+        const currentValue = habitLog?.value ?? 0;
+        let isCompleted = false;
 
-        if (habitLog.status === 'skip' || habitLog.status === 'fail') return false;
+        if (habitLog && habitLog.status !== 'skip' && habitLog.status !== 'fail') {
+            if (h.type === 'yesno') {
+                isCompleted = currentValue >= 1;
+            } else {
+                isCompleted = currentValue >= (h.goalValue ?? 1);
+            }
+        }
 
-        if (h.type === 'yesno') return (habitLog.value ?? 0) >= 1;
+        return {
+            habit: h,
+            isCompleted,
+            currentValue
+        };
+    });
 
-        return (habitLog.value ?? 0) >= (h.goalValue ?? 1);
-    }).length;
+    const completedCount = goals.filter((g) => g.isCompleted).length;
 
     return {
         total: allHabits.length,
         completed: completedCount,
+        goals,
     };
 }

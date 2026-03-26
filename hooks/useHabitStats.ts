@@ -1,5 +1,5 @@
 import {useQuery} from '@tanstack/react-query';
-import {getBestStreak, getHabitsLineData, getHabitsSummary} from '@/db/habitStats';
+import {getBestStreak, getHabitsLineData, getHabitsSummary} from '@/db/habit_stats';
 import {getMoodByRange} from "@/db/mood";
 
 export function useHabitsSummary(userId: number, from: string, to: string) {
