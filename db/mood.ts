@@ -40,3 +40,8 @@ export async function getMoodByRange(userId: number, from: string, to: string) {
         ))
         .orderBy(mood_logs.date);
 }
+
+export async function getMoodValueByDate(userId: number, date: string) {
+    const result = await getMoodByDate(userId, date);
+    return result?.mood ?? null;
+}

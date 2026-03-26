@@ -61,7 +61,7 @@ function getMonthRange(offset = 0) {
     return {from, to, label: d.toLocaleDateString('en', {month: 'long', year: 'numeric'})};
 }
 
-export default function Activity() {
+export default function Index() {
     const {width} = useWindowDimensions();
     const chartWidth = width - 80;
 

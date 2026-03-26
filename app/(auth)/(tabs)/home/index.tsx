@@ -23,7 +23,7 @@ export default function Home(){
     const [selectedDate, setSelectedDate] = useState<Date>(new Date());
     const {habits, loading, refetch} = useHabits(dbUserId!, selectedDate);
 
-    const queryClient = useQueryClient()
+    const queryClient = useQueryClient();
 
     const handleDelete = async (habitId: number) => {
         await deleteHabit(habitId);
@@ -68,7 +68,7 @@ export default function Home(){
     const handleSkip = async (habitId: number) => {
         await logHabit(habitId, 'skip', 0, selectedDate.toISOString().split('T')[0]);
         await refetch();
-    }
+    };
 
     return (
         <View style={styles.container}>
