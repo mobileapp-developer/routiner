@@ -60,6 +60,7 @@ export async function getDailyGoals(userId: number, targetDate: string): Promise
         ));
 
     const habitIds = allHabits.map(h => h.id);
+
     if (habitIds.length === 0) {
         return {total: 0, completed: 0};
     }
