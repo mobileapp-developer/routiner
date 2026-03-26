@@ -6,7 +6,7 @@ import BackButton from "@/components/ui/BackButton";
 import {useRouter} from "expo-router";
 import {useAuth} from "@clerk/clerk-expo";
 
-export default function Settings() {
+export default function Index() {
     const [darkMode, setDarkMode]         = useState(false);
     const [sounds, setSounds]             = useState(false);
     const [vacationMode, setVacationMode] = useState(false);
@@ -57,7 +57,7 @@ export default function Settings() {
 
                 <View style={styles.separator}/>
 
-                <Pressable style={styles.item}>
+                <Pressable style={styles.item} onPress={() => router.push('./settings/notifications')}>
                     <Text style={styles.itemText}>Notifications</Text>
                     <Ionicons name='chevron-forward' size={24} color={palette.primary.black[40]}/>
                 </Pressable>
