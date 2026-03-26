@@ -3,7 +3,7 @@ import {Link, useRouter} from "expo-router";
 import {useUser} from "@clerk/clerk-expo";
 import {FlatList, StyleSheet, Text, View} from 'react-native';
 import {palette} from "@/constants/palette";
-import {useHabits} from "@/hooks/useHabits";
+import {HABITS_QUERY_KEY, useHabits} from "@/hooks/useHabits";
 import MoodIcon from "@/components/habits/MoodIcon";
 import {useCurrentUser} from "@/hooks/useCurrentUser";
 import HabitCard from "@/components/habits/cards/HabitCard";
@@ -21,7 +21,7 @@ export default function Home(){
     const {user} = useUser();
     const {dbUserId} = useCurrentUser();
     const [selectedDate, setSelectedDate] = useState<Date>(new Date());
-    const {habits, loading, refetch} = useHabits(dbUserId!, selectedDate);
+    const {habits, loading} = useHabits(dbUserId!, selectedDate);
 
     const queryClient = useQueryClient();
 
@@ -30,8 +30,13 @@ export default function Home(){
 
         await queryClient.invalidateQueries({
             queryKey: DAILY_GOALS_QUERY_KEY
-        })
-        await refetch();
+        });
+        await queryClient.invalidateQueries({
+            queryKey: HABITS_QUERY_KEY
+        });
+        await queryClient.invalidateQueries({
+            queryKey: [...TOTAL_POINTS_QUERY_KEY, dbUserId]
+        });
     };
 
     const handleDone = async (habitId: number, goalValue: number, currentValue: number) => {
@@ -44,9 +49,11 @@ export default function Home(){
             queryKey: DAILY_GOALS_QUERY_KEY
         });
         await queryClient.invalidateQueries({
+            queryKey: HABITS_QUERY_KEY,
+        });
+        await queryClient.invalidateQueries({
             queryKey: [...TOTAL_POINTS_QUERY_KEY, dbUserId]
         });
-        await refetch();
     };
 
     const handleFail = async (habitId: number) => {
@@ -57,17 +64,20 @@ export default function Home(){
         await queryClient.invalidateQueries({
             queryKey: DAILY_GOALS_QUERY_KEY
         })
-
+        await queryClient.invalidateQueries({
+            queryKey: HABITS_QUERY_KEY,
+        });
         await queryClient.invalidateQueries({
             queryKey: [...TOTAL_POINTS_QUERY_KEY, dbUserId]
         })
-
-        await refetch();
     };
 
     const handleSkip = async (habitId: number) => {
         await logHabit(habitId, 'skip', 0, selectedDate.toISOString().split('T')[0]);
-        await refetch();
+
+        await queryClient.invalidateQueries({
+            queryKey: HABITS_QUERY_KEY,
+        });
     };
 
     return (

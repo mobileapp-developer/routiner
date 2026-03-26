@@ -12,6 +12,8 @@ import Dropdown from "@/components/ui/Dropdown";
 import {HabitForm} from "@/constants/types";
 import {FREQUENCY_OPTIONS, GOAL_UNIT_OPTIONS, HABIT_TYPE_OPTIONS, POINTS_OPTIONS} from "@/constants/habitOptions";
 import {useQueryClient} from "@tanstack/react-query";
+import {HABITS_QUERY_KEY} from "@/hooks/useHabits";
+import {DAILY_GOALS_QUERY_KEY} from "@/hooks/useDailyGoal";
 
 export default function CreateHabit() {
     const router = useRouter();
@@ -65,7 +67,10 @@ export default function CreateHabit() {
         });
 
         await queryClient.invalidateQueries({
-            queryKey: ['daily-goals']
+            queryKey: DAILY_GOALS_QUERY_KEY
+        });
+        await queryClient.invalidateQueries({
+            queryKey: HABITS_QUERY_KEY,
         });
 
         router.dismissAll();

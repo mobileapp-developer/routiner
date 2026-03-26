@@ -9,6 +9,7 @@ import {DAILY_GOALS_QUERY_KEY} from "@/hooks/useDailyGoal";
 import {TOTAL_POINTS_QUERY_KEY} from "@/hooks/useTotalPoints";
 import {useCurrentUser} from "@/hooks/useCurrentUser";
 import {awardPoints} from "@/db/points";
+import {HABITS_QUERY_KEY} from "@/hooks/useHabits";
 
 export default function LogHabit() {
     const router = useRouter();
@@ -44,6 +45,9 @@ export default function LogHabit() {
         await queryClient.invalidateQueries({
             queryKey: DAILY_GOALS_QUERY_KEY
         });
+        await queryClient.invalidateQueries({
+            queryKey: HABITS_QUERY_KEY,
+        });
 
         if (dbUserId) {
             await queryClient.invalidateQueries({
@@ -52,7 +56,6 @@ export default function LogHabit() {
         }
         router.back();
     };
-
 
     return (
         <KeyboardAvoidingView
