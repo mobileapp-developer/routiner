@@ -1,6 +1,6 @@
 import {db} from './database';
 import {habit, habit_logs, TInsertHabit} from './schema';
-import {and, eq, lte} from "drizzle-orm";
+import {and, eq, inArray, lte} from "drizzle-orm";
 import {DailyGoalResult, HabitWithProgress} from "@/constants/types";
 
 export async function createHabit(data: TInsertHabit) {
@@ -14,10 +14,9 @@ export async function getHabits(userId: number) {
 }
 
 export async function deleteHabit(habitId: number) {
-    await  db.delete(habit_logs).where(eq(habit_logs.habitId, habitId));
+    await db.delete(habit_logs).where(eq(habit_logs.habitId, habitId));
     return db.delete(habit).where(eq(habit.id, habitId));
 }
-
 
 
 export async function getHabitsWithProgress(userId: number, dateStr: string): Promise<HabitWithProgress[]> {
@@ -30,10 +29,18 @@ export async function getHabitsWithProgress(userId: number, dateStr: string): Pr
             lte(habit.createdAt, `${dateStr} 23:59:59`)
         ));
 
+    const habitIds = allHabits.map(h => h.id);
+    if (habitIds.length === 0) {
+        return [];
+    }
+
     const logs = await db
         .select()
         .from(habit_logs)
-        .where(eq(habit_logs.date, dateStr));
+        .where(and(
+            eq(habit_logs.date, dateStr),
+            inArray(habit_logs.habitId, habitIds)
+        ));
 
     return allHabits.map((h) => ({
         habit: h,
@@ -47,12 +54,23 @@ export async function getDailyGoals(userId: number, targetDate: string): Promise
     const allHabits = await db
         .select()
         .from(habit)
-        .where(and(eq(habit.userId, userId), eq(habit.isActive, 1)));
+        .where(and(
+            eq(habit.userId, userId),
+            eq(habit.isActive, 1)
+        ));
+
+    const habitIds = allHabits.map(h => h.id);
+    if (habitIds.length === 0) {
+        return {total: 0, completed: 0};
+    }
 
     const logs = await db
         .select()
         .from(habit_logs)
-        .where(eq(habit_logs.date, targetDate));
+        .where(and(
+            eq(habit_logs.date, targetDate),
+            inArray(habit_logs.habitId, habitIds)
+        ));
 
     const completedCount = allHabits.filter((h) => {
         const habitLog = logs.find((l) => l.habitId === h.id);
