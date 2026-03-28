@@ -7,6 +7,7 @@ import {useCurrentUser} from "@/hooks/useCurrentUser";
 import {createHabit} from "@/db/habit";
 import {DAILY_GOALS_QUERY_KEY} from "@/hooks/useDailyGoal";
 import {useQueryClient} from "@tanstack/react-query";
+import {HABITS_QUERY_KEY} from "@/hooks/useHabits";
 
 const SuggestedScreen = () => {
     const queryClient = useQueryClient();
@@ -27,6 +28,9 @@ const SuggestedScreen = () => {
         });
         await queryClient.invalidateQueries({
             queryKey: DAILY_GOALS_QUERY_KEY
+        });
+        await queryClient.invalidateQueries({
+            queryKey: HABITS_QUERY_KEY
         });
         Alert.alert('Habit added successfully!');
     };
