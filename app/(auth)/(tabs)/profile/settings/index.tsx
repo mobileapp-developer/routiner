@@ -57,7 +57,7 @@ export default function Index() {
 
                 <View style={styles.separator}/>
 
-                <Pressable style={styles.item} onPress={() => router.push('./settings/notifications')}>
+                <Pressable style={styles.item} onPress={() => router.push('./notifications')}>
                     <Text style={styles.itemText}>Notifications</Text>
                     <Ionicons name='chevron-forward' size={24} color={palette.primary.black[40]}/>
                 </Pressable>

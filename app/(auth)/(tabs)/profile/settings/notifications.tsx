@@ -5,6 +5,7 @@ import * as Notifications from "expo-notifications";
 import {SchedulableTriggerInputTypes} from "expo-notifications";
 import {palette} from "@/constants/palette";
 import BackButton from "@/components/ui/BackButton";
+// @ts-ignore
 import CustomDateTimePicker from "@/components/shared/DateTimePicker";
 import Constants from "expo-constants";
 
@@ -17,6 +18,7 @@ type NotificationPreferences = {
 };
 
 Notifications.setNotificationHandler({
+    // @ts-ignore
     handleNotification: async () => ({
         shouldShowAlert: true,
         shouldPlaySound: true,
