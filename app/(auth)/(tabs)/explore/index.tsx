@@ -11,6 +11,7 @@ import {LearningCard} from "@/components/habits/cards/LearningCard";
 import {Link} from "expo-router";
 import {useQueryClient} from "@tanstack/react-query";
 import {DAILY_GOALS_QUERY_KEY} from "@/hooks/useDailyGoal";
+import {HABITS_QUERY_KEY} from "@/hooks/useHabits";
 
 function SectionHeader({title, href}: { title: string; href?: string }) {
     return (
@@ -79,6 +80,9 @@ const Explore = () => {
         Alert.alert('Habit added successfully!');
         await queryClient.invalidateQueries({
             queryKey: DAILY_GOALS_QUERY_KEY
+        });
+        await queryClient.invalidateQueries({
+            queryKey: HABITS_QUERY_KEY
         });
     }
 
