@@ -15,6 +15,18 @@ export default function SettingsLayout() {
                     headerShown: false,
                 }}
             />
+            <Stack.Screen
+                name='general'
+                options={{
+                    headerShown: false,
+                }}
+            />
+            <Stack.Screen
+                name='security'
+                options={{
+                    headerShown: false,
+                }}
+            />
         </Stack>
     );
 };

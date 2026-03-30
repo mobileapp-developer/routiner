@@ -3,12 +3,13 @@ import {ActivityIndicator, Pressable, ScrollView, StyleSheet, Text, useWindowDim
 import {LineChart} from 'react-native-gifted-charts';
 import {Ionicons} from '@expo/vector-icons';
 import {palette} from '@/constants/palette';
+import {addDaysToDateKey, diffDateKeysInclusive, fromDateKey, toDateKey} from '@/constants/date';
 import {useCurrentUser} from '@/hooks/useCurrentUser';
 import {useBestStreak, useHabitsLineData, useHabitsSummary} from '@/hooks/useHabitStats';
 import {SummaryCard} from "@/components/habits/cards/SummaryCard";
 import {MoodCard} from "@/components/habits/cards/MoodCard";
 
-type Period = 'daily' | 'weekly' | 'monthly';
+type Period = 'weekly' | 'monthly';
 
 function getWeekRange(offset = 0) {
     const now = new Date();
@@ -22,8 +23,8 @@ function getWeekRange(offset = 0) {
     sun.setDate(mon.getDate() + 6);
 
     return {
-        from: mon.toISOString().split('T')[0],
-        to: sun.toISOString().split('T')[0],
+        from: toDateKey(mon),
+        to: toDateKey(sun),
         label: `${mon.toLocaleDateString('en', {
             month: 'short',
             day: 'numeric'
@@ -31,32 +32,13 @@ function getWeekRange(offset = 0) {
     };
 }
 
-function getDayRange(offset = 0) {
-    const d = new Date();
-
-    d.setDate(d.getDate() + offset);
-
-    const s = d.toISOString().split('T')[0];
-
-    return {
-        from: s,
-        to: s,
-        label: d.toLocaleDateString('en', {
-                weekday: 'long',
-                month: 'short',
-                day: 'numeric'
-            }
-        )
-    };
-}
-
 function getMonthRange(offset = 0) {
     const d = new Date();
     d.setMonth(d.getMonth() + offset);
 
-    const from = new Date(d.getFullYear(), d.getMonth(), 1).toISOString().split('T')[0];
+    const from = toDateKey(new Date(d.getFullYear(), d.getMonth(), 1));
 
-    const to = new Date(d.getFullYear(), d.getMonth() + 1, 0).toISOString().split('T')[0];
+    const to = toDateKey(new Date(d.getFullYear(), d.getMonth() + 1, 0));
 
     return {from, to, label: d.toLocaleDateString('en', {month: 'long', year: 'numeric'})};
 }
@@ -71,27 +53,24 @@ export default function Index() {
     const [period, setPeriod] = useState<Period>('weekly');
     const [offset, setOffset] = useState(0);
 
-    const range = period === 'daily' ? getDayRange(offset)
-        : period === 'monthly' ? getMonthRange(offset)
-            : getWeekRange(offset);
+    const range = period === 'monthly'
+        ? getMonthRange(offset)
+        : getWeekRange(offset);
 
     const summary = useHabitsSummary(userId, range.from, range.to);
     const lineQuery = useHabitsLineData(userId, range.from, range.to);
     const streakQ = useBestStreak(userId);
 
-    const days = Math.round((new Date(range.to).getTime() - new Date(range.from).getTime()) / 86400000) + 1;
+    const days = diffDateKeysInclusive(range.from, range.to);
+
+    const lineDataByDate = new Map((lineQuery.data ?? []).map((row) => [row.date, Number(row.count)]));
 
     const lineData = Array.from({length: days}, (_, i) => {
-        const d = new Date(range.from);
-
-        d.setDate(d.getDate() + i);
-
-        const dateStr = d.toISOString().split('T')[0];
-
-        const found = lineQuery.data?.find(r => r.date === dateStr);
+        const dateStr = addDaysToDateKey(range.from, i);
+        const d = fromDateKey(dateStr);
 
         return {
-            value: found ? Number(found.count) : 0,
+            value: lineDataByDate.get(dateStr) ?? 0,
             label: d.toLocaleDateString('en', {weekday: 'narrow'}),
         };
     });
@@ -99,7 +78,6 @@ export default function Index() {
     const isLoading = summary.isLoading || lineQuery.isLoading || streakQ.isLoading;
 
     const PERIODS: { key: Period; label: string }[] = [
-        {key: 'daily', label: 'Daily'},
         {key: 'weekly', label: 'Weekly'},
         {key: 'monthly', label: 'Monthly'},
     ];

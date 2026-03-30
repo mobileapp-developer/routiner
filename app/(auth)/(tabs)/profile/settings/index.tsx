@@ -36,7 +36,7 @@ export default function Index() {
             </View>
 
             <View style={styles.section}>
-                <Pressable style={styles.item}>
+                <Pressable style={styles.item} onPress={() => router.push('./settings/general')}>
                     <Text style={styles.itemText}>General</Text>
                     <Ionicons name='chevron-forward' size={24} color={palette.primary.black[40]}/>
                 </Pressable>
@@ -57,7 +57,7 @@ export default function Index() {
 
                 <View style={styles.separator}/>
 
-                <Pressable style={styles.item} onPress={() => router.push('./notifications')}>
+                <Pressable style={styles.item} onPress={() => router.push('./settings/notifications')}>
                     <Text style={styles.itemText}>Notifications</Text>
                     <Ionicons name='chevron-forward' size={24} color={palette.primary.black[40]}/>
                 </Pressable>

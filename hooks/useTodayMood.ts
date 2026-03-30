@@ -1,10 +1,11 @@
 import {getMoodValueByDate} from '@/db/mood';
 import {useQuery} from "@tanstack/react-query";
+import {toDateKey} from "@/constants/date";
 
 export const MOOD_QUERY_KEY = ['mood'];
 
 export function useTodayMood(userId: number | null, selectedDate?: Date) {
-    const targetDate = (selectedDate ?? new Date()).toISOString().split('T')[0];
+    const targetDate = toDateKey(selectedDate ?? new Date());
 
     const query = useQuery({
         queryKey: [...MOOD_QUERY_KEY, userId, targetDate],
@@ -16,9 +17,9 @@ export function useTodayMood(userId: number | null, selectedDate?: Date) {
     });
 
     return {
-        mood: query.data ?? null,
-        refetch: query.refetch,
+        mood:      query.data ?? null,
+        refetch:   query.refetch,
         isLoading: query.isLoading || query.isFetching,
-        error: query.error,
+        error:     query.error,
     };
 }

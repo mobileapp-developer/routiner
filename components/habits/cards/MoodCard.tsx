@@ -1,6 +1,7 @@
 import {MOOD} from "@/constants/mood";
-import {StyleSheet, Text, View} from "react-native";
+import {ScrollView, StyleSheet, Text, View} from "react-native";
 import {palette} from "@/constants/palette";
+import {addDaysToDateKey, fromDateKey} from "@/constants/date";
 import {useMoodRange} from "@/hooks/useHabitStats";
 import {useCurrentUser} from "@/hooks/useCurrentUser";
 
@@ -17,57 +18,74 @@ export function MoodCard({from, to, days}: Props) {
     const MOOD_EMOJI = Object.fromEntries(MOOD.map(m => [m.id, m.emoji]));
 
     const moodQuery = useMoodRange(userId, from, to);
+    const moodByDate = new Map((moodQuery.data ?? []).map((row) => [row.date, row.mood]));
 
     const moodData = Array.from({length: days}, (_, i) => {
-        const d = new Date(from);
-        d.setDate(d.getDate() + i);
-
-        const dateStr = d.toISOString().split('T')[0];
-
-        const found = moodQuery.data?.find(r => r.date === dateStr);
+        const dateStr = addDaysToDateKey(from, i);
+        const d = fromDateKey(dateStr);
 
         return {
-            weekday: d.toLocaleDateString('en', {weekday: 'narrow'}),
-            mood: found?.mood ?? null,
+            weekday: d.toLocaleDateString('uk-UA', {day: '2-digit'}),
+            mood: moodByDate.get(dateStr) ?? null,
         };
     });
 
     return (
-    <View style={styles.card}>
-        <View style={styles.cardHeader}>
-            <View style={styles.cardIconWrap}>
-                <Text style={styles.cardIconEmoji}>😊</Text>
-            </View>
-            <View>
-                <Text style={styles.cardTitle}>Mood</Text>
-                <Text style={styles.cardSubtitle}>Avg. Mood</Text>
-            </View>
-        </View>
-
-        <View style={styles.moodRow}>
-            {moodData.map((item, i) => (
-                <View key={i} style={styles.moodCol}>
-                    <Text style={styles.moodEmoji}>
-                        {item.mood ? MOOD_EMOJI[item.mood] : '·'}
-                    </Text>
-                    <Text style={styles.moodDay}>{item.weekday}</Text>
+        <View style={styles.card}>
+            <View style={styles.cardHeader}>
+                <View style={styles.cardIconWrap}>
+                    <Text style={styles.cardIconEmoji}>😊</Text>
                 </View>
-            ))}
+                <View>
+                    <Text style={styles.cardTitle}>Mood</Text>
+                    <Text style={styles.cardSubtitle}>Avg. Mood</Text>
+                </View>
+            </View>
+
+            <View style={styles.moodRowContainer}>
+                <ScrollView
+                    horizontal
+                    style={styles.moodScroll}
+                    showsHorizontalScrollIndicator={false}
+                    contentContainerStyle={[
+                        styles.moodContent,
+                        days <= 7 && styles.moodContentCompact,
+                    ]}
+                >
+                    {moodData.map((item, i) => (
+                        <View key={i} style={styles.moodCol}>
+                            <Text style={styles.moodEmoji}>
+                                {item.mood ? MOOD_EMOJI[item.mood] : '·'}
+                            </Text>
+                            <Text style={styles.moodDay}>{item.weekday}</Text>
+                        </View>
+                    ))}
+                </ScrollView>
+            </View>
         </View>
-    </View>
-)
+    )
 }
 
 const styles = StyleSheet.create({
-    moodRow: {
+    moodRowContainer: {
+        width: '100%',
+    },
+    moodScroll: {
+        width: '100%',
+    },
+    moodContent: {
         flexDirection: 'row',
-        justifyContent: 'space-between',
         paddingVertical: 8,
+        gap: 4,
+    },
+    moodContentCompact: {
+        width: '100%',
+        justifyContent: 'space-between',
     },
     moodCol: {
-        flex: 1,
         alignItems: 'center',
         gap: 6,
+        minWidth: 28,
     },
     moodEmoji: {
         fontSize: 22,

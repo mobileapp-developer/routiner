@@ -1,18 +1,19 @@
 import React from "react";
 import {Animated, FlatList, Pressable, StyleSheet, Text, View} from "react-native";
+import {useQueryClient} from "@tanstack/react-query";
 import {logMood} from "@/db/mood";
 import {MOOD} from "@/constants/mood";
+import {toDateKey} from "@/constants/date";
 import {palette} from "@/constants/palette";
 import {useCurrentUser} from "@/hooks/useCurrentUser";
 import {MOOD_QUERY_KEY, useTodayMood} from "@/hooks/useTodayMood";
-import {useQueryClient} from "@tanstack/react-query";
 
 interface AddMoodCardProps {
     selectedDate?: Date;
 }
 
 export default function AddMoodCard({selectedDate}: AddMoodCardProps) {
-    const targetDate = (selectedDate ?? new Date()).toISOString().split('T')[0];
+    const targetDate = toDateKey(selectedDate ?? new Date());
     const queryClient = useQueryClient();
     const {dbUserId} = useCurrentUser();
     const {mood: selected} = useTodayMood(dbUserId, selectedDate);

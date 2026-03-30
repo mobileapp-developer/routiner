@@ -1,9 +1,10 @@
 import {db} from './database';
 import {mood_logs, TInsertMoodLog} from './schema';
 import {and, eq, gte, lte} from "drizzle-orm";
+import {toDateKey} from "@/constants/date";
 
 export async function logMood(data: TInsertMoodLog) {
-    const date = data.date ?? new Date().toISOString().split('T')[0];
+    const date = data.date ?? toDateKey(new Date());
 
     const existing = await db
         .select()
