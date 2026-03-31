@@ -8,6 +8,7 @@ import {useCurrentUser} from "@/hooks/useCurrentUser";
 import {createHabit} from "@/db/habit";
 import {useQueryClient} from "@tanstack/react-query";
 import {DAILY_GOALS_QUERY_KEY} from "@/hooks/useDailyGoal";
+import {HABITS_QUERY_KEY} from "@/hooks/useHabits";
 
 export default function QuitHabit() {
     const router = useRouter();
@@ -31,6 +32,9 @@ export default function QuitHabit() {
 
         await queryClient.invalidateQueries({
             queryKey: DAILY_GOALS_QUERY_KEY
+        });
+        await queryClient.invalidateQueries({
+            queryKey: HABITS_QUERY_KEY,
         });
 
         router.dismissAll();

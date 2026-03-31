@@ -50,7 +50,7 @@ export default function Index() {
 
                 <View style={styles.separator}/>
 
-                <Pressable style={styles.item}>
+                <Pressable style={styles.item} onPress={() => router.push('./settings/security')}>
                     <Text style={styles.itemText}>Security</Text>
                     <Ionicons name='chevron-forward' size={24} color={palette.primary.black[40]}/>
                 </Pressable>
