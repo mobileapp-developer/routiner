@@ -24,11 +24,7 @@ type Props = {
     updatePreference: (key: keyof GeneralPreferences, value: boolean) => void
 };
 
-export const GeneralPreferencesContext = createContext<Props>({
-    preferences: defaultPreferences,
-    updatePreference: () => {
-    }
-});
+export const GeneralPreferencesContext = createContext<Props | undefined>(undefined);
 
 const isValidGeneralPreferences = (value: unknown): value is GeneralPreferences => {
     if (!value || typeof value !== "object") return false;
@@ -46,7 +42,21 @@ export const GeneralPreferencesProvider = ({children}: { children: React.ReactNo
     const [preferences, setPreferences] = useState<GeneralPreferences>(defaultPreferences);
 
     useEffect(() => {
-        hydrateGeneralPreferences();
+        const hydrate = async () => {
+            try {
+                const raw = await AsyncStorage.getItem(GENERAL_PREFS_KEY);
+                if (!raw) return;
+                const parsed = JSON.parse(raw) as unknown;
+                if (!isValidGeneralPreferences(parsed)) {
+                    await AsyncStorage.removeItem(GENERAL_PREFS_KEY);
+                    return;
+                }
+                setPreferences(parsed);
+            } catch (error) {
+                console.error("Failed to load general preferences", error);
+            }
+        };
+        void hydrate();
     }, []);
 
     const persistPreferences = async (nextPreferences: GeneralPreferences) => {
@@ -54,23 +64,6 @@ export const GeneralPreferencesProvider = ({children}: { children: React.ReactNo
             await AsyncStorage.setItem(GENERAL_PREFS_KEY, JSON.stringify(nextPreferences));
         } catch (error) {
             console.error("Failed to save general preferences", error);
-        }
-    };
-
-    const hydrateGeneralPreferences = async () => {
-        try {
-            const raw = await AsyncStorage.getItem(GENERAL_PREFS_KEY);
-            if (!raw) return;
-
-            const parsed = JSON.parse(raw) as unknown;
-            if (!isValidGeneralPreferences(parsed)) {
-                await AsyncStorage.removeItem(GENERAL_PREFS_KEY);
-                return;
-            }
-
-            setPreferences(parsed);
-        } catch (error) {
-            console.error("Failed to load general preferences", error);
         }
     };
 
