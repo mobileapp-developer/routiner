@@ -1,82 +1,14 @@
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import {useEffect, useState} from "react";
 import {Alert, Pressable, ScrollView, StyleSheet, Switch, Text, View} from "react-native";
 import {Ionicons} from "@expo/vector-icons";
 import BackButton from "@/components/ui/BackButton";
 import {palette} from "@/constants/palette";
-
-const GENERAL_PREFS_KEY = "general-preferences";
-
-type GeneralPreferences = {
-    hapticsEnabled: boolean;
-    is24HourTime: boolean;
-    autoTimezone: boolean;
-    streakCelebrations: boolean;
-    reduceMotion: boolean;
-};
-
-const defaultPreferences: GeneralPreferences = {
-    hapticsEnabled: true,
-    is24HourTime: false,
-    autoTimezone: true,
-    streakCelebrations: true,
-    reduceMotion: false,
-};
-
-const isValidGeneralPreferences = (value: unknown): value is GeneralPreferences => {
-    if (!value || typeof value !== "object") return false;
-    const data = value as Record<string, unknown>;
-    return [
-        "hapticsEnabled",
-        "is24HourTime",
-        "autoTimezone",
-        "streakCelebrations",
-        "reduceMotion",
-    ].every((key) => typeof data[key] === "boolean");
-};
+import {useGeneralPreferences} from "@/hooks/useGeneralPreferences";
 
 export default function General() {
-    const [preferences, setPreferences] = useState<GeneralPreferences>(defaultPreferences);
-
-    useEffect(() => {
-        hydrateGeneralPreferences();
-    }, []);
+const {preferences, updatePreference} = useGeneralPreferences();
 
     const showComingSoon = (label: string) => {
         Alert.alert("Coming soon", `${label} settings will be available soon.`);
-    };
-
-    const persistPreferences = async (nextPreferences: GeneralPreferences) => {
-        try {
-            await AsyncStorage.setItem(GENERAL_PREFS_KEY, JSON.stringify(nextPreferences));
-        } catch (error) {
-            console.error("Failed to save general preferences", error);
-        }
-    };
-
-    const hydrateGeneralPreferences = async () => {
-        try {
-            const raw = await AsyncStorage.getItem(GENERAL_PREFS_KEY);
-            if (!raw) return;
-
-            const parsed = JSON.parse(raw) as unknown;
-            if (!isValidGeneralPreferences(parsed)) {
-                await AsyncStorage.removeItem(GENERAL_PREFS_KEY);
-                return;
-            }
-
-            setPreferences(parsed);
-        } catch (error) {
-            console.error("Failed to load general preferences", error);
-        }
-    };
-
-    const updatePreference = (key: keyof GeneralPreferences, value: boolean) => {
-        setPreferences((prev) => {
-            const next = {...prev, [key]: value};
-            void persistPreferences(next);
-            return next;
-        });
     };
 
     return (
