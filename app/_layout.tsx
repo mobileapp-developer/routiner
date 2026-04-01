@@ -1,12 +1,13 @@
-import {Stack} from 'expo-router';
-import {ClerkProvider} from "@clerk/clerk-expo";
-import {StatusBar} from "expo-status-bar";
-import {tokenCache} from "@clerk/clerk-expo/token-cache";
-import {useDatabaseMigrations} from "@/db/migrations";
+import {useEffect} from "react";
 import {ActivityIndicator, StyleSheet, Text, View} from "react-native";
 import {GestureHandlerRootView} from "react-native-gesture-handler";
+import {Stack} from 'expo-router';
+import {StatusBar} from 'expo-status-bar';
+import {ClerkProvider} from "@clerk/clerk-expo";
+import {tokenCache} from "@clerk/clerk-expo/token-cache";
+import {useDatabaseMigrations} from "@/db/migrations";
 import {QueryClient, QueryClientProvider} from "@tanstack/react-query";
-import {useEffect} from "react";
+import {GeneralPreferencesProvider} from "@/context/GeneralPreferencesContext";
 
 const queryClient = new QueryClient()
 
@@ -40,12 +41,14 @@ export default function RootLayout() {
         <GestureHandlerRootView>
             <QueryClientProvider client={queryClient}>
                 <ClerkProvider tokenCache={tokenCache} publishableKey={process.env.EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY}>
-                    <Stack screenOptions={{headerShown: false}}>
-                        <Stack.Screen name="index"/>
-                        <Stack.Screen name="(public)"/>
-                        <Stack.Screen name="(auth)"/>
-                    </Stack>
-                    <StatusBar style="dark"/>
+                    <GeneralPreferencesProvider>
+                        <Stack screenOptions={{headerShown: false}}>
+                            <Stack.Screen name="index"/>
+                            <Stack.Screen name="(public)"/>
+                            <Stack.Screen name="(auth)"/>
+                        </Stack>
+                        <StatusBar style="dark"/>
+                    </GeneralPreferencesProvider>
                 </ClerkProvider>
             </QueryClientProvider>
         </GestureHandlerRootView>

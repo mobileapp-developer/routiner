@@ -1,6 +1,7 @@
 import * as Haptics from "expo-haptics";
 import {useCallback, useRef} from "react";
 import {Animated} from "react-native";
+import {useGeneralPreferences} from "@/hooks/useGeneralPreferences";
 
 interface UsePressAnimationOptions {
 	toValue?: number;
@@ -14,6 +15,7 @@ export const usePressAnimation = ({
 	hapticStyle = Haptics.ImpactFeedbackStyle.Light
 }: UsePressAnimationOptions = {}) => {
 	const scaleValue = useRef(new Animated.Value(1)).current;
+	const {preferences} = useGeneralPreferences();
 
 	const onPressIn = useCallback(() => {
 		Animated.spring(scaleValue, {
@@ -22,10 +24,10 @@ export const usePressAnimation = ({
 			tension: 100,
 			useNativeDriver: true
 		}).start();
-		if (haptics) {
+		if (haptics && preferences.hapticsEnabled) {
 			Haptics.impactAsync(hapticStyle);
 		}
-	}, [scaleValue, toValue, haptics, hapticStyle]);
+	}, [scaleValue, toValue, haptics, hapticStyle, preferences.hapticsEnabled]);
 
 	const onPressOut = useCallback(() => {
 		Animated.spring(scaleValue, {

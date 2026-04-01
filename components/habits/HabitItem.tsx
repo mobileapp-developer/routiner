@@ -8,9 +8,10 @@ interface HabitItemProps {
     current: number;
     goalValue: number;
     goalUnit: string;
+    color: string;
 }
 
-const HabitItem = ({ name, emoji, current, goalValue, goalUnit }: HabitItemProps) => {
+const HabitItem = ({ name, emoji, current, goalValue, goalUnit, color }: HabitItemProps) => {
     const percentage = goalValue > 0 ? Math.min(Math.round((current / goalValue) * 100), 100) : 0;
 
     return (
