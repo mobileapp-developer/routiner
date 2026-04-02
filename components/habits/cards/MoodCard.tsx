@@ -1,9 +1,9 @@
 import {MOOD} from "@/constants/mood";
 import {ScrollView, StyleSheet, Text, View} from "react-native";
-import {palette} from "@/constants/palette";
 import {addDaysToDateKey, fromDateKey} from "@/constants/date";
 import {useMoodRange} from "@/hooks/useHabitStats";
 import {useCurrentUser} from "@/hooks/useCurrentUser";
+import {usePalette} from "@/hooks/usePalette";
 
 type Props = {
     from: string;
@@ -14,6 +14,7 @@ type Props = {
 export function MoodCard({from, to, days}: Props) {
     const {dbUserId} = useCurrentUser();
     const userId = dbUserId ?? 0;
+    const palette = usePalette();
 
     const MOOD_EMOJI = Object.fromEntries(MOOD.map(m => [m.id, m.emoji]));
 
@@ -31,14 +32,14 @@ export function MoodCard({from, to, days}: Props) {
     });
 
     return (
-        <View style={styles.card}>
+        <View style={[styles.card, {backgroundColor: palette.primary.white, shadowColor: palette.primary.black[100]}]}>
             <View style={styles.cardHeader}>
-                <View style={styles.cardIconWrap}>
+                <View style={[styles.cardIconWrap, {backgroundColor: palette.primary.black[10]}]}>
                     <Text style={styles.cardIconEmoji}>😊</Text>
                 </View>
                 <View>
-                    <Text style={styles.cardTitle}>Mood</Text>
-                    <Text style={styles.cardSubtitle}>Avg. Mood</Text>
+                    <Text style={[styles.cardTitle, {color: palette.primary.black[80]}]}>Mood</Text>
+                    <Text style={[styles.cardSubtitle, {color: palette.primary.black[40]}]}>Avg. Mood</Text>
                 </View>
             </View>
 
@@ -57,7 +58,7 @@ export function MoodCard({from, to, days}: Props) {
                             <Text style={styles.moodEmoji}>
                                 {item.mood ? MOOD_EMOJI[item.mood] : '·'}
                             </Text>
-                            <Text style={styles.moodDay}>{item.weekday}</Text>
+                            <Text style={[styles.moodDay, {color: palette.primary.black[40]}]}>{item.weekday}</Text>
                         </View>
                     ))}
                 </ScrollView>
@@ -92,14 +93,11 @@ const styles = StyleSheet.create({
     },
     moodDay: {
         fontSize: 11,
-        color: palette.primary.black[40],
         fontWeight: '500',
     },
     card: {
-        backgroundColor: palette.primary.white,
         borderRadius: 20,
         padding: 16,
-        shadowColor: '#000',
         shadowOpacity: 0.05,
         shadowRadius: 8,
         shadowOffset: {width: 0, height: 2},
@@ -115,7 +113,6 @@ const styles = StyleSheet.create({
         width: 40,
         height: 40,
         borderRadius: 10,
-        backgroundColor: palette.primary.black[10],
         alignItems: 'center',
         justifyContent: 'center',
     },
@@ -125,10 +122,8 @@ const styles = StyleSheet.create({
     cardTitle: {
         fontSize: 15,
         fontWeight: '600',
-        color: palette.primary.black[80],
     },
     cardSubtitle: {
         fontSize: 12,
-        color: palette.primary.black[40],
     },
 })

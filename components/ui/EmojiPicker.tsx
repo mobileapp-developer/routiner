@@ -1,5 +1,5 @@
 import {FlatList, Modal, Pressable, StyleSheet, Text, View} from "react-native";
-import {palette} from "@/constants/palette";
+import {lightPalette} from "@/constants/palette";
 import {EMOJI} from "@/constants/emoji";
 
 type Props = {
@@ -26,7 +26,7 @@ export default function EmojiPicker({visible, selected, onSelect, onClose}: Prop
                             <Pressable
                                 style={[
                                     styles.emojiItem,
-                                    {backgroundColor: palette.primary.blue[10]},
+                                    {backgroundColor: lightPalette.primary.blue[10]},
                                     selected === item.emoji && styles.emojiSelected
                                 ]}
                                 onPress={() => {
@@ -51,7 +51,7 @@ const styles = StyleSheet.create({
         justifyContent: 'flex-end',
     },
     sheet: {
-        backgroundColor: palette.primary.white,
+        backgroundColor: lightPalette.primary.white,
         borderTopLeftRadius: 24,
         borderTopRightRadius: 24,
         padding: 20,
@@ -62,13 +62,13 @@ const styles = StyleSheet.create({
         width: 40,
         height: 4,
         borderRadius: 2,
-        backgroundColor: palette.primary.black[20],
+        backgroundColor: lightPalette.primary.black[20],
         alignSelf: 'center',
     },
     title: {
         fontSize: 18,
         fontWeight: '600',
-        color: palette.primary.black[100],
+        color: lightPalette.primary.black[100],
         textAlign: 'center',
     },
     grid: {
@@ -85,7 +85,7 @@ const styles = StyleSheet.create({
     },
     emojiSelected: {
         borderWidth: 1.5,
-        borderColor: palette.primary.blue[100],
+        borderColor: lightPalette.primary.blue[100],
     },
     emojiText: {
         fontSize: 32,

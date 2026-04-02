@@ -3,7 +3,7 @@ import {useEffect, useState} from "react";
 import {Alert, Pressable, ScrollView, StyleSheet, Switch, Text, View} from "react-native";
 import {Ionicons} from "@expo/vector-icons";
 import BackButton from "@/components/ui/BackButton";
-import {palette} from "@/constants/palette";
+import {usePalette} from "@/hooks/usePalette";
 
 const SECURITY_PREFS_KEY = "security-preferences";
 
@@ -34,6 +34,7 @@ const isValidSecurityPreferences = (value: unknown): value is SecurityPreference
 
 export default function SecurityScreen() {
     const [preferences, setPreferences] = useState<SecurityPreferences>(defaultPreferences);
+    const palette = usePalette();
 
     useEffect(() => {
         hydrateSecurityPreferences();
@@ -81,68 +82,68 @@ export default function SecurityScreen() {
     };
 
     return (
-        <View style={styles.container}>
-            <View style={styles.header}>
+        <View style={[styles.container, {backgroundColor: palette.primary.black[10]}]}>
+            <View style={[styles.header, {backgroundColor: palette.primary.white, shadowColor: palette.primary.black[20]}]}>
                 <BackButton/>
-                <Text style={styles.headerText}>Security</Text>
+                <Text style={[styles.headerText, {color: palette.primary.black[100]}]}>Security</Text>
             </View>
 
             <ScrollView contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
                 <View style={styles.labelCont}>
-                    <Text style={styles.label}>ACCOUNT SECURITY</Text>
+                    <Text style={[styles.label, {color: palette.primary.black[40]}]}>ACCOUNT SECURITY</Text>
                 </View>
 
-                <View style={styles.section}>
+                <View style={[styles.section, {backgroundColor: palette.primary.white}]}>
                     <Pressable style={styles.item} onPress={() => showComingSoon("Change Password")}>
-                        <Text style={styles.itemText}>Change Password</Text>
+                        <Text style={[styles.itemText, {color: palette.primary.black[100]}]}>Change Password</Text>
                         <Ionicons name='chevron-forward' size={22} color={palette.primary.black[40]}/>
                     </Pressable>
 
-                    <View style={styles.separator}/>
+                    <View style={[styles.separator, {borderColor: palette.primary.black[10]}]}/>
 
                     <View style={styles.item}>
-                        <Text style={styles.itemText}>Biometric Unlock</Text>
+                        <Text style={[styles.itemText, {color: palette.primary.black[100]}]}>Biometric Unlock</Text>
                         <Switch
                             value={preferences.biometricUnlock}
                             onValueChange={(value) => updatePreference("biometricUnlock", value)}
                         />
                     </View>
 
-                    <View style={styles.separator}/>
+                    <View style={[styles.separator, {borderColor: palette.primary.black[10]}]}/>
 
                     <View style={styles.item}>
-                        <Text style={styles.itemText}>Two-Factor Authentication</Text>
+                        <Text style={[styles.itemText, {color: palette.primary.black[100]}]}>Two-Factor Authentication</Text>
                         <Switch
                             value={preferences.twoFactorAuth}
                             onValueChange={(value) => updatePreference("twoFactorAuth", value)}
                         />
                     </View>
 
-                    <View style={styles.separator}/>
+                    <View style={[styles.separator, {borderColor: palette.primary.black[10]}]}/>
 
                     <View style={styles.item}>
-                        <Text style={styles.itemText}>Login Alerts</Text>
+                        <Text style={[styles.itemText, {color: palette.primary.black[100]}]}>Login Alerts</Text>
                         <Switch
                             value={preferences.loginAlerts}
                             onValueChange={(value) => updatePreference("loginAlerts", value)}
                         />
                     </View>
 
-                    <View style={styles.separator}/>
+                    <View style={[styles.separator, {borderColor: palette.primary.black[10]}]}/>
 
                     <Pressable style={styles.item} onPress={() => showComingSoon("Active Sessions")}>
-                        <Text style={styles.itemText}>Active Sessions</Text>
+                        <Text style={[styles.itemText, {color: palette.primary.black[100]}]}>Active Sessions</Text>
                         <Ionicons name='chevron-forward' size={22} color={palette.primary.black[40]}/>
                     </Pressable>
                 </View>
 
                 <View style={styles.labelCont}>
-                    <Text style={styles.label}>PRIVACY</Text>
+                    <Text style={[styles.label, {color: palette.primary.black[40]}]}>PRIVACY</Text>
                 </View>
 
-                <View style={styles.section}>
+                <View style={[styles.section, {backgroundColor: palette.primary.white}]}>
                     <View style={styles.item}>
-                        <Text style={styles.itemText}>Hide Activity Status</Text>
+                        <Text style={[styles.itemText, {color: palette.primary.black[100]}]}>Hide Activity Status</Text>
                         <Switch
                             value={preferences.hideActivityStatus}
                             onValueChange={(value) => updatePreference("hideActivityStatus", value)}
@@ -157,17 +158,14 @@ export default function SecurityScreen() {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: "#f8f8f8",
     },
     header: {
         height: 130,
-        backgroundColor: "white",
         justifyContent: "flex-start",
         alignItems: "center",
         paddingHorizontal: 18,
         paddingTop: 40,
         flexDirection: "row",
-        shadowColor: palette.primary.black[20],
         shadowOffset: {
             width: 0,
             height: 1,
@@ -187,7 +185,6 @@ const styles = StyleSheet.create({
     label: {
         fontSize: 12,
         fontWeight: "600",
-        color: palette.primary.black[40],
         letterSpacing: 1,
         paddingTop: 20,
     },
@@ -198,7 +195,6 @@ const styles = StyleSheet.create({
     section: {
         width: "92%",
         borderRadius: 18,
-        backgroundColor: palette.primary.white,
         alignSelf: "center",
     },
     item: {
@@ -211,11 +207,9 @@ const styles = StyleSheet.create({
         fontSize: 16,
         fontWeight: "500",
         lineHeight: 20,
-        color: palette.primary.black[100],
     },
     separator: {
         borderWidth: 1,
-        borderColor: palette.primary.black[10],
         marginHorizontal: 16,
     },
 });

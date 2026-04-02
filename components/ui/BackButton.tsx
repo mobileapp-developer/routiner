@@ -1,7 +1,7 @@
 import {useRouter} from "expo-router";
 import {Animated, Pressable, StyleSheet} from 'react-native'
 import {Ionicons} from "@expo/vector-icons";
-import {palette} from "@/constants/palette";
+import {lightPalette} from "@/constants/palette";
 import {useRef} from "react";
 
 const BackButton = () => {
@@ -39,7 +39,7 @@ const styles = StyleSheet.create({
         width: 55,
         height: 55,
         borderRadius: 19,
-        borderColor: palette.primary.black[10],
+        borderColor: lightPalette.primary.black[10],
         borderWidth: 1.5,
         justifyContent: 'center',
         alignItems: 'center',

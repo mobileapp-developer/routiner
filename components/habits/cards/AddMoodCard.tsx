@@ -4,9 +4,9 @@ import {useQueryClient} from "@tanstack/react-query";
 import {logMood} from "@/db/mood";
 import {MOOD} from "@/constants/mood";
 import {toDateKey} from "@/constants/date";
-import {palette} from "@/constants/palette";
 import {useCurrentUser} from "@/hooks/useCurrentUser";
 import {MOOD_QUERY_KEY, useTodayMood} from "@/hooks/useTodayMood";
+import {usePalette} from "@/hooks/usePalette";
 
 interface AddMoodCardProps {
     selectedDate?: Date;
@@ -17,6 +17,7 @@ export default function AddMoodCard({selectedDate}: AddMoodCardProps) {
     const queryClient = useQueryClient();
     const {dbUserId} = useCurrentUser();
     const {mood: selected} = useTodayMood(dbUserId, selectedDate);
+    const palette = usePalette();
 
     const isToday = !selectedDate ||
         selectedDate.toDateString() === new Date().toDateString();
@@ -36,12 +37,12 @@ export default function AddMoodCard({selectedDate}: AddMoodCardProps) {
     }
 
     return (
-        <Animated.View style={styles.card}>
+        <Animated.View style={[styles.card, {backgroundColor: palette.primary.white}]}>
             <View style={styles.left}>
-                <Text style={styles.title}>
+                <Text style={[styles.title, {color: palette.primary.black[100]}]}>
                     {isToday ? 'Add Mood' : 'Mood'}
                 </Text>
-                <Text style={styles.subtitle}>
+                <Text style={[styles.subtitle, {color: palette.primary.black[40]}]}>
                     {isToday ? "How're you feeling?" : selected ? 'Mood that day' : 'No mood logged'}
                 </Text>
             </View>
@@ -57,7 +58,8 @@ export default function AddMoodCard({selectedDate}: AddMoodCardProps) {
                         disabled={!isToday}
                         style={[
                             styles.emojiButton,
-                            selected === item.id && styles.emojiSelected,
+                            {borderColor: palette.primary.black[10], backgroundColor: palette.primary.white},
+                            selected === item.id && [styles.emojiSelected, {borderColor: palette.primary.blue[100], backgroundColor: palette.primary.blue[10]}],
                             !isToday && selected !== item.id && styles.emojiDimmed,
                         ]}
                     >
@@ -74,7 +76,6 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'space-between',
-        backgroundColor: palette.primary.white,
         borderRadius: 20,
         padding: 16,
     },
@@ -84,11 +85,9 @@ const styles = StyleSheet.create({
     title: {
         fontSize: 18,
         fontWeight: '600',
-        color: palette.primary.black[100],
     },
     subtitle: {
         fontSize: 14,
-        color: palette.primary.black[40],
     },
     emojiButton: {
         height: 42,
@@ -98,16 +97,12 @@ const styles = StyleSheet.create({
         marginLeft: 12,
         borderRadius: 12,
         borderWidth: 1,
-        borderColor: palette.primary.black[10],
-        backgroundColor: palette.primary.white,
     },
     emoji: {
         fontSize: 24,
     },
     emojiSelected: {
         borderWidth: 1.5,
-        borderColor: palette.primary.blue[100],
-        backgroundColor: palette.primary.blue[10],
     },
     emojiDimmed: {
         opacity: 0.3,

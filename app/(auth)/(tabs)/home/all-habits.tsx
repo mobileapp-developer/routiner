@@ -1,6 +1,6 @@
 import React, {useMemo} from 'react';
 import {ActivityIndicator, FlatList, StyleSheet, Text, View} from 'react-native';
-import {palette} from '@/constants/palette';
+import {lightPalette} from '@/constants/palette';
 import {useCurrentUser} from '@/hooks/useCurrentUser';
 import {useHabits} from '@/hooks/useHabits';
 import HabitItem from '@/components/habits/HabitItem';
@@ -13,7 +13,7 @@ export default function AllHabitsScreen() {
     if (!dbUserId || loading) {
         return (
             <View style={styles.center}>
-                <ActivityIndicator size="large" color={palette.primary.blue[100]} />
+                <ActivityIndicator size="large" color={lightPalette.primary.blue[100]} />
             </View>
         );
     }
@@ -44,7 +44,7 @@ export default function AllHabitsScreen() {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: palette.primary.blue[10],
+        backgroundColor: lightPalette.primary.blue[10],
     },
     listContent: {
         padding: 16,
@@ -54,11 +54,11 @@ const styles = StyleSheet.create({
         flex: 1,
         alignItems: 'center',
         justifyContent: 'center',
-        backgroundColor: palette.primary.blue[10],
+        backgroundColor: lightPalette.primary.blue[10],
     },
     empty: {
         textAlign: 'center',
         marginTop: 24,
-        color: palette.primary.black[40],
+        color: lightPalette.primary.black[40],
     },
 });

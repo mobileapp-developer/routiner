@@ -5,7 +5,7 @@ import {Dimensions, FlatList, Image, StyleSheet, Text, View} from "react-native"
 import {AppleSignInButton} from "@/components/auth/AppleSignInButton";
 import AuthButton from "@/components/ui/AuthButton";
 import {GoogleSignInButton} from "@/components/auth/GoogleSignInButton";
-import {palette} from "@/constants/palette";
+import {lightPalette} from "@/constants/palette";
 import {ONBOARDING_SCREENS} from "@/constants/onboarding";
 
 const {width} = Dimensions.get("window");
@@ -45,7 +45,7 @@ const OnBoarding = () => {
     return (
         <View style={styles.container}>
             <LinearGradient
-                colors={[palette.primary.blue[80], palette.primary.blue[100]]}
+                colors={[lightPalette.primary.blue[80], lightPalette.primary.blue[100]]}
                 style={styles.gradient}
                 start={{x: 0, y: 0}}
                 end={{x: 1, y: 1}}>
@@ -71,9 +71,9 @@ const OnBoarding = () => {
                     <AuthButton
                         text="Continue with Email"
                         icon="mail-open-outline"
-                        backgroundColor={palette.primary.white}
-                        textColor={palette.primary.black[100]}
-                        iconColor={palette.primary.black[100]}
+                        backgroundColor={lightPalette.primary.white}
+                        textColor={lightPalette.primary.black[100]}
+                        iconColor={lightPalette.primary.black[100]}
                         onPress={() => router.push("/sign-in")}
                         height={60}
                         borderRadius={32}
@@ -83,9 +83,9 @@ const OnBoarding = () => {
                         <GoogleSignInButton/>
                         <AuthButton
                             text="Facebook"
-                            backgroundColor={palette.primary.white}
-                            textColor={palette.primary.black[100]}
-                            iconColor={palette.primary.blue[100]}
+                            backgroundColor={lightPalette.primary.white}
+                            textColor={lightPalette.primary.black[100]}
+                            iconColor={lightPalette.primary.blue[100]}
                             icon="logo-facebook"
                             onPress={() => console.log("Facebook button pressed")}
                             height={40}
@@ -130,13 +130,13 @@ const styles = StyleSheet.create({
     title: {
         fontSize: 48,
         fontWeight: "800",
-        color: palette.primary.white,
+        color: lightPalette.primary.white,
         marginHorizontal: 24
     },
     description: {
         fontSize: 16,
         fontWeight: "400",
-        color: palette.primary.white,
+        color: lightPalette.primary.white,
         marginHorizontal: 24,
         paddingTop: 4
     },
@@ -151,12 +151,12 @@ const styles = StyleSheet.create({
         width: 8,
         height: 8,
         borderRadius: 4,
-        backgroundColor: palette.primary.blue[40]
+        backgroundColor: lightPalette.primary.blue[40]
     },
     activeDot: {
         width: 8,
         height: 8,
-        backgroundColor: palette.primary.white
+        backgroundColor: lightPalette.primary.white
     },
     buttonContainer: {
         position: "absolute",
@@ -175,7 +175,7 @@ const styles = StyleSheet.create({
     privacyText: {
         fontSize: 13,
         fontWeight: "400",
-        color: palette.primary.black[20],
+        color: lightPalette.primary.black[20],
         textAlign: "center"
     }
 });

@@ -1,11 +1,11 @@
 import {Alert, Animated, Easing, Pressable, StyleSheet, Text, View} from "react-native";
 import {THabit} from "@/db/schema";
 import {usePressAnimation} from "@/hooks/usePressAnimation";
-import {palette} from "@/constants/palette";
 import Swipeable, {SwipeableMethods} from "react-native-gesture-handler/ReanimatedSwipeable";
 import {Entypo, FontAwesome5, MaterialIcons} from "@expo/vector-icons";
 import {useRef} from "react";
 import CircularProgress from "@/components/ui/CircularProgress";
+import {usePalette} from "@/hooks/usePalette";
 
 type Props = {
     habit: THabit,
@@ -20,6 +20,7 @@ type Props = {
 
 export default function HabitCard({habit, currentValue, onPress, onDelete, onFail, onSkip, onDone, onLogPress}: Props) {
     const {scaleValue, onPressIn, onPressOut} = usePressAnimation();
+    const palette = usePalette();
 
     const doneScale     = useRef(new Animated.Value(1)).current;
     const doneBgOpacity = useRef(new Animated.Value(0)).current;
@@ -216,43 +217,43 @@ export default function HabitCard({habit, currentValue, onPress, onDelete, onFai
     });
 
     const renderRightActions = () => (
-        <Animated.View style={styles.rightActions}>
+        <Animated.View style={[styles.rightActions, {borderColor: palette.primary.black[10], backgroundColor: palette.primary.white}]}>
             <Animated.View style={[styles.action, styles.failAction, {transform: [{scale: failScale}]}]}>
-                <Animated.View style={[StyleSheet.absoluteFillObject, styles.failActionFlash, {opacity: failBgOpacity}]}/>
+                <Animated.View style={[StyleSheet.absoluteFillObject, styles.failActionFlash, {opacity: failBgOpacity, backgroundColor: palette.primary.redError[20]}]}/>
                 <Pressable style={styles.actionInner} onPress={handleFailPress}>
                     <Animated.View style={{transform: [{translateX: failShakeInterpolate}]}}>
                         <Entypo name='cross' size={24} color={palette.primary.redError[100]}/>
                     </Animated.View>
-                    <Text style={styles.actionLabel}>Fail</Text>
+                    <Text style={[styles.actionLabel, {color: palette.primary.black[100]}]}>Fail</Text>
                 </Pressable>
             </Animated.View>
             
             <Animated.View style={[styles.action, styles.skipAction, {transform: [{scale: skipScale}]}]}>
-                <Animated.View style={[StyleSheet.absoluteFillObject, styles.skipActionFlash, {opacity: skipBgOpacity}]}/>
+                <Animated.View style={[StyleSheet.absoluteFillObject, styles.skipActionFlash, {opacity: skipBgOpacity, backgroundColor: palette.primary.orangeWarning[20]}]}/>
                 <Pressable style={styles.actionInner} onPress={handleSkipPress}>
                     <Animated.View style={{transform: [{translateX: skipShift}]}}>
                         <Entypo name="chevron-right" size={24} color={palette.primary.black[100]}/>
                     </Animated.View>
-                    <Text style={styles.actionLabel}>Skip</Text>
+                    <Text style={[styles.actionLabel, {color: palette.primary.black[100]}]}>Skip</Text>
                 </Pressable>
             </Animated.View>
         </Animated.View>
     );
 
     const renderLeftActions = () => (
-        <Animated.View style={styles.leftActions}>
+        <Animated.View style={[styles.leftActions, {borderColor: palette.primary.black[10], backgroundColor: palette.primary.white}]}>
             <Pressable style={[styles.action]} onPress={handleDeletePress}>
                 <FontAwesome5 name='trash-alt' size={24} color={palette.primary.redError[100]}/>
-                <Text style={styles.actionLabel}>Delete</Text>
+                <Text style={[styles.actionLabel, {color: palette.primary.black[100]}]}>Delete</Text>
             </Pressable>
 
             <Animated.View style={[styles.action, styles.doneAction, {transform: [{scale: doneScale}]}]}>
-                <Animated.View style={[StyleSheet.absoluteFillObject, styles.doneActionFlash, {opacity: doneBgOpacity}]}/>
+                <Animated.View style={[StyleSheet.absoluteFillObject, styles.doneActionFlash, {opacity: doneBgOpacity, backgroundColor: palette.primary.green[20]}]}/>
                 <Pressable style={styles.doneActionInner} onPress={handleDonePress}>
                     <Animated.View style={{transform: [{rotate: rotateInterpolate}]}}>
                         <MaterialIcons name='done-all' size={24} color={palette.primary.green[100]}/>
                     </Animated.View>
-                    <Text style={styles.actionLabel}>Done</Text>
+                    <Text style={[styles.actionLabel, {color: palette.primary.black[100]}]}>Done</Text>
                 </Pressable>
             </Animated.View>
         </Animated.View>
@@ -261,12 +262,12 @@ export default function HabitCard({habit, currentValue, onPress, onDelete, onFai
     const renderProgress = () => {
         if (habit.type === 'yesno') {
             const done = currentValue >= 1;
-            return <Text style={styles.progress}>{done ? '✅ Виконано' : '❌ Не виконано'}</Text>
+            return <Text style={[styles.progress, {color: palette.primary.black[40]}]}>{done ? '✅ Виконано' : '❌ Не виконано'}</Text>
         }
         if (habit.type === 'count' || habit.type === 'time') {
             const goal = habit.goalValue ?? 1;
             return (
-                <Text style={styles.progress}>{currentValue}/{goal} {habit.goalUnit ?? ''}</Text>
+                <Text style={[styles.progress, {color: palette.primary.black[40]}]}>{currentValue}/{goal} {habit.goalUnit ?? ''}</Text>
             );
         }
     }
@@ -286,7 +287,12 @@ export default function HabitCard({habit, currentValue, onPress, onDelete, onFai
             overshootRight={false}
         >
             <Animated.View style={{transform: [{scale: scaleValue}]}}>
-                <Pressable style={styles.card} onPress={onPress} onPressIn={onPressIn} onPressOut={onPressOut}>
+                <Pressable
+                    style={[styles.card, {backgroundColor: palette.primary.white, borderColor: palette.primary.black[10]}]}
+                    onPress={onPress}
+                    onPressIn={onPressIn}
+                    onPressOut={onPressOut}
+                >
                     <View style={styles.left}>
                         <CircularProgress
                             percentage={getProgressPercentage()}
@@ -297,18 +303,18 @@ export default function HabitCard({habit, currentValue, onPress, onDelete, onFai
                         <Text style={styles.icon}>{habit.icon ?? '📌'}</Text>
                     </View>
                     <View style={styles.info}>
-                        <Text style={styles.name}>{habit.name}</Text>
+                        <Text style={[styles.name, {color: palette.primary.black[100]}]}>{habit.name}</Text>
                         {renderProgress()}
                     </View>
                     <Pressable 
-                        style={styles.plusButton} 
+                        style={[styles.plusButton, {borderColor: palette.primary.black[10]}]}
                         onPress={onLogPress}
                         disabled={getProgressPercentage() === 100}
                     >
                         {getProgressPercentage() === 100 ? (
                             <MaterialIcons name="done" size={28} color={palette.primary.green[100]} />
                         ) : (
-                            <Text style={styles.plus}>+</Text>
+                            <Text style={[styles.plus, {color: palette.primary.black[100]}]}>+</Text>
                         )}
                     </Pressable>
                 </Pressable>
@@ -323,9 +329,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         padding: 16,
-        backgroundColor: palette.primary.white,
         borderWidth: 1,
-        borderColor: palette.primary.black[10],
         borderRadius: 24,
         marginBottom: 12,
     },
@@ -350,20 +354,17 @@ const styles = StyleSheet.create({
     },
     progress: {
         fontSize: 13,
-        color: '#888',
     },
     plusButton: {
         width: 48,
         height: 48,
         borderRadius: 16,
         borderWidth: 1,
-        borderColor: '#ddd',
         alignItems: 'center',
         justifyContent: 'center',
     },
     plus: {
         fontSize: 30,
-        color: palette.primary.black[100],
     },
     doneAction: {
         overflow: 'hidden',
@@ -376,15 +377,12 @@ const styles = StyleSheet.create({
     },
     doneActionFlash: {
         borderRadius: 20,
-        backgroundColor: palette.primary.green[20],
     },
     failActionFlash: {
         borderRadius: 20,
-        backgroundColor: palette.primary.redError[20],
     },
     skipActionFlash: {
         borderRadius: 20,
-        backgroundColor: palette.primary.orangeWarning[20],
     },
     doneActionInner: {
         flex: 1,
@@ -406,8 +404,6 @@ const styles = StyleSheet.create({
         marginBottom: 12,
         borderRadius: 24,
         borderWidth: 1.5,
-        borderColor: palette.primary.black[10],
-        backgroundColor: palette.primary.white,
         gap: 8,
     },
     rightActions: {
@@ -416,8 +412,6 @@ const styles = StyleSheet.create({
         marginBottom: 12,
         borderRadius: 24,
         borderWidth: 1.5,
-        borderColor: palette.primary.black[10],
-        backgroundColor: palette.primary.white,
         gap: 8,
     },
     action: {
@@ -430,11 +424,9 @@ const styles = StyleSheet.create({
     },
     actionText: {
         fontSize: 20,
-        color: palette.primary.black[100],
     },
     actionLabel: {
         fontSize: 12,
         fontWeight: '600',
-        color: palette.primary.black[100],
     },
 });

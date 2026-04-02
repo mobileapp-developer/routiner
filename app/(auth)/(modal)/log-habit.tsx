@@ -1,7 +1,6 @@
 import {Animated, KeyboardAvoidingView, Platform, Pressable, StyleSheet, Text, TextInput, View} from "react-native";
 import {useLocalSearchParams, useRouter} from "expo-router";
 import {useSlideAnimation} from "@/hooks/useSlideAnimation";
-import {palette} from "@/constants/palette";
 import {useState} from "react";
 import {logHabit} from "@/db/habit_logs";
 import {useQueryClient} from "@tanstack/react-query";
@@ -10,12 +9,14 @@ import {TOTAL_POINTS_QUERY_KEY} from "@/hooks/useTotalPoints";
 import {useCurrentUser} from "@/hooks/useCurrentUser";
 import {awardPoints} from "@/db/points";
 import {HABITS_QUERY_KEY} from "@/hooks/useHabits";
+import {usePalette} from "@/hooks/usePalette";
 
 export default function LogHabit() {
     const router = useRouter();
     const queryClient = useQueryClient();
     const {dbUserId} = useCurrentUser();
     const {slideValue} = useSlideAnimation();
+    const palette = usePalette();
     const {habitId, habitName, goalUnit, goalValue, currentValue, date} = useLocalSearchParams<{
         habitId: string;
         habitName: string;
@@ -63,15 +64,15 @@ export default function LogHabit() {
             behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
         >
             <Pressable style={styles.overlay} onPress={() => router.back()}>
-                <Animated.View style={[styles.sheet, {transform: [{translateY: slideValue}]}]}>
+                <Animated.View style={[styles.sheet, {backgroundColor: palette.primary.white, transform: [{translateY: slideValue}]}]}>
                     <Pressable onPress={(e) => e.stopPropagation()} style={styles.content}>
-                        <View style={styles.handle}/>
+                        <View style={[styles.handle, {backgroundColor: palette.primary.black[20]}]}/>
 
-                        <Text style={styles.title}>{habitName}</Text>
+                        <Text style={[styles.title, {color: palette.primary.black[100]}]}>{habitName}</Text>
 
                         <View style={styles.inputRow}>
                             <TextInput
-                                style={styles.input}
+                                style={[styles.input, {color: palette.primary.black[100]}]}
                                 value={value}
                                 onChangeText={setValue}
                                 keyboardType="numeric"
@@ -79,11 +80,11 @@ export default function LogHabit() {
                                 placeholderTextColor={palette.primary.black[40]}
                                 autoFocus
                             />
-                            <Text style={styles.unit}>{goalUnit}</Text>
+                            <Text style={[styles.unit, {color: palette.primary.black[40]}]}>{goalUnit}</Text>
                         </View>
 
-                        <Pressable style={styles.addButton} onPress={handleAdd} disabled={!dbUserId}>
-                            <Text style={styles.addButtonText}>Add</Text>
+                        <Pressable style={[styles.addButton, {backgroundColor: palette.primary.blue[100]}]} onPress={handleAdd} disabled={!dbUserId}>
+                            <Text style={[styles.addButtonText, {color: palette.primary.white}]}>Add</Text>
                         </Pressable>
                     </Pressable>
                 </Animated.View>
@@ -99,7 +100,6 @@ const styles = StyleSheet.create({
         justifyContent: 'flex-end',
     },
     sheet: {
-        backgroundColor: palette.primary.white,
         borderTopLeftRadius: 24,
         borderTopRightRadius: 24,
         paddingBottom: 40,
@@ -112,13 +112,11 @@ const styles = StyleSheet.create({
         width: 40,
         height: 4,
         borderRadius: 2,
-        backgroundColor: palette.primary.black[20],
         alignSelf: 'center',
     },
     title: {
         fontSize: 20,
         fontWeight: '700',
-        color: palette.primary.black[100],
         textAlign: 'center',
     },
     inputRow: {
@@ -130,17 +128,14 @@ const styles = StyleSheet.create({
     input: {
         fontSize: 48,
         fontWeight: '700',
-        color: palette.primary.black[100],
         textAlign: 'center',
         minWidth: 120,
     },
     unit: {
         fontSize: 24,
-        color: palette.primary.black[40],
         fontWeight: '500',
     },
     addButton: {
-        backgroundColor: palette.primary.blue[100],
         borderRadius: 40,
         padding: 18,
         alignItems: 'center',
@@ -148,6 +143,5 @@ const styles = StyleSheet.create({
     addButtonText: {
         fontSize: 16,
         fontWeight: '700',
-        color: palette.primary.white,
     },
 });

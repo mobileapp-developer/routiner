@@ -1,12 +1,14 @@
 import React from "react";
 import {FlatList, StyleSheet, View} from "react-native";
-import {palette} from "@/constants/palette";
 import {LEARNING_ITEMS} from "@/constants/data";
 import {LearningCard} from "@/components/habits/cards/LearningCard";
+import {usePalette} from "@/hooks/usePalette";
 
 const LearningScreen = () => {
+    const palette = usePalette();
+
     return (
-        <View style={styles.container}>
+        <View style={[styles.container, {backgroundColor: palette.primary.black[10]}]}>
             <FlatList
                 data={LEARNING_ITEMS}
                 keyExtractor={(item) => item.id}
@@ -22,7 +24,6 @@ const LearningScreen = () => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: palette.primary.white,
     },
     list: {
         padding: 20,

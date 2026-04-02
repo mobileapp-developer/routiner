@@ -1,18 +1,27 @@
 import {useState} from "react";
 import {Alert, Pressable, StyleSheet, Switch, Text, View} from "react-native";
-import {palette} from "@/constants/palette";
 import {Ionicons} from "@expo/vector-icons";
 import BackButton from "@/components/ui/BackButton";
 import {useRouter} from "expo-router";
 import {useAuth} from "@clerk/clerk-expo";
+import {useThemeMode} from "@/hooks/useThemeMode";
+import {usePalette} from "@/hooks/usePalette";
 
 export default function Index() {
-    const [darkMode, setDarkMode]         = useState(false);
+    const {mode, setUseSystemTheme, setDarkMode} = useThemeMode();
     const [sounds, setSounds]             = useState(false);
     const [vacationMode, setVacationMode] = useState(false);
 
     const router = useRouter();
     const {signOut} = useAuth();
+
+    const palette = usePalette();
+
+    const handleDarkModeChange = (value: boolean) => {
+        setUseSystemTheme(false);
+        setDarkMode(value);
+    };
+
 
     const handleSignOut = async () => {
         try {
@@ -25,75 +34,82 @@ export default function Index() {
     }
 
     return (
-        <View style={styles.container}>
-            <View style={styles.header}>
+        <View style={[styles.container, {backgroundColor: palette.primary.black[10]}]}>
+            <View style={[styles.header, {backgroundColor: palette.primary.white, shadowColor: palette.primary.black[20]}]}>
                 <BackButton/>
-                <Text style={styles.headerText}>Settings</Text>
+                <Text style={[styles.headerText, {color: palette.primary.black[100]}]}>Settings</Text>
             </View>
 
             <View style={styles.labelCont}>
-                <Text style={styles.label}>GENERAL</Text>
+                <Text style={[styles.label, {color: palette.primary.black[40]}]}>GENERAL</Text>
             </View>
 
-            <View style={styles.section}>
+            <View style={[styles.section, {backgroundColor: palette.primary.white}]}>
                 <Pressable style={styles.item} onPress={() => router.push('./settings/general')}>
-                    <Text style={styles.itemText}>General</Text>
+                    <Text style={[styles.itemText, {color: palette.primary.black[100]}]}>General</Text>
                     <Ionicons name='chevron-forward' size={24} color={palette.primary.black[40]}/>
                 </Pressable>
 
-                <View style={styles.separator}/>
+                <View style={[styles.separator, {borderColor: palette.primary.black[10]}]}/>
 
                 <View style={styles.item}>
-                    <Text style={styles.itemText}>Dark Mode</Text>
-                    <Switch value={darkMode} onValueChange={setDarkMode}/>
+                    <Text style={[styles.itemText, {color: palette.primary.black[100]}]}>Use System Theme</Text>
+                    <Switch value={mode.useSystemTheme} onValueChange={setUseSystemTheme}/>
                 </View>
 
-                <View style={styles.separator}/>
-
-                <Pressable style={styles.item} onPress={() => router.push('./settings/security')}>
-                    <Text style={styles.itemText}>Security</Text>
-                    <Ionicons name='chevron-forward' size={24} color={palette.primary.black[40]}/>
-                </Pressable>
-
-                <View style={styles.separator}/>
-
-                <Pressable style={styles.item} onPress={() => router.push('./settings/notifications')}>
-                    <Text style={styles.itemText}>Notifications</Text>
-                    <Ionicons name='chevron-forward' size={24} color={palette.primary.black[40]}/>
-                </Pressable>
-
-                <View style={styles.separator}/>
+                <View style={[styles.separator, {borderColor: palette.primary.black[10]}]}/>
 
                 <View style={styles.item}>
-                    <Text style={styles.itemText}>Sounds</Text>
+                    <Text style={[styles.itemText, {color: palette.primary.black[100]}]}>Dark Mode</Text>
+                    <Switch value={mode.isDarkMode} onValueChange={handleDarkModeChange} disabled={mode.useSystemTheme}/>
+                </View>
+
+                <View style={[styles.separator, {borderColor: palette.primary.black[10]}]}/>
+
+                <Pressable style={styles.item} onPress={() => router.push('./settings/security')}>
+                    <Text style={[styles.itemText, {color: palette.primary.black[100]}]}>Security</Text>
+                    <Ionicons name='chevron-forward' size={24} color={palette.primary.black[40]}/>
+                </Pressable>
+
+                <View style={[styles.separator, {borderColor: palette.primary.black[10]}]}/>
+
+                <Pressable style={styles.item} onPress={() => router.push('./settings/notifications')}>
+                    <Text style={[styles.itemText, {color: palette.primary.black[100]}]}>Notifications</Text>
+                    <Ionicons name='chevron-forward' size={24} color={palette.primary.black[40]}/>
+                </Pressable>
+
+                <View style={[styles.separator, {borderColor: palette.primary.black[10]}]}/>
+
+                <View style={styles.item}>
+                    <Text style={[styles.itemText, {color: palette.primary.black[100]}]}>Sounds</Text>
                     <Switch value={sounds} onValueChange={setSounds}/>
                 </View>
 
-                <View style={styles.separator}/>
+                <View style={[styles.separator, {borderColor: palette.primary.black[10]}]}/>
 
                 <View style={styles.item}>
-                    <Text style={styles.itemText}>Vacation Mode</Text>
+                    <Text style={[styles.itemText, {color: palette.primary.black[100]}]}>Vacation Mode</Text>
                     <Switch value={vacationMode} onValueChange={setVacationMode}/>
                 </View>
             </View>
 
             <View style={styles.labelCont}>
-                <Text style={styles.label}>ABOUT US</Text>
+                <Text style={[styles.label, {color: palette.primary.black[40]}]}>ABOUT US</Text>
             </View>
 
-            <View style={styles.section}>
+            <View style={[styles.section, {backgroundColor: palette.primary.white}]}>
                 <Pressable style={styles.item}>
-                    <Text style={styles.itemText}>Rate Routiner</Text>
+                    <Text style={[styles.itemText, {color: palette.primary.black[100]}]}>Rate Routiner</Text>
                     <Ionicons name='chevron-forward' size={24} color={palette.primary.black[40]}/>
                 </Pressable>
 
                 <Pressable style={styles.item}>
-                    <Text style={styles.itemText}>About Us</Text>
+                    <Text style={[styles.itemText, {color: palette.primary.black[100]}]}>About Us</Text>
                     <Ionicons name='chevron-forward' size={24} color={palette.primary.black[40]}/>
                 </Pressable>
 
                 <Pressable style={styles.item}>
-                    <Text style={styles.itemText}>Support</Text>
+                    <Text style={[styles.itemText, {color: palette.primary.black[100]}]}>Support</Text>
                     <Ionicons name='chevron-forward' size={24} color={palette.primary.black[40]}/>
                 </Pressable>
 
@@ -103,8 +119,8 @@ export default function Index() {
                 </Pressable>
             </View>
         </View>
-    )
-}
+    );
+};
 
 const styles = StyleSheet.create({
     container: {
@@ -118,7 +134,6 @@ const styles = StyleSheet.create({
         paddingHorizontal: 18,
         paddingTop: 40,
         flexDirection: "row",
-        shadowColor: palette.primary.black[20],
         shadowOffset: {
             width: 0,
             height: 1
@@ -135,7 +150,6 @@ const styles = StyleSheet.create({
     label: {
         fontSize: 12,
         fontWeight: '600',
-        color: palette.primary.black[40],
         letterSpacing: 1,
         paddingTop: 20,
     },
@@ -146,7 +160,6 @@ const styles = StyleSheet.create({
     section: {
         width: '92%',
         borderRadius: 18,
-        backgroundColor: palette.primary.white,
         alignSelf: 'center'
     },
     itemText: {
@@ -162,7 +175,6 @@ const styles = StyleSheet.create({
     },
     separator: {
         borderWidth: 1,
-        borderColor: palette.primary.black[10],
         marginHorizontal: 16,
     },
 })

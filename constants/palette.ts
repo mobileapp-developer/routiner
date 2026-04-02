@@ -1,4 +1,4 @@
-export const palette = {
+export const lightPalette = {
     primary: {
         black: {
             100: '#000000',
@@ -8,6 +8,7 @@ export const palette = {
             20: '#CDCDD0',
             10: '#EAECF0',
         },
+        white: '#FFFFFF',
         blue: {
             100: '#3843FF',
             80: '#6069FF',
@@ -48,7 +49,60 @@ export const palette = {
             20: '#C3EBC0',
             10: '#E1F5E0',
         },
-        white: '#FFFFFF'
     },
     secondary: {},
-}
+};
+
+export const darkPalette = {
+    primary: {
+        black: {
+            100: '#FFFFFF',
+            80: '#E0E0E6',
+            60: '#A0A0AA',
+            40: '#6B6B75',
+            20: '#3A3A45',
+            10: '#000000',
+        },
+        white: '#121212',
+        blue: {
+            100: '#5C6AFF',
+            80: '#7A85FF',
+            60: '#9AA3FF',
+            40: '#B8BFFF',
+            20: '#2A2F6B',
+            10: '#1A1C3A',
+        },
+        blueInfo: {
+            100: '#29B6F6',
+            80: '#4EC3F7',
+            60: '#74D0F8',
+            40: '#99DCF9',
+            20: '#1A4F6B',
+            10: '#0D2F3F',
+        },
+        redError: {
+            100: '#EF5350',
+            80: '#F27573',
+            60: '#F59896',
+            40: '#F8BAB9',
+            20: '#5C1F1E',
+            10: '#3B1313',
+        },
+        orangeWarning: {
+            100: '#FFB300',
+            80: '#FFC033',
+            60: '#FFCC57',
+            40: '#FFD97A',
+            20: '#5C3D00',
+            10: '#3B2600',
+        },
+        green: {
+            100: '#4CAF50',
+            80: '#66BB6A',
+            60: '#81C784',
+            40: '#A5D6A7',
+            20: '#1B4D1E',
+            10: '#0F2F11',
+        },
+    },
+};

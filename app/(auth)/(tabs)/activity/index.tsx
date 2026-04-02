@@ -2,12 +2,12 @@ import React, {useState} from 'react';
 import {ActivityIndicator, Pressable, ScrollView, StyleSheet, Text, useWindowDimensions, View,} from 'react-native';
 import {LineChart} from 'react-native-gifted-charts';
 import {Ionicons} from '@expo/vector-icons';
-import {palette} from '@/constants/palette';
 import {addDaysToDateKey, diffDateKeysInclusive, fromDateKey, toDateKey} from '@/constants/date';
 import {useCurrentUser} from '@/hooks/useCurrentUser';
 import {useBestStreak, useHabitsLineData, useHabitsSummary} from '@/hooks/useHabitStats';
 import {SummaryCard} from "@/components/habits/cards/SummaryCard";
 import {MoodCard} from "@/components/habits/cards/MoodCard";
+import {usePalette} from "@/hooks/usePalette";
 
 type Period = 'weekly' | 'monthly';
 
@@ -46,6 +46,7 @@ function getMonthRange(offset = 0) {
 export default function Index() {
     const {width} = useWindowDimensions();
     const chartWidth = width - 80;
+    const palette = usePalette();
 
     const {dbUserId} = useCurrentUser();
     const userId = dbUserId ?? 0;
@@ -83,20 +84,24 @@ export default function Index() {
     ];
 
     return (
-        <View style={styles.container}>
-            <View style={styles.header}>
-                <Text style={styles.screenTitle}>Activity</Text>
-                <View style={styles.segmented}>
+        <View style={[styles.container, {backgroundColor: palette.primary.black[10]}]}>
+            <View style={[styles.header, {
+                backgroundColor: palette.primary.white,
+                borderBottomColor: palette.primary.black[10]
+            }]}>
+                <Text style={[styles.screenTitle, {color: palette.primary.black[100]}]}>Activity</Text>
+                <View style={[styles.segmented, {backgroundColor: palette.primary.black[10]}]}>
                     {PERIODS.map(p => (
                         <Pressable
                             key={p.key}
-                            style={[styles.segmentBtn, period === p.key && styles.segmentBtnActive]}
+                            style={[styles.segmentBtn, period === p.key && [styles.segmentBtnActive, {backgroundColor: palette.primary.white}]]}
                             onPress={() => {
                                 setPeriod(p.key);
                                 setOffset(0);
                             }}
                         >
-                            <Text style={[styles.segmentText, period === p.key && styles.segmentTextActive]}>
+                            <Text
+                                style={[styles.segmentText, {color: palette.primary.black[40]}, period === p.key && [styles.segmentTextActive, {color: palette.primary.blue[100]}]]}>
                                 {p.label}
                             </Text>
                         </Pressable>
@@ -104,17 +109,23 @@ export default function Index() {
                 </View>
                 <View style={styles.dateNav}>
                     <View>
-                        <Text style={styles.dateNavTitle}>
+                        <Text style={[styles.dateNavTitle, {color: palette.primary.black[80]}]}>
                             {period === 'weekly' ? 'This week' : period === 'monthly' ? 'This month' : 'Today'}
                         </Text>
-                        <Text style={styles.dateNavSub}>{range.label}</Text>
+                        <Text style={[styles.dateNavSub, {color: palette.primary.black[40]}]}>{range.label}</Text>
                     </View>
                     <View style={styles.dateNavBtns}>
-                        <Pressable style={styles.dateNavBtn} onPress={() => setOffset(o => o - 1)}>
+                        <Pressable style={[styles.dateNavBtn, {
+                            backgroundColor: palette.primary.white,
+                            borderColor: palette.primary.black[10]
+                        }]} onPress={() => setOffset(o => o - 1)}>
                             <Ionicons name="chevron-back" size={18} color={palette.primary.black[60]}/>
                         </Pressable>
                         <Pressable
-                            style={[styles.dateNavBtn, offset === 0 && styles.dateNavBtnDisabled]}
+                            style={[styles.dateNavBtn, {
+                                backgroundColor: palette.primary.white,
+                                borderColor: palette.primary.black[10]
+                            }, offset === 0 && styles.dateNavBtnDisabled]}
                             onPress={() => setOffset(o => Math.min(0, o + 1))}
                             disabled={offset === 0}
                         >
@@ -139,14 +150,18 @@ export default function Index() {
                             streak={streakQ.data ?? 0}
                         />
 
-                        <View style={styles.card}>
+                        <View style={[styles.card, {
+                            backgroundColor: palette.primary.white,
+                            shadowColor: palette.primary.black[100]
+                        }]}>
                             <View style={styles.cardHeader}>
-                                <View style={styles.cardIconWrap}>
+                                <View style={[styles.cardIconWrap, {backgroundColor: palette.primary.black[10]}]}>
                                     <Text style={styles.cardIconEmoji}>📈</Text>
                                 </View>
                                 <View>
-                                    <Text style={styles.cardTitle}>Habits</Text>
-                                    <Text style={styles.cardSubtitle}>Completions by day</Text>
+                                    <Text style={[styles.cardTitle, {color: palette.primary.black[80]}]}>Habits</Text>
+                                    <Text style={[styles.cardSubtitle, {color: palette.primary.black[40]}]}>Completions
+                                        by day</Text>
                                 </View>
                             </View>
 
@@ -167,8 +182,8 @@ export default function Index() {
                                         dataPointsRadius={4}
                                         xAxisColor={palette.primary.black[20]}
                                         yAxisColor={palette.primary.black[20]}
-                                        yAxisTextStyle={styles.axisText}
-                                        xAxisLabelTextStyle={styles.axisText}
+                                        yAxisTextStyle={[styles.axisText, {color: palette.primary.black[40]}]}
+                                        xAxisLabelTextStyle={[styles.axisText, {color: palette.primary.black[40]}]}
                                         noOfSections={3}
                                         rulesColor={palette.primary.black[10]}
                                         rulesType="solid"
@@ -176,7 +191,8 @@ export default function Index() {
                                     />
                                 </View>
                             ) : (
-                                <Text style={styles.empty}>No data for this period</Text>
+                                <Text style={[styles.empty, {color: palette.primary.black[40]}]}>No data for this
+                                    period</Text>
                             )}
                         </View>
                     </>
@@ -190,15 +206,12 @@ export default function Index() {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: palette.primary.black[10],
     },
     header: {
-        backgroundColor: palette.primary.white,
         paddingHorizontal: 20,
         paddingTop: 70,
         paddingBottom: 20,
         borderBottomWidth: 1.5,
-        borderBottomColor: palette.primary.black[10],
         gap: 12,
     },
     content: {
@@ -209,12 +222,10 @@ const styles = StyleSheet.create({
     screenTitle: {
         fontSize: 28,
         fontWeight: '700',
-        color: palette.primary.black[100],
         marginBottom: 4,
     },
     segmented: {
         flexDirection: 'row',
-        backgroundColor: palette.primary.black[10],
         borderRadius: 12,
         padding: 4,
         gap: 4,
@@ -226,15 +237,14 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     segmentBtnActive: {
-        backgroundColor: palette.primary.white,
+        backgroundColor: '#FFFFFF',
     },
     segmentText: {
         fontSize: 14,
         fontWeight: '500',
-        color: palette.primary.black[40],
     },
     segmentTextActive: {
-        color: palette.primary.blue[100],
+        color: '#3843FF',
         fontWeight: '600',
     },
     dateNav: {
@@ -245,11 +255,9 @@ const styles = StyleSheet.create({
     dateNavTitle: {
         fontSize: 15,
         fontWeight: '600',
-        color: palette.primary.black[80],
     },
     dateNavSub: {
         fontSize: 12,
-        color: palette.primary.black[40],
         marginTop: 1,
     },
     dateNavBtns: {
@@ -260,20 +268,16 @@ const styles = StyleSheet.create({
         width: 42,
         height: 42,
         borderRadius: 16,
-        backgroundColor: palette.primary.white,
         alignItems: 'center',
         justifyContent: 'center',
-        borderColor: palette.primary.black[10],
         borderWidth: 1,
     },
     dateNavBtnDisabled: {
         opacity: 0.4,
     },
     card: {
-        backgroundColor: palette.primary.white,
         borderRadius: 20,
         padding: 16,
-        shadowColor: '#000',
         shadowOpacity: 0.05,
         shadowRadius: 8,
         shadowOffset: {width: 0, height: 2},
@@ -289,7 +293,6 @@ const styles = StyleSheet.create({
         width: 40,
         height: 40,
         borderRadius: 10,
-        backgroundColor: palette.primary.black[10],
         alignItems: 'center',
         justifyContent: 'center',
     },
@@ -299,19 +302,15 @@ const styles = StyleSheet.create({
     cardTitle: {
         fontSize: 15,
         fontWeight: '600',
-        color: palette.primary.black[80],
     },
     cardSubtitle: {
         fontSize: 12,
-        color: palette.primary.black[40],
     },
     axisText: {
         fontSize: 10,
-        color: palette.primary.black[40],
     },
     empty: {
         textAlign: 'center',
-        color: palette.primary.black[40],
         fontSize: 13,
         paddingVertical: 24,
     },

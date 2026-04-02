@@ -6,7 +6,7 @@ import CircularProgress from "@/components/ui/CircularProgress";
 import {getUser} from "@/db/user";
 import {useDailyGoals} from "@/hooks/useDailyGoal";
 import {usePressAnimation} from "@/hooks/usePressAnimation";
-import {palette} from "@/constants/palette";
+import {lightPalette} from "@/constants/palette";
 import {useRouter} from "expo-router";
 
 export const getBannerText = (percentage: number) => {
@@ -47,7 +47,7 @@ const DailyGoalBanner = () => {
 
                     <View style={styles.content}>
                         <View style={styles.progressBarContainer}>
-                            <CircularProgress percentage={percentage} color={palette.primary.white} showLabel/>
+                            <CircularProgress percentage={percentage} color={lightPalette.primary.white} showLabel/>
                         </View>
                         <View>
                             <Text style={styles.dailyButtonTitle}>{getBannerText(percentage)}</Text>
@@ -80,14 +80,14 @@ const styles = StyleSheet.create({
         fontWeight: "500",
         lineHeight: 24,
         letterSpacing: 0,
-        color: palette.primary.white
+        color: lightPalette.primary.white
     },
     dailyButtonText: {
         fontSize: 14,
         fontWeight: "400",
         lineHeight: 24,
         letterSpacing: 0,
-        color: palette.primary.blue[40]
+        color: lightPalette.primary.blue[40]
     }
 });
 

@@ -2,7 +2,7 @@ import {LinearGradient} from "expo-linear-gradient";
 import {useRouter} from "expo-router";
 import {useEffect} from "react";
 import {Image, StyleSheet, View} from "react-native";
-import {palette} from "@/constants/palette";
+import {lightPalette} from "@/constants/palette";
 
 const Splash = () => {
 	const router = useRouter();
@@ -18,7 +18,7 @@ const Splash = () => {
 	return (
 		<View style={styles.container}>
 			<LinearGradient
-				colors={[palette.primary.blue[80], palette.primary.blue[100]]}
+				colors={[lightPalette.primary.blue[80], lightPalette.primary.blue[100]]}
 				style={styles.gradient}
 				start={{ x: 0, y: 0 }}
 				end={{ x: 1, y: 1 }}>

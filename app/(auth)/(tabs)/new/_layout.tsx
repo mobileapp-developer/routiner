@@ -1,14 +1,14 @@
 import {Stack} from "expo-router";
-import {palette} from "@/constants/palette";
+import {lightPalette} from "@/constants/palette";
 
 export default function NewLayout() {
     return (
         <Stack
             screenOptions={{
                 headerStyle: {
-                    backgroundColor: palette.primary.white,
+                    backgroundColor: lightPalette.primary.white,
                 },
-                headerTintColor: palette.primary.black[100],
+                headerTintColor: lightPalette.primary.black[100],
                 headerShadowVisible: false,
             }}
         >

@@ -2,7 +2,7 @@ import {HabitClub} from "@/constants/types";
 import {usePressAnimation} from "@/hooks/usePressAnimation";
 import {Animated, Pressable, StyleSheet, Text, View} from "react-native";
 import React from "react";
-import {palette} from "@/constants/palette";
+import {lightPalette} from "@/constants/palette";
 
 export function ClubCard({club}: { club: HabitClub }) {
     const {scaleValue, onPressIn, onPressOut} = usePressAnimation();
@@ -28,8 +28,8 @@ const styles = StyleSheet.create({
         width: 130,
         borderRadius: 16,
         borderWidth: 1.5,
-        borderColor: palette.primary.black[10],
-        backgroundColor: palette.primary.white,
+        borderColor: lightPalette.primary.black[10],
+        backgroundColor: lightPalette.primary.white,
         padding: 14,
         marginRight: 12,
         gap: 6,
@@ -38,7 +38,7 @@ const styles = StyleSheet.create({
         width: 44,
         height: 44,
         borderRadius: 12,
-        backgroundColor: palette.primary.blue[10],
+        backgroundColor: lightPalette.primary.blue[10],
         alignItems: "center",
         justifyContent: "center",
         marginBottom: 4,
@@ -49,10 +49,10 @@ const styles = StyleSheet.create({
     clubName: {
         fontSize: 14,
         fontWeight: "700",
-        color: palette.primary.black[100],
+        color: lightPalette.primary.black[100],
     },
     clubMembers: {
         fontSize: 12,
-        color: palette.primary.black[40],
+        color: lightPalette.primary.black[40],
     },
 });

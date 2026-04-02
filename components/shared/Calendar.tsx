@@ -1,6 +1,7 @@
 import React, {useEffect, useRef, useState} from 'react';
-import {FlatList, Pressable, StyleSheet, Text} from 'react-native';
-import {palette} from "@/constants/palette";
+import {FlatList, Pressable, StyleSheet, Text, useColorScheme} from 'react-native';
+import {usePalette} from "@/hooks/usePalette";
+import {useThemeMode} from "@/hooks/useThemeMode";
 
 const DAY_NAMES = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
 const ITEM_WIDTH = 48;
@@ -26,6 +27,11 @@ const generateDays = () => {
 };
 
 const HorizontalCalendar = ({onDaySelect}: HorizontalCalendarProps) => {
+    const palette = usePalette();
+    const {mode} = useThemeMode();
+    const systemTheme = useColorScheme();
+    const isDark = mode.useSystemTheme ? systemTheme === 'dark' : mode.isDarkMode;
+
     const days = useRef(generateDays()).current;
     const todayIndex = days.findIndex(d => d.toDateString() === new Date().toDateString());
     const [selectedIndex, setSelectedIndex] = useState(todayIndex);
@@ -59,12 +65,18 @@ const HorizontalCalendar = ({onDaySelect}: HorizontalCalendarProps) => {
             renderItem={({item, index}) => (
                 <Pressable
                     onPress={() => handlePress(index)}
-                    style={[styles.day, index === selectedIndex && styles.daySelected]
+                    style={[
+                        styles.day,
+                        {backgroundColor: isDark ? palette.primary.black[20] : palette.primary.white},
+                        index === selectedIndex && [styles.daySelected, {borderColor: palette.primary.blue[100]}],
+                    ]
                     }>
-                    <Text style={[styles.number, index === selectedIndex && styles.textSelected]}>
+                    <Text
+                        style={[styles.number, {color: palette.primary.black[100]}, index === selectedIndex && [styles.textSelected, {color: palette.primary.blue[100]}]]}>
                         {item.getDate()}
                     </Text>
-                    <Text style={[styles.name, index === selectedIndex && styles.textSelected]}>
+                    <Text
+                        style={[styles.name, {color: palette.primary.black[40]}, index === selectedIndex && [styles.textSelected, {color: palette.primary.blue[100]}]]}>
                         {DAY_NAMES[item.getDay()]}
                     </Text>
                 </Pressable>
@@ -86,7 +98,6 @@ const styles = StyleSheet.create({
         paddingVertical: 10,
         borderRadius: 14,
         borderWidth: 2,
-        backgroundColor: palette.primary.white,
         borderColor: 'transparent',
     },
     daySelected: {
@@ -95,12 +106,10 @@ const styles = StyleSheet.create({
     number: {
         fontSize: 18,
         fontWeight: '600',
-        color: '#1A1D3F'
     },
     name: {
         fontSize: 11,
         fontWeight: '500',
-        color: '#9B9BAD',
         marginTop: 2
     },
     textSelected: {

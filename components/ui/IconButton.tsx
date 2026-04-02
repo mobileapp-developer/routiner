@@ -1,6 +1,6 @@
 import React from 'react';
 import {Image, ImageSourcePropType, ImageStyle, Pressable, StyleProp, StyleSheet, ViewStyle,} from 'react-native';
-import {palette} from "@/constants/palette";
+import {lightPalette} from "@/constants/palette";
 
 interface IconButtonProps {
     icon: ImageSourcePropType;
@@ -62,7 +62,7 @@ const styles = StyleSheet.create({
     button: {
         alignItems: 'center',
         justifyContent: 'center',
-        borderColor: palette.primary.black[10],
+        borderColor: lightPalette.primary.black[10],
         borderWidth: 1,
         borderRadius: 16,
         shadowColor: '#000',

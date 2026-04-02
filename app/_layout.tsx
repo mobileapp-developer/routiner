@@ -8,8 +8,19 @@ import {tokenCache} from "@clerk/clerk-expo/token-cache";
 import {useDatabaseMigrations} from "@/db/migrations";
 import {QueryClient, QueryClientProvider} from "@tanstack/react-query";
 import {GeneralPreferencesProvider} from "@/context/GeneralPreferencesContext";
+import {ThemeModeProvider} from "@/context/ThemeModeContext";
+import {useThemeMode} from "@/hooks/useThemeMode";
+import {useColorScheme} from "react-native";
 
 const queryClient = new QueryClient()
+
+function ThemedStatusBar() {
+    const {mode} = useThemeMode();
+    const systemTheme = useColorScheme();
+    const isDark = mode.useSystemTheme ? systemTheme === "dark" : mode.isDarkMode;
+
+    return <StatusBar style={isDark ? "light" : "dark"}/>;
+}
 
 export default function RootLayout() {
     const {success, error} = useDatabaseMigrations();
@@ -41,14 +52,16 @@ export default function RootLayout() {
         <GestureHandlerRootView>
             <QueryClientProvider client={queryClient}>
                 <ClerkProvider tokenCache={tokenCache} publishableKey={process.env.EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY}>
-                    <GeneralPreferencesProvider>
-                        <Stack screenOptions={{headerShown: false}}>
-                            <Stack.Screen name="index"/>
-                            <Stack.Screen name="(public)"/>
-                            <Stack.Screen name="(auth)"/>
-                        </Stack>
-                        <StatusBar style="dark"/>
-                    </GeneralPreferencesProvider>
+                    <ThemeModeProvider>
+                        <GeneralPreferencesProvider>
+                            <Stack screenOptions={{headerShown: false}}>
+                                <Stack.Screen name="index"/>
+                                <Stack.Screen name="(public)"/>
+                                <Stack.Screen name="(auth)"/>
+                            </Stack>
+                            <ThemedStatusBar/>
+                        </GeneralPreferencesProvider>
+                    </ThemeModeProvider>
                 </ClerkProvider>
             </QueryClientProvider>
         </GestureHandlerRootView>

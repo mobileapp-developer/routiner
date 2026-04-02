@@ -1,7 +1,9 @@
 import {Stack} from "expo-router";
-import {palette} from "@/constants/palette";
+import {usePalette} from "@/hooks/usePalette";
 
 export default function ExploreLayout() {
+    const palette = usePalette();
+
     return (
         <Stack
             screenOptions={{
