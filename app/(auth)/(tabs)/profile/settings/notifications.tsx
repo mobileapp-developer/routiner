@@ -3,11 +3,11 @@ import {useEffect, useState} from "react";
 import {Alert, Platform, Pressable, StyleSheet, Switch, Text, View} from "react-native";
 import * as Notifications from "expo-notifications";
 import {SchedulableTriggerInputTypes} from "expo-notifications";
-import {palette} from "@/constants/palette";
 import BackButton from "@/components/ui/BackButton";
 // @ts-ignore
 import CustomDateTimePicker from "@/components/shared/DateTimePicker";
 import Constants from "expo-constants";
+import {usePalette} from "@/hooks/usePalette";
 
 const NOTIFICATION_PREFS_KEY = "notification-preferences";
 
@@ -30,6 +30,7 @@ export default function NotificationsScreen() {
     const [allowNotifications, setAllowNotifications] = useState(false);
     const [targetDate, setTargetDate] = useState(new Date(new Date().setHours(8, 0, 0, 0)));
     const [isPickerOpen, setIsPickerOpen] = useState(false);
+    const palette = usePalette();
 
     useEffect(() => {
         hydrateNotificationSettings();
@@ -136,19 +137,19 @@ export default function NotificationsScreen() {
     }
 
     return (
-        <View style={styles.container}>
-            <View style={styles.header}>
+        <View style={[styles.container, {backgroundColor: palette.primary.black[10]}]}>
+            <View style={[styles.header, {backgroundColor: palette.primary.white, shadowColor: palette.primary.black[20]}]}>
                 <BackButton />
-                <Text style={styles.headerText}>Notifications</Text>
+                <Text style={[styles.headerText, {color: palette.primary.black[100]}]}>Notifications</Text>
             </View>
 
             <View style={styles.labelCont}>
-                <Text style={styles.label}>NOTIFICATIONS</Text>
+                <Text style={[styles.label, {color: palette.primary.black[40]}]}>NOTIFICATIONS</Text>
             </View>
 
-            <View style={styles.section}>
+            <View style={[styles.section, {backgroundColor: palette.primary.white}]}>
                 <View style={styles.item}>
-                    <Text style={styles.itemText}>Allow Notifications</Text>
+                    <Text style={[styles.itemText, {color: palette.primary.black[100]}]}>Allow Notifications</Text>
                     <Switch
                         value={allowNotifications}
                         onValueChange={handleToggleNotifications}
@@ -160,8 +161,8 @@ export default function NotificationsScreen() {
                         onPress={() => setIsPickerOpen((prev) => !prev)}
                         style={[styles.item, { borderTopWidth: 1, borderTopColor: palette.primary.black[10] }]}
                     >
-                        <Text style={styles.itemText}>Reminder Time</Text>
-                        <Text style={[styles.itemText, { color: palette.primary.black[40] }]}>
+                        <Text style={[styles.itemText, {color: palette.primary.black[100]}]}>Reminder Time</Text>
+                        <Text style={[styles.itemText, {color: palette.primary.black[40]}]}>
                             {targetDate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                         </Text>
                     </Pressable>
@@ -181,17 +182,14 @@ export default function NotificationsScreen() {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#f8f8f8'
     },
     header: {
         height: 130,
-        backgroundColor: "white",
         justifyContent: "flex-start",
         alignItems: "center",
         paddingHorizontal: 18,
         paddingTop: 40,
         flexDirection: "row",
-        shadowColor: palette.primary.black[20],
         shadowOffset: {
             width: 0,
             height: 1
@@ -208,12 +206,11 @@ const styles = StyleSheet.create({
     label: {
         fontSize: 12,
         fontWeight: '600',
-        color: palette.primary.black[40],
         letterSpacing: 1,
         paddingTop: 20
     },
     labelCont: { paddingHorizontal: 16, paddingBottom: 16 },
-    section: { width: '92%', borderRadius: 18, backgroundColor: 'white', alignSelf: 'center', overflow: 'hidden' },
+    section: { width: '92%', borderRadius: 18, alignSelf: 'center', overflow: 'hidden' },
     item: { flexDirection: 'row', justifyContent: 'space-between', padding: 16 },
     itemText: { fontSize: 16, fontWeight: '500', alignSelf: 'center' },
 });

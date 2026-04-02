@@ -1,6 +1,6 @@
 import React from 'react';
 import {StyleSheet, Text, View} from 'react-native';
-import {palette} from "@/constants/palette";
+import {lightPalette} from "@/constants/palette";
 
 const Search = () => {
     return (
@@ -15,11 +15,11 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: palette.primary.white,
+        backgroundColor: lightPalette.primary.white,
     },
     text: {
         fontSize: 18,
-        color: palette.primary.black[100],
+        color: lightPalette.primary.black[100],
     },
 });
 

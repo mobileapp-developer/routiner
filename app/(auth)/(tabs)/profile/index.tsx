@@ -1,7 +1,6 @@
 import React, {useState} from 'react';
 import {ActivityIndicator, Alert, FlatList, Image, Pressable, StyleSheet, Text, View} from 'react-native';
 import {useUser} from "@clerk/clerk-expo";
-import {palette} from "@/constants/palette";
 import {useRouter} from "expo-router";
 import {FontAwesome5, Ionicons} from "@expo/vector-icons";
 import * as ImagePicker from 'expo-image-picker';
@@ -9,6 +8,7 @@ import {useCurrentUser} from "@/hooks/useCurrentUser";
 import {useTotalPoints} from "@/hooks/useTotalPoints";
 import {usePointsLogs} from "@/hooks/usePointsLogs";
 import {ActivityItem} from "@/constants/types";
+import {usePalette} from "@/hooks/usePalette";
 
 function formatDate(loggedAt: string | null) {
     if (!loggedAt) return '';
@@ -26,14 +26,14 @@ function formatDate(loggedAt: string | null) {
     return `${date.toLocaleDateString('en', {day: 'numeric', month: 'short'})}, ${date.toLocaleTimeString('en', {hour: '2-digit', minute: '2-digit'})}`;
 }
 
-function ActivityCard({item}: {item: ActivityItem}) {
+function ActivityCard({item, palette}: {item: ActivityItem, palette: ReturnType<typeof usePalette>}) {
     return (
-        <View style={styles.activityCard}>
+        <View style={[styles.activityCard, {backgroundColor: palette.primary.white}] }>
             <View style={styles.activityLeft}>
-                <Text style={styles.activityTitle}>
+                <Text style={[styles.activityTitle, {color: palette.primary.black[100]}]}>
                     {item.points > 0 ? `${item.points} points earned!` : `${Math.abs(item.points)} points lost!`}
                 </Text>
-                <Text style={styles.activitySub}>{item.habitName} • {formatDate(item.loggedAt)}</Text>
+                <Text style={[styles.activitySub, {color: palette.primary.black[40]}]}>{item.habitName} • {formatDate(item.loggedAt)}</Text>
             </View>
             <View style={[styles.activityIcon, {backgroundColor: item.points > 0 ? palette.primary.green[10] : palette.primary.redError[10]}]}>
                 <Ionicons
@@ -54,6 +54,8 @@ export default function Profile() {
     const {user} = useUser();
     const {dbUserId} = useCurrentUser();
     const {data: totalPoints} = useTotalPoints(dbUserId);
+
+    const palette = usePalette();
 
     const getDateRange = () => {
         const today = new Date();
@@ -102,28 +104,30 @@ export default function Profile() {
     };
 
     return (
-        <View style={styles.container}>
-            <View style={styles.header}>
+        <View style={[styles.container, {backgroundColor: palette.primary.black[10]}]}>
+            <View style={[styles.header, {backgroundColor: palette.primary.white, borderBottomColor: palette.primary.black[10]}]}>
                 <View style={styles.section}>
-                    <Text style={styles.screenTitle}>Profile</Text>
-                    <View style={styles.settingsButton}>
+                    <Text style={[styles.screenTitle, {color: palette.primary.black[100]}]}>Profile</Text>
+                    <View style={[styles.settingsButton, {borderColor: palette.primary.black[20]}]}>
                         <Pressable onPress={onSettingsPress}>
                             <Ionicons name='settings' size={24} color={palette.primary.black[40]}/>
                         </Pressable>
                     </View>
                 </View>
                 <View style={styles.profile}>
-                    <Pressable onPress={onAvatarPress} disabled={uploading} style={styles.avatar}>
+                    <Pressable onPress={onAvatarPress} disabled={uploading} style={[styles.avatar, {backgroundColor: palette.primary.green[20]}]}>
                         {user?.imageUrl ? (
                             <Image source={{uri: user.imageUrl}} style={styles.avatarImage}/>
                         ) : null}
                         {uploading ? <ActivityIndicator/> : null}
                     </Pressable>
                     <View style={styles.userNameContainer}>
-                        <Text style={styles.userName}>{user?.firstName} {user?.lastName}</Text>
-                        <View style={styles.pointsContainer}>
+                        <Text style={[styles.userName, {color: palette.primary.black[100]}]}>{user?.firstName} {user?.lastName}</Text>
+                        <View style={[styles.pointsContainer, {
+                            backgroundColor: palette.primary.orangeWarning[20],
+                            borderColor: palette.primary.orangeWarning[80],}] }>
                             <FontAwesome5 name='medal' size={16} color={palette.primary.orangeWarning[100]}/>
-                            <Text style={styles.habitPoints}>{totalPoints}</Text>
+                            <Text style={[styles.habitPoints, {color: palette.primary.orangeWarning[100],}]}>{totalPoints}</Text>
                         </View>
                     </View>
                 </View>
@@ -134,29 +138,29 @@ export default function Profile() {
                 keyExtractor={(item) => item.id.toString()}
                 contentContainerStyle={styles.scroll}
                 ListHeaderComponent={
-                    <View style={styles.activityHeader}>
-                        <Text style={styles.activityTitle2}>
+                    <View style={[styles.activityHeader, {backgroundColor: palette.primary.white}]}>
+                        <Text style={[styles.activityTitle2, {color: palette.primary.black[60]}]}>
                             Showing last {activityPeriod === 'week' ? 'week' : 'month'} activity
                         </Text>
-                        <View style={styles.filter}>
+                        <View style={[styles.filter, {backgroundColor: palette.primary.black[10]}]}>
                             <Pressable
-                                style={[styles.filterBtn, activityPeriod === 'week' && styles.filterBtnActive]}
+                                style={[styles.filterBtn, activityPeriod === 'week' && [styles.filterBtnActive, {backgroundColor: palette.primary.white}]]}
                                 onPress={() => setActivityPeriod('week')}
                             >
-                                <Text style={[styles.filterText, activityPeriod === 'week' && styles.filterTextActive]}>Week</Text>
+                                <Text style={[styles.filterText, {color: palette.primary.black[40]}, activityPeriod === 'week' && [styles.filterTextActive, {color: palette.primary.blue[100]}]]}>Week</Text>
                             </Pressable>
                             <Pressable
-                                style={[styles.filterBtn, activityPeriod === 'month' && styles.filterBtnActive]}
+                                style={[styles.filterBtn, activityPeriod === 'month' && [styles.filterBtnActive, {backgroundColor: palette.primary.white}]]}
                                 onPress={() => setActivityPeriod('month')}
                             >
-                                <Text style={[styles.filterText, activityPeriod === 'month' && styles.filterTextActive]}>Month</Text>
+                                <Text style={[styles.filterText, {color: palette.primary.black[40]}, activityPeriod === 'month' && [styles.filterTextActive, {color: palette.primary.blue[100]}]]}>Month</Text>
                             </Pressable>
                         </View>
                     </View>
                 }
-                renderItem={({item}) => <ActivityCard item={item}/>}
+                renderItem={({item}) => <ActivityCard item={item} palette={palette}/>}
                 ListEmptyComponent={
-                    <Text style={styles.empty}>No activity yet</Text>
+                    <Text style={[styles.empty, {color: palette.primary.black[40]}]}>No activity yet</Text>
                 }
             />
         </View>
@@ -166,15 +170,12 @@ export default function Profile() {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: palette.primary.black[10],
     },
     header: {
-        backgroundColor: palette.primary.white,
         paddingHorizontal: 20,
         paddingTop: 70,
         paddingBottom: 20,
         borderBottomWidth: 1.5,
-        borderBottomColor: palette.primary.black[10],
         gap: 12,
     },
     section: {
@@ -184,7 +185,6 @@ const styles = StyleSheet.create({
     screenTitle: {
         fontSize: 28,
         fontWeight: '700',
-        color: palette.primary.black[100],
         marginBottom: 4,
     },
     settingsButton: {
@@ -193,7 +193,6 @@ const styles = StyleSheet.create({
         height: 50,
         width: 50,
         borderRadius: 20,
-        borderColor: palette.primary.black[20],
         borderWidth: 1,
     },
     profile: {
@@ -203,7 +202,6 @@ const styles = StyleSheet.create({
         height: 56,
         width: 56,
         borderRadius: 28,
-        backgroundColor: palette.primary.green[20],
         overflow: 'hidden',
         alignItems: 'center',
         justifyContent: 'center',
@@ -216,7 +214,6 @@ const styles = StyleSheet.create({
         fontSize: 18,
         fontWeight: '500',
         lineHeight: 24,
-        color: palette.primary.black[100],
     },
     userNameContainer: {
         flexDirection: 'column',
@@ -229,22 +226,18 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         paddingHorizontal: 10,
         paddingVertical: 2,
-        backgroundColor: palette.primary.orangeWarning[20],
-        borderColor: palette.primary.orangeWarning[80],
         borderWidth: 0.5,
         borderRadius: 18,
     },
     habitPoints: {
         fontSize: 16,
         fontWeight: '600',
-        color: palette.primary.orangeWarning[100],
     },
     scroll: {
         paddingBottom: 120,
         gap: 12,
     },
     activityHeader: {
-        backgroundColor: palette.primary.white,
         marginTop: 10,
         marginHorizontal: 20,
         borderRadius: 14,
@@ -257,11 +250,9 @@ const styles = StyleSheet.create({
     activityTitle2: {
         fontSize: 14,
         fontWeight: '500',
-        color: palette.primary.black[60],
     },
     filter: {
         flexDirection: 'row',
-        backgroundColor: palette.primary.black[10],
         borderRadius: 10,
         padding: 3,
         gap: 4,
@@ -272,22 +263,20 @@ const styles = StyleSheet.create({
         borderRadius: 8,
     },
     filterBtnActive: {
-        backgroundColor: palette.primary.white,
+        // color is applied dynamically from palette
     },
     filterText: {
         fontSize: 14,
-        color: palette.primary.black[40],
         fontWeight: '500',
     },
     filterTextActive: {
-        color: palette.primary.blue[100],
+        // color is applied dynamically from palette
         fontWeight: '600',
     },
     activityCard: {
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'space-between',
-        backgroundColor: palette.primary.white,
         borderRadius: 16,
         padding: 16,
         marginHorizontal: 20,
@@ -299,11 +288,9 @@ const styles = StyleSheet.create({
     activityTitle: {
         fontSize: 15,
         fontWeight: '600',
-        color: palette.primary.black[100],
     },
     activitySub: {
         fontSize: 12,
-        color: palette.primary.black[40],
     },
     activityIcon: {
         width: 40,
@@ -314,7 +301,6 @@ const styles = StyleSheet.create({
     },
     empty: {
         textAlign: 'center',
-        color: palette.primary.black[40],
         fontSize: 13,
         paddingVertical: 24,
         paddingHorizontal: 20,

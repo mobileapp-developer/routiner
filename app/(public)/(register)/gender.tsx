@@ -4,7 +4,7 @@ import {useState} from "react";
 import {Pressable, StyleSheet, Text, View} from "react-native";
 import AuthButton from "@/components/ui/AuthButton";
 import BackButton from "@/components/ui/BackButton";
-import {palette} from "@/constants/palette";
+import {lightPalette} from "@/constants/palette";
 
 const Page = () => {
 	const router = useRouter();
@@ -50,8 +50,8 @@ const Page = () => {
 			<View style={styles.footer}>
 				<AuthButton
 					text="Next"
-					backgroundColor={palette.primary.blue[100]}
-					textColor={palette.primary.white}
+					backgroundColor={lightPalette.primary.blue[100]}
+					textColor={lightPalette.primary.white}
 					onPress={handleNext}
 					height={52}
 					width={345}
@@ -75,7 +75,7 @@ const styles = StyleSheet.create({
 		paddingHorizontal: 18,
 		paddingTop: 40,
 		flexDirection: "row",
-		shadowColor: palette.primary.black[20],
+		shadowColor: lightPalette.primary.black[20],
 		shadowOffset: {width: 0, height: 1},
 		shadowOpacity: 0.25,
 		shadowRadius: 3.84,
@@ -107,15 +107,15 @@ const styles = StyleSheet.create({
 		width: 165,
 		borderWidth: 2,
 		borderRadius: 16,
-		borderColor: palette.primary.black[20],
-		backgroundColor: palette.primary.white,
+		borderColor: lightPalette.primary.black[20],
+		backgroundColor: lightPalette.primary.white,
 		justifyContent: "center",
 		alignItems: "center",
 		padding: 12,
 		gap: 24
 	},
 	selectedCard: {
-		borderColor: palette.primary.blue[100]
+		borderColor: lightPalette.primary.blue[100]
 	},
 	emoji: {
 		fontSize: 44,

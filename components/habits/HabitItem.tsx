@@ -1,6 +1,6 @@
 import {StyleSheet, Text, View} from "react-native";
 import CircularProgress from "@/components/ui/CircularProgress";
-import {palette} from "@/constants/palette";
+import {lightPalette} from "@/constants/palette";
 
 interface HabitItemProps {
     name: string;
@@ -11,13 +11,13 @@ interface HabitItemProps {
     color: string;
 }
 
-const HabitItem = ({ name, emoji, current, goalValue, goalUnit, color }: HabitItemProps) => {
+const HabitItem = ({ name, emoji, current, goalValue, goalUnit }: HabitItemProps) => {
     const percentage = goalValue > 0 ? Math.min(Math.round((current / goalValue) * 100), 100) : 0;
 
     return (
         <View style={styles.container}>
             <View style={styles.progressWrapper}>
-                <CircularProgress percentage={percentage} size={56} strokeWidth={3} color={palette.primary.blue[100]} />
+                <CircularProgress percentage={percentage} size={56} strokeWidth={3} color={lightPalette.primary.blue[100]} />
                 <Text style={styles.emoji}>{emoji}</Text>
             </View>
             <View style={styles.info}>

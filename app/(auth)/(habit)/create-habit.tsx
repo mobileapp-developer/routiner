@@ -1,6 +1,5 @@
 import {Animated, Pressable, ScrollView, StyleSheet, Text, TextInput, View,} from "react-native";
 import BackButton from "@/components/ui/BackButton";
-import {palette} from "@/constants/palette";
 import {useState} from "react";
 import ColorPicker from "@/components/ui/ColorPicker";
 import EmojiPicker from "@/components/ui/EmojiPicker";
@@ -14,6 +13,7 @@ import {FREQUENCY_OPTIONS, GOAL_UNIT_OPTIONS, HABIT_TYPE_OPTIONS, POINTS_OPTIONS
 import {useQueryClient} from "@tanstack/react-query";
 import {HABITS_QUERY_KEY} from "@/hooks/useHabits";
 import {DAILY_GOALS_QUERY_KEY} from "@/hooks/useDailyGoal";
+import {usePalette} from "@/hooks/usePalette";
 
 export default function CreateHabit() {
     const router = useRouter();
@@ -42,6 +42,7 @@ export default function CreateHabit() {
 
     const {dbUserId} = useCurrentUser();
     const {scaleValue, onPressOut, onPressIn} = usePressAnimation();
+    const palette = usePalette();
 
     const updateForm = (key: keyof HabitForm, value: string) => {
         setForm((prev) => ({...prev, [key]: value}));
@@ -77,10 +78,10 @@ export default function CreateHabit() {
     };
 
     return (
-        <View style={styles.container}>
-            <View style={styles.header}>
+        <View style={[styles.container, {backgroundColor: palette.primary.black[10]}]}>
+            <View style={[styles.header, {backgroundColor: palette.primary.white, shadowColor: palette.primary.black[20]}]}>
                 <BackButton/>
-                <Text style={[styles.headerText, {right: 80}]}>
+                <Text style={[styles.headerText, {right: 80, color: palette.primary.black[100]}]}>
                     Create Custom Habit
                 </Text>
             </View>
@@ -88,42 +89,42 @@ export default function CreateHabit() {
             <ScrollView contentContainerStyle={styles.scroll} showsVerticalScrollIndicator={false}>
 
                 {/* NAME */}
-                <Text style={styles.label}>NAME</Text>
+                <Text style={[styles.label, {color: palette.primary.black[100]}]}>NAME</Text>
                 <View>
                     <TextInput
                         value={form.name}
                         onChangeText={(text) => updateForm("name", text)}
                         placeholder="Walk"
-                        style={styles.input}
+                        style={[styles.input, {color: palette.primary.black[100]}]}
                         placeholderTextColor={palette.primary.black[40]}
                     />
-                    <View style={styles.separator}/>
-                    {error ? <Text style={styles.error}>{error}</Text> : null}
+                    <View style={[styles.separator, {borderTopColor: palette.primary.black[20]}]}/>
+                    {error ? <Text style={[styles.error, {color: palette.primary.redError[100]}]}>{error}</Text> : null}
                 </View>
 
                 {/* ICON AND COLOR */}
-                <Text style={styles.label}>ICON AND COLOR</Text>
+                <Text style={[styles.label, {color: palette.primary.black[100]}]}>ICON AND COLOR</Text>
                 <View style={styles.row}>
-                    <Pressable style={styles.iconColorCard} onPress={() => setEmojiPickerVisible(true)}>
+                    <Pressable style={[styles.iconColorCard, {backgroundColor: palette.primary.white, borderColor: palette.primary.black[10]}]} onPress={() => setEmojiPickerVisible(true)}>
                         <Text style={styles.iconEmoji}>{form.icon}</Text>
                         <View>
-                            <Text style={styles.iconColorTitle}>{form.iconName}</Text>
-                            <Text style={styles.iconColorSub}>Icon</Text>
+                            <Text style={[styles.iconColorTitle, {color: palette.primary.black[100]}]}>{form.iconName}</Text>
+                            <Text style={[styles.iconColorSub, {color: palette.primary.black[40]}]}>Icon</Text>
                         </View>
                     </Pressable>
 
-                    <Pressable style={styles.iconColorCard} onPress={() => setColorPickerVisible(true)}>
+                    <Pressable style={[styles.iconColorCard, {backgroundColor: palette.primary.white, borderColor: palette.primary.black[10]}]} onPress={() => setColorPickerVisible(true)}>
                         <View style={[styles.colorCircle, {backgroundColor: form.color}]}/>
                         <View>
-                            <Text style={styles.iconColorTitle}>{form.colorName}</Text>
-                            <Text style={styles.iconColorSub}>Color</Text>
+                            <Text style={[styles.iconColorTitle, {color: palette.primary.black[100]}]}>{form.colorName}</Text>
+                            <Text style={[styles.iconColorSub, {color: palette.primary.black[40]}]}>Color</Text>
                         </View>
                     </Pressable>
                 </View>
 
                 {/* GOAL */}
-                <Text style={styles.label}>GOAL</Text>
-                <View style={styles.section}>
+                <Text style={[styles.label, {color: palette.primary.black[100]}]}>GOAL</Text>
+                <View style={[styles.section, {backgroundColor: palette.primary.white, borderColor: palette.primary.black[10]}]}>
                     <View style={styles.goalTop}>
                         <View>
                             <TextInput
@@ -131,34 +132,34 @@ export default function CreateHabit() {
                                 onChangeText={(text) => updateForm("goalValue", text)}
                                 placeholder="1 times"
                                 keyboardType="numeric"
-                                style={styles.goalValue}
+                                style={[styles.goalValue, {color: palette.primary.black[100]}]}
                                 placeholderTextColor={palette.primary.black[40]}
                             />
-                            <Text style={styles.goalSub}>or more per day</Text>
+                            <Text style={[styles.goalSub, {color: palette.primary.black[40]}]}>or more per day</Text>
                         </View>
                     </View>
 
                     <View style={styles.goalBottom}>
-                        <Pressable style={styles.goalChip} onPress={() => setFrequencyDropdownVisible(true)}>
-                            <Text style={styles.goalChipText}>
+                        <Pressable style={[styles.goalChip, {backgroundColor: palette.primary.blue[10]}]} onPress={() => setFrequencyDropdownVisible(true)}>
+                            <Text style={[styles.goalChipText, {color: palette.primary.black[80]}]}>
                                 🔄 {form.frequencyType === 'daily' ? 'Daily' : form.frequencyType === 'weekly_times' ? 'Weekly' : 'Monthly'}
                             </Text>
                         </Pressable>
 
-                        <Pressable style={styles.goalChip} onPress={() => setHabitTypeDropdownVisible(true)}>
-                            <Text style={styles.goalChipText}>
+                        <Pressable style={[styles.goalChip, {backgroundColor: palette.primary.blue[10]}]} onPress={() => setHabitTypeDropdownVisible(true)}>
+                            <Text style={[styles.goalChipText, {color: palette.primary.black[80]}]}>
                                 {form.habitType === 'yesno' ? '✅ Yes/No' : form.habitType === 'time' ? '⏱ Time' : '🔢 Count'}
                             </Text>
                         </Pressable>
 
-                        <Pressable style={styles.goalChip} onPress={() => setGoalUnitDropdownVisible(true)}>
-                            <Text style={styles.goalChipText}>
+                        <Pressable style={[styles.goalChip, {backgroundColor: palette.primary.blue[10]}]} onPress={() => setGoalUnitDropdownVisible(true)}>
+                            <Text style={[styles.goalChipText, {color: palette.primary.black[80]}]}>
                                 {form.goalUnit ? form.goalUnit : '📐 Unit'}
                             </Text>
                         </Pressable>
 
-                        <Pressable style={styles.goalChip} onPress={() => setPointsDropdownVisible(true)}>
-                            <Text style={styles.goalChipText}>
+                        <Pressable style={[styles.goalChip, {backgroundColor: palette.primary.blue[10]}]} onPress={() => setPointsDropdownVisible(true)}>
+                            <Text style={[styles.goalChipText, {color: palette.primary.black[80]}]}>
                                 {form.points ? `⭐ ${form.points} pts` : '⭐ Points'}
                             </Text>
                         </Pressable>
@@ -167,9 +168,9 @@ export default function CreateHabit() {
 
                 {/* ADD BUTTON */}
                 <Animated.View style={[styles.footer, {transform: [{scale: scaleValue}]}]}>
-                    <Pressable style={styles.addButton} onPress={handleSubmit} onPressIn={onPressIn}
+                    <Pressable style={[styles.addButton, {backgroundColor: palette.primary.blue[100]}]} onPress={handleSubmit} onPressIn={onPressIn}
                                onPressOut={onPressOut}>
-                        <Text style={styles.addButtonText}>Add Habit</Text>
+                        <Text style={[styles.addButtonText, {color: palette.primary.white}]}>Add Habit</Text>
                     </Pressable>
                 </Animated.View>
             </ScrollView>
@@ -226,17 +227,14 @@ export default function CreateHabit() {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: palette.primary.blue[10],
     },
     header: {
         height: 130,
-        backgroundColor: palette.primary.white,
         justifyContent: "space-between",
         alignItems: "center",
         paddingHorizontal: 18,
         paddingTop: 40,
         flexDirection: "row",
-        shadowColor: palette.primary.black[20],
         shadowOffset: {width: 0, height: 1},
         shadowOpacity: 0.25,
         shadowRadius: 3.84,
@@ -254,27 +252,22 @@ const styles = StyleSheet.create({
     label: {
         fontSize: 12,
         fontWeight: "600",
-        color: palette.primary.black[100],
         letterSpacing: 1,
         marginBottom: 4,
         marginTop: 16,
     },
     section: {
-        backgroundColor: palette.primary.white,
         borderWidth: 1,
-        borderColor: palette.primary.black[10],
         borderRadius: 20,
         padding: 16,
     },
     input: {
         fontSize: 22,
         fontWeight: "500",
-        color: palette.primary.black[100],
         paddingVertical: 8,
     },
     separator: {
         borderTopWidth: 1,
-        borderTopColor: palette.primary.black[20],
         marginTop: 8,
     },
     row: {
@@ -286,10 +279,8 @@ const styles = StyleSheet.create({
         flexDirection: "row",
         alignItems: "center",
         gap: 10,
-        backgroundColor: palette.primary.white,
         borderWidth: 1,
         borderRadius: 20,
-        borderColor: palette.primary.black[10],
         padding: 12,
         paddingVertical: 16,
     },
@@ -304,11 +295,9 @@ const styles = StyleSheet.create({
     iconColorTitle: {
         fontSize: 15,
         fontWeight: "600",
-        color: palette.primary.black[100],
     },
     iconColorSub: {
         fontSize: 12,
-        color: palette.primary.black[40],
     },
     goalTop: {
         flexDirection: "row",
@@ -318,11 +307,9 @@ const styles = StyleSheet.create({
     goalValue: {
         fontSize: 20,
         fontWeight: "600",
-        color: palette.primary.black[100],
     },
     goalSub: {
         fontSize: 13,
-        color: palette.primary.black[40],
     },
     goalBottom: {
         flexDirection: "row",
@@ -333,17 +320,14 @@ const styles = StyleSheet.create({
     goalChip: {
         flexDirection: "row",
         alignItems: "center",
-        backgroundColor: palette.primary.blue[10],
         borderRadius: 20,
         paddingHorizontal: 12,
         paddingVertical: 6,
     },
     goalChipText: {
         fontSize: 13,
-        color: palette.primary.black[80],
     },
     addButton: {
-        backgroundColor: palette.primary.blue[100],
         borderRadius: 40,
         padding: 18,
         alignItems: "center",
@@ -351,13 +335,11 @@ const styles = StyleSheet.create({
     addButtonText: {
         fontSize: 16,
         fontWeight: "700",
-        color: palette.primary.white,
     },
     footer: {
         marginTop: 16,
     },
     error: {
-        color: "red",
         fontSize: 13,
         marginTop: 4,
     },

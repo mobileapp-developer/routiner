@@ -2,7 +2,7 @@ import {Challenge} from "@/constants/types";
 import {usePressAnimation} from "@/hooks/usePressAnimation";
 import {Animated, Pressable, StyleSheet, Text, View} from "react-native";
 import {Ionicons} from "@expo/vector-icons";
-import {palette} from "@/constants/palette";
+import {lightPalette} from "@/constants/palette";
 import React from "react";
 
 export function ChallengeCard({item}: { item: Challenge }) {
@@ -17,7 +17,7 @@ export function ChallengeCard({item}: { item: Challenge }) {
                 <Ionicons
                     name='time-outline'
                     size={22}
-                    color={palette.primary.white}
+                    color={lightPalette.primary.white}
                     style={{marginBottom: 4}}
                 />
                 <Text style={styles.challengeTitle}>{item.title}</Text>
@@ -51,7 +51,7 @@ export function ChallengeCard({item}: { item: Challenge }) {
 const styles = StyleSheet.create({
     challengeCard: {
         width: 185,
-        backgroundColor: palette.primary.blue[100],
+        backgroundColor: lightPalette.primary.blue[100],
         borderRadius: 20,
         padding: 16,
         marginRight: 14,
@@ -95,9 +95,9 @@ const styles = StyleSheet.create({
         width: 24,
         height: 24,
         borderRadius: 12,
-        backgroundColor: palette.primary.blue[40],
+        backgroundColor: lightPalette.primary.blue[40],
         borderWidth: 2,
-        borderColor: palette.primary.blue[100],
+        borderColor: lightPalette.primary.blue[100],
     },
     challengeFriendsText: {
         fontSize: 12,

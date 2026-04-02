@@ -1,7 +1,7 @@
 import {usePressAnimation} from "@/hooks/usePressAnimation";
 import {Animated, Pressable, StyleSheet, Text, View} from "react-native";
 import {POPULAR_HABITS} from "@/constants/habits";
-import {palette} from "@/constants/palette";
+import {lightPalette} from "@/constants/palette";
 
 export function PopularHabitCard({item, onPress, fullWidth}: {
     item: typeof POPULAR_HABITS[0],
@@ -50,11 +50,11 @@ const styles = StyleSheet.create({
     habitName: {
         fontSize: 15,
         fontWeight: '600',
-        color: palette.primary.black[100],
+        color: lightPalette.primary.black[100],
     },
     habitGoal: {
         fontSize: 13,
-        color: palette.primary.black[60],
+        color: lightPalette.primary.black[60],
     },
     goalValueContainer: {
         width: 110,
@@ -67,14 +67,14 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         paddingHorizontal: 6,
         paddingVertical: 2,
-        backgroundColor: palette.primary.orangeWarning[20],
-        borderColor: palette.primary.orangeWarning[80],
+        backgroundColor: lightPalette.primary.orangeWarning[20],
+        borderColor: lightPalette.primary.orangeWarning[80],
         borderWidth: 0.5,
         borderRadius: 10,
     },
     habitPoints: {
         fontSize: 13,
         fontWeight: '600',
-        color: palette.primary.orangeWarning[100],
+        color: lightPalette.primary.orangeWarning[100],
     }
 });

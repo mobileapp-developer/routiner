@@ -1,7 +1,6 @@
 import React, {useRef, useState} from "react";
 import {Alert, Animated, FlatList, Pressable, ScrollView, StyleSheet, Text, TextInput, View,} from "react-native";
 import {Feather} from "@expo/vector-icons";
-import {palette} from "@/constants/palette";
 import {POPULAR_HABITS} from "@/constants/habits";
 import {PopularHabitCard} from "@/components/habits/cards/PopularHabitCard";
 import {useCurrentUser} from "@/hooks/useCurrentUser";
@@ -12,17 +11,26 @@ import {Link} from "expo-router";
 import {useQueryClient} from "@tanstack/react-query";
 import {DAILY_GOALS_QUERY_KEY} from "@/hooks/useDailyGoal";
 import {HABITS_QUERY_KEY} from "@/hooks/useHabits";
+import {usePalette} from "@/hooks/usePalette";
 
-function SectionHeader({title, href}: { title: string; href?: string }) {
+function SectionHeader({
+    title,
+    href,
+    palette,
+}: {
+    title: string;
+    href?: string;
+    palette: ReturnType<typeof usePalette>;
+}) {
     return (
         <View style={styles.sectionRow}>
-            <Text style={styles.sectionTitle}>{title}</Text>
+            <Text style={[styles.sectionTitle, {color: palette.primary.black[100]}]}>{title}</Text>
             {href ? (
-                <Link href={href as any} style={styles.sectionLink}>
+                <Link href={href as any} style={[styles.sectionLink, {color: palette.primary.blue[100]}]}>
                     VIEW ALL
                 </Link>
             ) : (
-                <Text style={styles.sectionLink}>VIEW ALL</Text>
+                <Text style={[styles.sectionLink, {color: palette.primary.blue[100]}]}>VIEW ALL</Text>
             )}
         </View>
     );
@@ -31,6 +39,7 @@ function SectionHeader({title, href}: { title: string; href?: string }) {
 const Explore = () => {
     const queryClient = useQueryClient();
     const {dbUserId} = useCurrentUser();
+    const palette = usePalette();
     const [query, setQuery] = useState('');
     const [isSearching, setIsSearching] = useState(false);
 
@@ -92,15 +101,15 @@ const Explore = () => {
     const filterLearning = LEARNING_ITEMS.filter(i => i.title.toLowerCase().includes(q));
 
     return (
-        <View style={styles.container}>
-            <View style={styles.header}>
+        <View style={[styles.container, {backgroundColor: palette.primary.black[10]}]}>
+            <View style={[styles.header, {backgroundColor: palette.primary.white, borderBottomColor: palette.primary.black[10]}]}>
                 <View style={styles.headerRow}>
-                    <Animated.Text style={[styles.headerTitle, {opacity: titleOpacity}]} numberOfLines={1}>
+                    <Animated.Text style={[styles.headerTitle, {opacity: titleOpacity, color: palette.primary.black[100]}]} numberOfLines={1}>
                         Explore
                     </Animated.Text>
 
                     {isSearching && (
-                        <Animated.View style={[styles.searchInputWrapper, {width: animatedWidth}]}>
+                        <Animated.View style={[styles.searchInputWrapper, {width: animatedWidth, backgroundColor: palette.primary.black[10]}]}>
                             <Animated.View style={{flex: 1, opacity: inputOpacity}}>
                                 <TextInput
                                     autoFocus
@@ -108,14 +117,14 @@ const Explore = () => {
                                     onChangeText={setQuery}
                                     placeholder="Search habits..."
                                     placeholderTextColor={palette.primary.black[40]}
-                                    style={styles.searchInput}
+                                    style={[styles.searchInput, {color: palette.primary.black[100]}]}
                                 />
                             </Animated.View>
                         </Animated.View>
                     )}
 
                     <Pressable
-                        style={styles.searchBtn}
+                        style={[styles.searchBtn, {backgroundColor: palette.primary.black[10]}]}
                         onPress={isSearching ? closeSearch : openSearch}
                         hitSlop={8}
                     >
@@ -133,7 +142,7 @@ const Explore = () => {
                 contentContainerStyle={styles.scroll}
             >
                 {/* Suggested for You */}
-                <SectionHeader title="Suggested for You" href="/(auth)/(tabs)/explore/suggested"/>
+                <SectionHeader title="Suggested for You" href="/(auth)/(tabs)/explore/suggested" palette={palette}/>
                 <FlatList
                     data={filterHabits}
                     keyExtractor={(item) => item.id}
@@ -149,7 +158,7 @@ const Explore = () => {
                 />
 
                 {/* Learning */}
-                <SectionHeader title="Learning" href="/(auth)/(tabs)/explore/learning"/>
+                <SectionHeader title="Learning" href="/(auth)/(tabs)/explore/learning" palette={palette}/>
                 <FlatList
                     data={filterLearning}
                     keyExtractor={(item) => item.id}
@@ -168,15 +177,12 @@ const Explore = () => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: palette.primary.white,
     },
     header: {
-        backgroundColor: palette.primary.white,
         paddingTop: 60,
         paddingHorizontal: 20,
         paddingBottom: 16,
         borderBottomWidth: 1,
-        borderBottomColor: palette.primary.black[10],
     },
     headerRow: {
         flexDirection: "row",
@@ -190,20 +196,17 @@ const styles = StyleSheet.create({
         left: 0,
         fontSize: 28,
         fontWeight: "700",
-        color: palette.primary.black[100],
     },
     searchBtn: {
         width: 40,
         height: 40,
         borderRadius: 20,
-        backgroundColor: palette.primary.black[10],
         alignItems: "center",
         justifyContent: "center",
         flexShrink: 0,
     },
     searchInputWrapper: {
         height: 40,
-        backgroundColor: palette.primary.black[10],
         borderRadius: 20,
         overflow: 'hidden',
         justifyContent: 'center',
@@ -214,7 +217,6 @@ const styles = StyleSheet.create({
     searchInput: {
         fontSize: 15,
         fontWeight: '500',
-        color: palette.primary.black[100],
         paddingVertical: 12,
         paddingHorizontal: 16,
     },
@@ -236,12 +238,10 @@ const styles = StyleSheet.create({
     sectionTitle: {
         fontSize: 17,
         fontWeight: "700",
-        color: palette.primary.black[100],
     },
     sectionLink: {
         fontSize: 13,
         fontWeight: "700",
-        color: palette.primary.blue[100],
     },
 });
 

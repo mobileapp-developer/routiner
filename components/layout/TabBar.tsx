@@ -1,9 +1,10 @@
 import React from 'react'
 import {Animated, Pressable, StyleSheet} from 'react-native'
 import {BottomTabBarProps} from '@react-navigation/bottom-tabs'
-import {palette} from '@/constants/palette'
+import {lightPalette} from '@/constants/palette'
 import {usePressAnimation} from "@/hooks/usePressAnimation";
 import {useRouter} from "expo-router";
+import {usePalette} from "@/hooks/usePalette";
 
 type TabItemProps = {
     route: any
@@ -15,7 +16,7 @@ type TabItemProps = {
 function TabItem({isFocused, options, onPress}: TabItemProps) {
     const {scaleValue, onPressOut, onPressIn} = usePressAnimation();
 
-    const iconColor = isFocused ? palette.primary.blue[100] : palette.primary.black[40]
+    const iconColor = isFocused ? lightPalette.primary.blue[100] : lightPalette.primary.black[40]
 
     return (
         <Pressable
@@ -39,14 +40,12 @@ function TabItem({isFocused, options, onPress}: TabItemProps) {
     )
 }
 
-export default function MyTabBar({
-                                     state,
-                                     descriptors,
-                                     navigation,
-                                 }: BottomTabBarProps) {
+export default function MyTabBar({state, descriptors, navigation}: BottomTabBarProps) {
     const router = useRouter();
+    const palette = usePalette();
+
     return (
-        <Animated.View style={styles.container}>
+        <Animated.View style={[styles.container, {borderColor: palette.primary.black[20], backgroundColor: palette.primary.white}]}>
             {state.routes.map((route, index) => {
                 const {options} = descriptors[route.key]
                 const isFocused = state.index === index
@@ -90,9 +89,7 @@ const styles = StyleSheet.create({
         left: 24,
         right: 24,
         height: 70,
-        backgroundColor: '#ffffff',
         borderWidth: 0.5,
-        borderColor: palette.primary.black[20],
         borderRadius: 70,
         alignItems: 'center',
         justifyContent: 'space-around',

@@ -4,7 +4,7 @@ import {useSignUp} from "@clerk/clerk-expo";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import {Pressable, ScrollView, StyleSheet, Text, View} from "react-native";
 import {HABITS} from "@/constants/habits";
-import {palette} from "@/constants/palette";
+import {lightPalette} from "@/constants/palette";
 import BackButton from "@/components/ui/BackButton";
 import AuthButton from "@/components/ui/AuthButton";
 import {createUser} from "@/db/user";
@@ -67,8 +67,8 @@ const Page = () => {
             <View style={styles.footer}>
                 <AuthButton
                     text='Next'
-                    backgroundColor={selectedHabit ? palette.primary.blue[100] : palette.primary.black[20]}
-                    textColor={palette.primary.white}
+                    backgroundColor={selectedHabit ? lightPalette.primary.blue[100] : lightPalette.primary.black[20]}
+                    textColor={lightPalette.primary.white}
                     onPress={handleNext}
                     height={52}
                     width={345}
@@ -92,7 +92,7 @@ const styles = StyleSheet.create({
         paddingHorizontal: 18,
         paddingTop: 40,
         flexDirection: 'row',
-        shadowColor: palette.primary.black[20],
+        shadowColor: lightPalette.primary.black[20],
         shadowOffset: {width: 0, height: 1},
         shadowOpacity: 0.25,
         shadowRadius: 3.84,
@@ -117,7 +117,7 @@ const styles = StyleSheet.create({
     subtitle: {
         fontSize: 14,
         fontWeight: '400',
-        color: palette.primary.black[60],
+        color: lightPalette.primary.black[60],
     },
     cards: {
         flexDirection: 'row',
@@ -132,15 +132,15 @@ const styles = StyleSheet.create({
         width: 180,
         borderWidth: 2,
         borderRadius: 16,
-        borderColor: palette.primary.black[20],
-        backgroundColor: palette.primary.white,
+        borderColor: lightPalette.primary.black[20],
+        backgroundColor: lightPalette.primary.white,
         justifyContent: 'center',
         alignItems: 'center',
         padding: 12,
         gap: 24
     },
     selectedCard: {
-        borderColor: palette.primary.blue[100],
+        borderColor: lightPalette.primary.blue[100],
     },
     emoji: {
         fontSize: 44,

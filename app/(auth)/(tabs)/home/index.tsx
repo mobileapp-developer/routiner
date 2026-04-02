@@ -1,8 +1,8 @@
 import React, {useState} from 'react';
 import {Link, useRouter} from "expo-router";
 import {useUser} from "@clerk/clerk-expo";
-import {FlatList, StyleSheet, Text, View} from 'react-native';
-import {palette} from "@/constants/palette";
+import {FlatList, StyleSheet, Text, useColorScheme, View} from 'react-native';
+import {lightPalette} from "@/constants/palette";
 import {HABITS_QUERY_KEY, useHabits} from "@/hooks/useHabits";
 import MoodIcon from "@/components/habits/MoodIcon";
 import {useCurrentUser} from "@/hooks/useCurrentUser";
@@ -15,6 +15,8 @@ import {useQueryClient} from "@tanstack/react-query";
 import {DAILY_GOALS_QUERY_KEY} from "@/hooks/useDailyGoal";
 import {awardPoints, deductPoints} from "@/db/points";
 import {TOTAL_POINTS_QUERY_KEY} from "@/hooks/useTotalPoints";
+import {usePalette} from "@/hooks/usePalette";
+import {useThemeMode} from "@/hooks/useThemeMode";
 
 export default function Home(){
     const router = useRouter();
@@ -22,6 +24,11 @@ export default function Home(){
     const {dbUserId} = useCurrentUser();
     const [selectedDate, setSelectedDate] = useState<Date>(new Date());
     const {habits, loading} = useHabits(dbUserId!, selectedDate);
+
+    const {mode} = useThemeMode();
+    const systemTheme = useColorScheme();
+    const isDark = mode.useSystemTheme ? systemTheme === 'dark' : mode.isDarkMode;
+    const palette = usePalette();
 
     const queryClient = useQueryClient();
 
@@ -81,9 +88,9 @@ export default function Home(){
     };
 
     return (
-        <View style={styles.container}>
+        <View style={[styles.container, {backgroundColor: isDark ? palette.primary.black[10] : palette.primary.blue[10]}]}>
             {/* Header */}
-            <View style={styles.header}>
+            <View style={[styles.header, {backgroundColor: palette.primary.white, borderBottomColor: palette.primary.black[10]}]}>
                 <View style={styles.iconButtonsContainer}>
 
                 </View>
@@ -91,8 +98,8 @@ export default function Home(){
                 {/* Text section */}
                 <View style={styles.greeting}>
                     <View style={styles.content}>
-                        <Text style={styles.mainText}>Hi, {user?.firstName} 👋🏻</Text>
-                        <Text style={styles.subText}>Let's make habit together</Text>
+                        <Text style={[styles.mainText, {color: palette.primary.black[100]}]}>Hi, {user?.firstName} 👋🏻</Text>
+                        <Text style={[styles.subText, {color: palette.primary.black[40]}]}>Let's make habit together</Text>
                     </View>
 
                     <View style={styles.moodIcon}>
@@ -160,17 +167,14 @@ export default function Home(){
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: palette.primary.blue[10],
     },
     content: {
         paddingVertical: 16,
         flex: 2
     },
     header: {
-        backgroundColor: palette.primary.white,
         paddingHorizontal: 20,
         borderBottomWidth: 1.5,
-        borderBottomColor: palette.primary.black[10],
     },
     iconButtonsContainer: {
         marginTop: 70,
@@ -194,7 +198,7 @@ const styles = StyleSheet.create({
         fontWeight: '400',
         lineHeight: 24,
         letterSpacing: 0,
-        color: palette.primary.black[40],
+        color: lightPalette.primary.black[40],
     },
     moodIcon: {
         alignSelf: 'center',
@@ -215,14 +219,14 @@ const styles = StyleSheet.create({
         fontWeight: '600',
         lineHeight: 24,
         letterSpacing: 0,
-        color: palette.primary.black[100],
+        color: lightPalette.primary.black[100],
     },
     sectionLink: {
         fontSize: 14,
         fontWeight: '700',
         lineHeight: 16,
         letterSpacing: 0,
-        color: palette.primary.blue[100],
+        color: lightPalette.primary.blue[100],
     },
     habitsList: {
         paddingHorizontal: 16,
@@ -233,6 +237,6 @@ const styles = StyleSheet.create({
     empty: {
         textAlign: 'center',
         marginTop: 32,
-        color: palette.primary.black[40],
+        color: lightPalette.primary.black[40],
     }
 });

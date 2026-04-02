@@ -1,6 +1,5 @@
 import {Animated, Pressable, ScrollView, StyleSheet, Text, TextInput, View,} from "react-native";
 import BackButton from "@/components/ui/BackButton";
-import {palette} from "@/constants/palette";
 import {useState} from "react";
 import ColorPicker from "@/components/ui/ColorPicker";
 import EmojiPicker from "@/components/ui/EmojiPicker";
@@ -10,6 +9,7 @@ import {useRouter} from "expo-router";
 import {usePressAnimation} from "@/hooks/usePressAnimation";
 import {HabitForm} from "@/constants/types";
 import {useQueryClient} from "@tanstack/react-query";
+import {usePalette} from "@/hooks/usePalette";
 
 export default function QuitHabit() {
     const router = useRouter();
@@ -31,10 +31,11 @@ export default function QuitHabit() {
     const [error, setError] = useState("");
     const [colorPickerVisible, setColorPickerVisible] = useState(false);
     const [emojiPickerVisible, setEmojiPickerVisible] = useState(false);
-    const [pointsDropdownVisible, setPointsDropdownVisible] = useState(false);
+    const [, setPointsDropdownVisible] = useState(false);
 
     const {dbUserId} = useCurrentUser();
     const {scaleValue, onPressOut, onPressIn} = usePressAnimation();
+    const palette = usePalette();
 
     const updateForm = (key: keyof HabitForm, value: string) => {
         setForm((prev) => ({...prev, [key]: value}));
@@ -65,10 +66,10 @@ export default function QuitHabit() {
     };
 
     return (
-        <View style={styles.container}>
-            <View style={styles.header}>
+        <View style={[styles.container, {backgroundColor: palette.primary.black[10]}]}>
+            <View style={[styles.header, {backgroundColor: palette.primary.white, shadowColor: palette.primary.black[20]}]}>
                 <BackButton/>
-                <Text style={[styles.headerText, {right: 115}]}>
+                <Text style={[styles.headerText, {right: 115, color: palette.primary.black[100]}]}>
                     Quit Bad Habit
                 </Text>
             </View>
@@ -76,54 +77,54 @@ export default function QuitHabit() {
             <ScrollView contentContainerStyle={styles.scroll} showsVerticalScrollIndicator={false}>
 
                 {/* NAME */}
-                <Text style={styles.label}>NAME</Text>
+                <Text style={[styles.label, {color: palette.primary.black[100]}]}>NAME</Text>
                 <View>
                     <TextInput
                         value={form.name}
                         onChangeText={(text) => updateForm("name", text)}
                         placeholder="Smoking"
-                        style={styles.input}
+                        style={[styles.input, {color: palette.primary.black[100]}]}
                         placeholderTextColor={palette.primary.black[40]}
                     />
-                    <View style={styles.separator}/>
-                    {error ? <Text style={styles.error}>{error}</Text> : null}
+                    <View style={[styles.separator, {borderTopColor: palette.primary.black[20]}]}/>
+                    {error ? <Text style={[styles.error, {color: palette.primary.redError[100]}]}>{error}</Text> : null}
                 </View>
 
                 {/* ICON AND COLOR */}
-                <Text style={styles.label}>ICON AND COLOR</Text>
+                <Text style={[styles.label, {color: palette.primary.black[100]}]}>ICON AND COLOR</Text>
                 <View style={styles.row}>
-                    <Pressable style={styles.iconColorCard} onPress={() => setEmojiPickerVisible(true)}>
+                    <Pressable style={[styles.iconColorCard, {backgroundColor: palette.primary.white, borderColor: palette.primary.black[10]}]} onPress={() => setEmojiPickerVisible(true)}>
                         <Text style={styles.iconEmoji}>{form.icon}</Text>
                         <View>
-                            <Text style={styles.iconColorTitle}>{form.iconName}</Text>
-                            <Text style={styles.iconColorSub}>Icon</Text>
+                            <Text style={[styles.iconColorTitle, {color: palette.primary.black[100]}]}>{form.iconName}</Text>
+                            <Text style={[styles.iconColorSub, {color: palette.primary.black[40]}]}>Icon</Text>
                         </View>
                     </Pressable>
 
-                    <Pressable style={styles.iconColorCard} onPress={() => setColorPickerVisible(true)}>
+                    <Pressable style={[styles.iconColorCard, {backgroundColor: palette.primary.white, borderColor: palette.primary.black[10]}]} onPress={() => setColorPickerVisible(true)}>
                         <View style={[styles.colorCircle, {backgroundColor: form.color}]}/>
                         <View>
-                            <Text style={styles.iconColorTitle}>{form.colorName}</Text>
-                            <Text style={styles.iconColorSub}>Color</Text>
+                            <Text style={[styles.iconColorTitle, {color: palette.primary.black[100]}]}>{form.colorName}</Text>
+                            <Text style={[styles.iconColorSub, {color: palette.primary.black[40]}]}>Color</Text>
                         </View>
                     </Pressable>
                 </View>
 
                 {/* POINTS */}
-                <Text style={styles.label}>POINTS</Text>
-                <View style={styles.pointsRow}>
+                <Text style={[styles.label, {color: palette.primary.black[100]}]}>POINTS</Text>
+                <View style={[styles.pointsRow, {backgroundColor: palette.primary.white, borderColor: palette.primary.black[10]}]}>
                     <Pressable style={styles.pointsChip} onPress={() => setPointsDropdownVisible(true)}>
                         <Text style={styles.pointsChipText}>⭐</Text>
-                        <Text style={styles.pointsValue}>{form.points ? `${form.points} pts` : 'Choose points'}</Text>
-                        <Text style={styles.pointsArrow}>›</Text>
+                        <Text style={[styles.pointsValue, {color: palette.primary.black[100]}]}>{form.points ? `${form.points} pts` : 'Choose points'}</Text>
+                        <Text style={[styles.pointsArrow, {color: palette.primary.black[40]}]}>›</Text>
                     </Pressable>
                 </View>
 
                 {/* ADD BUTTON */}
                 <Animated.View style={[styles.footer, {transform: [{scale: scaleValue}]}]}>
-                    <Pressable style={styles.addButton} onPress={handleSubmit} onPressIn={onPressIn}
+                    <Pressable style={[styles.addButton, {backgroundColor: palette.primary.blue[100]}]} onPress={handleSubmit} onPressIn={onPressIn}
                                onPressOut={onPressOut}>
-                        <Text style={styles.addButtonText}>Quit Habit</Text>
+                        <Text style={[styles.addButtonText, {color: palette.primary.white}]}>Quit Habit</Text>
                     </Pressable>
                 </Animated.View>
             </ScrollView>
@@ -148,17 +149,14 @@ export default function QuitHabit() {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: palette.primary.blue[10],
     },
     header: {
         height: 130,
-        backgroundColor: palette.primary.white,
         justifyContent: "space-between",
         alignItems: "center",
         paddingHorizontal: 18,
         paddingTop: 40,
         flexDirection: "row",
-        shadowColor: palette.primary.black[20],
         shadowOffset: {width: 0, height: 1},
         shadowOpacity: 0.25,
         shadowRadius: 3.84,
@@ -176,27 +174,22 @@ const styles = StyleSheet.create({
     label: {
         fontSize: 12,
         fontWeight: "600",
-        color: palette.primary.black[100],
         letterSpacing: 1,
         marginBottom: 4,
         marginTop: 16,
     },
     section: {
-        backgroundColor: palette.primary.white,
         borderWidth: 1,
-        borderColor: palette.primary.black[10],
         borderRadius: 20,
         padding: 16,
     },
     input: {
         fontSize: 22,
         fontWeight: "500",
-        color: palette.primary.black[100],
         paddingVertical: 8,
     },
     separator: {
         borderTopWidth: 1,
-        borderTopColor: palette.primary.black[20],
         marginTop: 8,
     },
     row: {
@@ -208,10 +201,8 @@ const styles = StyleSheet.create({
         flexDirection: "row",
         alignItems: "center",
         gap: 10,
-        backgroundColor: palette.primary.white,
         borderWidth: 1,
         borderRadius: 20,
-        borderColor: palette.primary.black[10],
         padding: 12,
         paddingVertical: 16,
     },
@@ -226,11 +217,9 @@ const styles = StyleSheet.create({
     iconColorTitle: {
         fontSize: 15,
         fontWeight: "600",
-        color: palette.primary.black[100],
     },
     iconColorSub: {
         fontSize: 12,
-        color: palette.primary.black[40],
     },
     goalTop: {
         flexDirection: "row",
@@ -240,11 +229,9 @@ const styles = StyleSheet.create({
     goalValue: {
         fontSize: 20,
         fontWeight: "600",
-        color: palette.primary.black[100],
     },
     goalSub: {
         fontSize: 13,
-        color: palette.primary.black[40],
     },
     goalBottom: {
         flexDirection: "row",
@@ -255,17 +242,14 @@ const styles = StyleSheet.create({
     goalChip: {
         flexDirection: "row",
         alignItems: "center",
-        backgroundColor: palette.primary.blue[10],
         borderRadius: 20,
         paddingHorizontal: 12,
         paddingVertical: 6,
     },
     goalChipText: {
         fontSize: 13,
-        color: palette.primary.black[80],
     },
     addButton: {
-        backgroundColor: palette.primary.blue[100],
         borderRadius: 40,
         padding: 18,
         alignItems: "center",
@@ -273,20 +257,16 @@ const styles = StyleSheet.create({
     addButtonText: {
         fontSize: 16,
         fontWeight: "700",
-        color: palette.primary.white,
     },
     footer: {
         marginTop: 16,
     },
     error: {
-        color: "red",
         fontSize: 13,
         marginTop: 4,
     },
     pointsRow: {
-        backgroundColor: palette.primary.white,
         borderWidth: 1,
-        borderColor: palette.primary.black[10],
         borderRadius: 20,
         padding: 4,
     },
@@ -303,10 +283,8 @@ const styles = StyleSheet.create({
         flex: 1,
         fontSize: 16,
         fontWeight: '500',
-        color: palette.primary.black[100],
     },
     pointsArrow: {
         fontSize: 24,
-        color: palette.primary.black[40],
     },
 });

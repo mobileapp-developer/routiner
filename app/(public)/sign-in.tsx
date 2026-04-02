@@ -1,6 +1,6 @@
 import {Animated, Pressable, StyleSheet, Text, TextInput, View} from "react-native";
 import BackButton from "@/components/ui/BackButton";
-import {palette} from "@/constants/palette";
+import {lightPalette} from "@/constants/palette";
 import {Link, useRouter} from "expo-router";
 import {useSignIn} from "@clerk/clerk-expo";
 import {useState} from "react";
@@ -56,7 +56,7 @@ const SignIn = () => {
                 <View
                     style={[
                         styles.underline,
-                        {backgroundColor: value ? palette.primary.green[100] : palette.primary.black[40]}
+                        {backgroundColor: value ? lightPalette.primary.green[100] : lightPalette.primary.black[40]}
                     ]}
                 />
             </View>
@@ -88,8 +88,8 @@ const SignIn = () => {
                 </Link>
                 <AuthButton
                     text={loading ? 'Signing in...' : 'Next'}
-                    backgroundColor={palette.primary.blue[100]}
-                    textColor={palette.primary.white}
+                    backgroundColor={lightPalette.primary.blue[100]}
+                    textColor={lightPalette.primary.white}
                     onPress={handleSignIn}
                     height={52}
                     width={345}
@@ -113,7 +113,7 @@ const styles = StyleSheet.create({
         paddingHorizontal: 18,
         paddingTop: 40,
         flexDirection: 'row',
-        shadowColor: palette.primary.black[20],
+        shadowColor: lightPalette.primary.black[20],
         shadowOffset: {width: 0, height: 1},
         shadowOpacity: 0.25,
         shadowRadius: 3.84,
@@ -155,7 +155,7 @@ const styles = StyleSheet.create({
         width: 24,
         height: 24,
         borderRadius: 12,
-        backgroundColor: palette.primary.black[20],
+        backgroundColor: lightPalette.primary.black[20],
         justifyContent: 'center',
         alignItems: 'center',
     },
@@ -171,7 +171,7 @@ const styles = StyleSheet.create({
         letterSpacing: 0,
         paddingHorizontal: 24,
         marginTop: 8,
-        color: palette.primary.black[60],
+        color: lightPalette.primary.black[60],
     },
     errorText: {
         color: 'red',
@@ -192,7 +192,7 @@ const styles = StyleSheet.create({
         fontWeight: '500',
         lineHeight: 20,
         letterSpacing: 0,
-        color: palette.primary.blue[100],
+        color: lightPalette.primary.blue[100],
     },
 });
 

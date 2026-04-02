@@ -1,6 +1,6 @@
 import {Animated, FlatList, Pressable, StyleSheet, Text, View} from "react-native";
 import CircularProgress from "@/components/ui/CircularProgress";
-import {palette} from "@/constants/palette";
+import {lightPalette} from "@/constants/palette";
 import {LinearGradient} from "expo-linear-gradient";
 import {useCurrentUser} from "@/hooks/useCurrentUser";
 import {useRouter} from "expo-router";
@@ -35,7 +35,7 @@ export default function DailyProgress() {
                     </View>
                     <View style={styles.circularProgress}>
                         <CircularProgress size={320} strokeWidth={20} fontSize={40} percentage={percentage}
-                                          color={palette.primary.white} showLabel/>
+                                          color={lightPalette.primary.white} showLabel/>
                     </View>
                     <View style={styles.textSection}>
                         <Text style={styles.text}>{completed} of {total} completed</Text>
@@ -115,7 +115,7 @@ const styles = StyleSheet.create({
         fontWeight: '600',
         lineHeight: 28,
         textAlign: 'center',
-        color: palette.primary.white
+        color: lightPalette.primary.white
     },
     list: {
         width: '100%',
@@ -129,9 +129,9 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         paddingVertical: 6,
-        backgroundColor: palette.primary.white,
+        backgroundColor: lightPalette.primary.white,
         borderWidth: 1,
-        borderColor: palette.primary.black[10],
+        borderColor: lightPalette.primary.black[10],
         borderRadius: 24,
         marginBottom: 12,
     },
@@ -169,13 +169,13 @@ const styles = StyleSheet.create({
     },
     plus: {
         fontSize: 30,
-        color: palette.primary.black[100],
+        color: lightPalette.primary.black[100],
     },
     footer: {
         paddingBottom: 60,
     },
     button: {
-        backgroundColor: palette.primary.white,
+        backgroundColor: lightPalette.primary.white,
         marginHorizontal: 40,
         paddingVertical: 16,
         borderRadius: 32
@@ -186,6 +186,6 @@ const styles = StyleSheet.create({
         fontWeight: '600',
         lineHeight: 24,
         letterSpacing: 0,
-        color: palette.primary.blue[100],
+        color: lightPalette.primary.blue[100],
     }
 })

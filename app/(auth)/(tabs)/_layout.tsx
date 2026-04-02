@@ -1,7 +1,7 @@
 import {Tabs, usePathname} from 'expo-router';
 import MyTabBar from '@/components/layout/TabBar';
 import {FontAwesome5, Ionicons, MaterialIcons} from "@expo/vector-icons";
-import {palette} from "@/constants/palette";
+import {lightPalette} from "@/constants/palette";
 
 export default function TabLayout() {
     const pathname = usePathname();
@@ -39,7 +39,7 @@ export default function TabLayout() {
                     title: 'New',
                     headerShown: false,
                     tabBarIcon: () => (
-                        <MaterialIcons name='add-circle' size={60} color={palette.primary.blue[100]}/>
+                        <MaterialIcons name='add-circle' size={60} color={lightPalette.primary.blue[100]}/>
                     )
                 }}
             />

@@ -1,5 +1,5 @@
 import {Modal, Pressable, StyleSheet, Text} from "react-native";
-import {palette} from "@/constants/palette";
+import {lightPalette} from "@/constants/palette";
 
 type Option = {
     label: string;
@@ -53,24 +53,24 @@ const styles = StyleSheet.create({
         paddingHorizontal: 40,
     },
     menu: {
-        backgroundColor: palette.primary.white,
+        backgroundColor: lightPalette.primary.white,
         borderRadius: 16,
         overflow: 'hidden',
     },
     option: {
         padding: 16,
         borderBottomWidth: 1,
-        borderBottomColor: palette.primary.black[10],
+        borderBottomColor: lightPalette.primary.black[10],
     },
     optionSelected: {
-        backgroundColor: palette.primary.blue[10],
+        backgroundColor: lightPalette.primary.blue[10],
     },
     optionText: {
         fontSize: 15,
-        color: palette.primary.black[100],
+        color: lightPalette.primary.black[100],
     },
     optionTextSelected: {
         fontWeight: '600',
-        color: palette.primary.blue[100],
+        color: lightPalette.primary.blue[100],
     },
 });

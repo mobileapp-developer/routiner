@@ -3,7 +3,7 @@ import {usePressAnimation} from "@/hooks/usePressAnimation";
 import {Animated, Image, Pressable, StyleSheet, Text, View} from "react-native";
 import {Feather} from "@expo/vector-icons";
 import React from "react";
-import {palette} from "@/constants/palette";
+import {lightPalette} from "@/constants/palette";
 
 export function LearningCard({item}: { item: Learning }) {
     const {scaleValue, onPressIn, onPressOut} = usePressAnimation();
@@ -46,7 +46,7 @@ const styles = StyleSheet.create({
         right: 0,
         padding: 12,
         gap: 6,
-        backgroundColor: palette.primary.blue[100],
+        backgroundColor: lightPalette.primary.blue[100],
     },
     learningBadge: {
         width: 20,
