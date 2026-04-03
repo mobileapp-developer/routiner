@@ -9,8 +9,8 @@ import {usePalette} from "@/hooks/usePalette";
 
 export default function Index() {
     const {mode, setUseSystemTheme, setDarkMode} = useThemeMode();
-    const [sounds, setSounds]             = useState(false);
-    const [vacationMode, setVacationMode] = useState(false);
+    const [sounds, setSounds]                    = useState(false);
+    const [vacationMode, setVacationMode]        = useState(false);
 
     const router = useRouter();
     const {signOut} = useAuth();
@@ -21,7 +21,6 @@ export default function Index() {
         setUseSystemTheme(false);
         setDarkMode(value);
     };
-
 
     const handleSignOut = async () => {
         try {
