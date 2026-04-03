@@ -47,6 +47,16 @@ export default function ModalLayout() {
                               animation: 'fade',
                           }}
             />
+            <Stack.Screen name='edit-habit'
+                          options={{
+                              headerShown: false,
+                              presentation: 'transparentModal',
+                              animation: 'fade',
+                              contentStyle: {
+                                  backgroundColor: 'transparent'
+                              },
+                          }}
+            />
         </Stack>
     )
 }
