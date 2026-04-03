@@ -1,6 +1,6 @@
 import {FlatList, Modal, Pressable, StyleSheet, Text, View} from "react-native";
 import {HABIT_COLORS} from "@/constants/colors";
-import {lightPalette} from "@/constants/palette";
+import {usePalette} from "@/hooks/usePalette";
 
 type Props = {
     visible: boolean;
@@ -10,12 +10,15 @@ type Props = {
 }
 
 export default function ColorPicker({visible, selected, onSelect, onClose}: Props) {
+    const palette = usePalette();
+
     return (
         <Modal visible={visible} transparent animationType="slide">
             <Pressable style={styles.overlay} onPress={onClose}>
-                <Pressable onPress={(e) => e.stopPropagation()} style={styles.sheet}>
-                    <View style={styles.handle}/>
-                    <Text style={styles.title}>Choose Color</Text>
+                <Pressable onPress={(e) => e.stopPropagation()}
+                           style={[styles.sheet, {backgroundColor: palette.primary.white}]}>
+                    <View style={[styles.handle, {backgroundColor: palette.primary.black[20]}]}/>
+                    <Text style={[styles.title, {color: palette.primary.black[100]}]}>Choose Color</Text>
 
                     <FlatList
                         data={HABIT_COLORS}
@@ -26,7 +29,7 @@ export default function ColorPicker({visible, selected, onSelect, onClose}: Prop
                             <Pressable
                                 style={[styles.colorItem,
                                     {backgroundColor: item.hex},
-                                    selected === item.hex && styles.colorSelected
+                                    selected === item.hex && [styles.colorSelected, {borderColor: palette.primary.blue[100]}]
                                 ]}
                                 onPress={() => {
                                     onSelect(item.hex, item.name);
@@ -48,7 +51,6 @@ const styles = StyleSheet.create({
         justifyContent: 'flex-end',
     },
     sheet: {
-        backgroundColor: lightPalette.primary.white,
         borderTopLeftRadius: 24,
         borderTopRightRadius: 24,
         padding: 20,
@@ -59,13 +61,11 @@ const styles = StyleSheet.create({
         width: 40,
         height: 4,
         borderRadius: 2,
-        backgroundColor: lightPalette.primary.black[20],
         alignSelf: 'center',
     },
     title: {
         fontSize: 18,
         fontWeight: '600',
-        color: lightPalette.primary.black[100],
         textAlign: 'center',
     },
     row: {
@@ -80,6 +80,5 @@ const styles = StyleSheet.create({
     },
     colorSelected: {
         borderWidth: 1.5,
-        borderColor: lightPalette.primary.blue[100],
     },
 });

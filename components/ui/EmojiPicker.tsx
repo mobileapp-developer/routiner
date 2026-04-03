@@ -1,6 +1,7 @@
-import {FlatList, Modal, Pressable, StyleSheet, Text, View} from "react-native";
-import {lightPalette} from "@/constants/palette";
+import {FlatList, Modal, Pressable, StyleSheet, Text, View, useColorScheme} from "react-native";
 import {EMOJI} from "@/constants/emoji";
+import {usePalette} from "@/hooks/usePalette";
+import {useThemeMode} from "@/hooks/useThemeMode";
 
 type Props = {
     visible: boolean;
@@ -10,12 +11,17 @@ type Props = {
 }
 
 export default function EmojiPicker({visible, selected, onSelect, onClose}: Props) {
+    const palette = usePalette();
+    const {mode} = useThemeMode();
+    const systemTheme = useColorScheme();
+    const isDark = mode.useSystemTheme ? systemTheme === 'dark' : mode.isDarkMode;
+
     return (
         <Modal visible={visible} transparent animationType="slide">
             <Pressable style={styles.overlay} onPress={onClose}>
-                <Pressable onPress={(e) => e.stopPropagation()} style={styles.sheet}>
-                    <View style={styles.handle}/>
-                    <Text style={styles.title}>Choose Icon</Text>
+                <Pressable onPress={(e) => e.stopPropagation()} style={[styles.sheet, {backgroundColor: palette.primary.white}]}>
+                    <View style={[styles.handle, {backgroundColor: palette.primary.black[20]}]}/>
+                    <Text style={[styles.title, {color: palette.primary.black[100]}]}>Choose Icon</Text>
 
                     <FlatList
                         data={EMOJI}
@@ -26,8 +32,8 @@ export default function EmojiPicker({visible, selected, onSelect, onClose}: Prop
                             <Pressable
                                 style={[
                                     styles.emojiItem,
-                                    {backgroundColor: lightPalette.primary.blue[10]},
-                                    selected === item.emoji && styles.emojiSelected
+                                    {backgroundColor: isDark ? palette.primary.black[20] : palette.primary.blue[10]},
+                                    selected === item.emoji && [styles.emojiSelected, {borderColor: palette.primary.blue[100]}]
                                 ]}
                                 onPress={() => {
                                     onSelect(item.emoji, item.name);
@@ -51,7 +57,6 @@ const styles = StyleSheet.create({
         justifyContent: 'flex-end',
     },
     sheet: {
-        backgroundColor: lightPalette.primary.white,
         borderTopLeftRadius: 24,
         borderTopRightRadius: 24,
         padding: 20,
@@ -62,13 +67,11 @@ const styles = StyleSheet.create({
         width: 40,
         height: 4,
         borderRadius: 2,
-        backgroundColor: lightPalette.primary.black[20],
         alignSelf: 'center',
     },
     title: {
         fontSize: 18,
         fontWeight: '600',
-        color: lightPalette.primary.black[100],
         textAlign: 'center',
     },
     grid: {
@@ -85,7 +88,6 @@ const styles = StyleSheet.create({
     },
     emojiSelected: {
         borderWidth: 1.5,
-        borderColor: lightPalette.primary.blue[100],
     },
     emojiText: {
         fontSize: 32,
