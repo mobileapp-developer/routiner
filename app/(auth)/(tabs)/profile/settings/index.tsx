@@ -1,5 +1,5 @@
 import {useState} from "react";
-import {Alert, Pressable, StyleSheet, Switch, Text, View} from "react-native";
+import {Alert, Pressable, ScrollView, StyleSheet, Switch, Text, View} from "react-native";
 import {Ionicons} from "@expo/vector-icons";
 import BackButton from "@/components/ui/BackButton";
 import {useRouter} from "expo-router";
@@ -33,7 +33,7 @@ export default function Index() {
     }
 
     return (
-        <View style={[styles.container, {backgroundColor: palette.primary.black[10]}]}>
+        <ScrollView style={[styles.container, {backgroundColor: palette.primary.black[10]}]}>
             <View style={[styles.header, {backgroundColor: palette.primary.white, shadowColor: palette.primary.black[20]}]}>
                 <BackButton/>
                 <Text style={[styles.headerText, {color: palette.primary.black[100]}]}>Settings</Text>
@@ -117,7 +117,7 @@ export default function Index() {
                     <Ionicons name='chevron-forward' size={24} color={palette.primary.black[40]}/>
                 </Pressable>
             </View>
-        </View>
+        </ScrollView>
     );
 };
 
